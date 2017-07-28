@@ -31,10 +31,12 @@ function getEvents(callback) {
   setTimeout(function() { callback(MOCK_EVENTS)}, 100);
 }
 
-function displayEvents() {
+function displayEvents(data) {
   for (index in data.events) {
     $('ul').append(
-      '<li>' + data.events[index].title + '</li>'
+      '<li>' + data.events[index].title + '</li>' +
+      '<p> Start: ' + data.events[index].start + '</p>' +
+      '<p> End: ' + data.events[index].end + '</p>'
     );
   }
 }
