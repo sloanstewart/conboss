@@ -3,8 +3,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const PORT = process.env.PORT || 8080;
 const app = express();
+const {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
+const {User, Event} = require('./models');
 
 app.use(morgan('common'));
 app.use(bodyParser.json());
