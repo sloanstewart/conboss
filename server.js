@@ -20,9 +20,22 @@ app.get("/", (req, res) => {
   .sendFile(__dirname + '/views/index.html');
 });
 
+app.get("/schedule", (req, res) => {
+  res
+  .status(200)
+  .sendFile(__dirname + '/views/schedule.html');
+});
+
+app.get("/users", (req, res) => {
+  res
+  .status(200)
+  .sendFile(__dirname + '/views/users.html');
+});
+
 // 404 for requests to everything that's not specified
 app.use('*', function(req, res) {
-  res.status(404).json({message: 'Not Found'});
+  res.status(404)
+  .sendFile(__dirname + '/views/404.html');
 });
 
 let server;
