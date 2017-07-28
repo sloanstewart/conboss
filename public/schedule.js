@@ -33,7 +33,7 @@ function getEvents(callback) {
 
 function displayEvents(data) {
   for (index in data.events) {
-    $('ul').append(
+    $('.list').append(
       '<li>' + data.events[index].title + '</li>' +
       '<p> Start: ' + data.events[index].start + '</p>' +
       '<p> End: ' + data.events[index].end + '</p>'

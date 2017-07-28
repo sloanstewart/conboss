@@ -41,7 +41,7 @@ function getUsers(callback) {
 
 function displayUsers(data) {
   for (index in data.users) {
-    $('ul').append(
+    $('.list').append(
       '<li>' + data.users[index].lastName + ", " + data.users[index].firstName + '</li>' +
       '<p>' + data.users[index].email + '</p>'
     );
