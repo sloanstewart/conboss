@@ -20,6 +20,12 @@ app.get("/", (req, res) => {
   .sendFile(__dirname + '/views/index.html');
 });
 
+app.get("/register", (req, res) => {
+  res
+  .status(200)
+  .sendFile(__dirname + '/views/register.html');
+});
+
 app.get("/schedule", (req, res) => {
   res
   .status(200)

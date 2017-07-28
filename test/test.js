@@ -25,6 +25,24 @@ describe('GET "/"', function(){
   });
 });
 
+describe('GET "/register"', function(){
+  before(function() {
+    return runServer();
+  });
+
+  after(function() {
+    return closeServer();
+  });
+
+  it('should return http status 200', function() {
+    return chai.request(app)
+    .get('/register')
+    .then(function(res) {
+      res.should.have.status(200);
+    });
+  });
+});
+
 describe('GET "/schedule"', function(){
   before(function() {
     return runServer();
