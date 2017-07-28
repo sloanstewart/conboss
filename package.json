@@ -1,0 +1,27 @@
+{
+  "name": "conboss",
+  "version": "1.0.0",
+  "description": "Convention management app",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "morgan": "^1.8.2",
+    "mongoose": "^4.11.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sloanstewart/conboss.git"
+  },
+  "author": "Sloan Stewart",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sloanstewart/conboss/issues"
+  },
+  "homepage": "https://github.com/sloanstewart/conboss#readme"
+}
