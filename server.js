@@ -30,10 +30,22 @@ app.get("/register", (req, res) => {
   .sendFile(__dirname + '/views/register.html');
 });
 
-app.get("/schedule", (req, res) => {
+app.get("/users", (req, res) => {
+  res
+  .status(200)
+  .sendFile(__dirname + '/views/users.html');
+});
+
+app.get("/events", (req, res) => {
+      res
+      .status(200)
+      .sendFile(__dirname + '/views/events.html');
+});
+
+app.get("/api/events", (req, res) => {
   Event
     .find()
-    .limit(100)
+    .limit(50 )
     .then( events => {
       res
       // .sendFile(__dirname + '/views/schedule.html')
@@ -44,10 +56,58 @@ app.get("/schedule", (req, res) => {
     });
 });
 
-app.get("/users", (req, res) => {
-  res
-  .status(200)
-  .sendFile(__dirname + '/views/users.html');
+app.post('/api/events', (req, res) => {
+  const required = ['title', 'start', 'end'];
+  for (let i=0; i<required.length; i++) {
+    const field = required[i];
+    if(!(field in req.body)) {
+      const message = 'Missing \`${field}\` in request body';
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  Event
+    .create({
+      title: req.body.title,
+      details: req.body.content,
+      start: req.body.start,
+      end: req.body.end
+    });
+
+});
+
+app.put('/api/events/:id', (req, res) => {
+  if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
+    res.status(400).json({
+      error: "Request path ID and request body ID values must match"
+    });
+  }
+
+  const updated = {};
+  const updateableFields = ['title', 'details', 'start', 'end', 'users'];
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updated[field] = req.body[field];
+    }
+  });
+
+  Event
+    .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+    .exec()
+    .then(updatedEvent => {res.status(200).json(updatedEvent);})
+    .catch(err => res.status(500).json({message: 'Problem with updating event'}));
+});
+
+app.delete('/api/events/:id', (req, res) => {
+  Event
+    .findByIdAndRemove(req.params.id)
+    .exec()
+    .then(() => {
+      const message = `Deleted event ${req.params.id}`;
+      console.log(message);
+      res.status(200).json({message: message});
+    });
 });
 
 // 404 for requests to everything that's not specified
@@ -57,9 +117,9 @@ app.use('*', function(req, res) {
 });
 
 let server;
-function runServer(databaseUrl=TEST_DATABASE_URL, port=PORT) {
+function runServer(databaseUrl=DATABASE_URL, port=PORT) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(databaseUrl, err => {
+    mongoose.connect(databaseUrl, {useMongoClient: true}, err => {
       if (err) {
         return reject(err);
       }

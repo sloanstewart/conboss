@@ -1,6 +1,5 @@
 [
 {
-  "id": "111",
   "title": "The First Event!",
   "details": "details for the first event right here.",
   "start": "2017-08-01T18:00:00.000Z",
@@ -8,7 +7,6 @@
   "created": "2017-07-28T12:00:00.000Z"
 },
 {
-  "id": "222",
   "title": "Another Sweet event",
   "details": "details for the second event right here.",
   "start": "2017-08-01T20:00:00.000Z",
@@ -16,9 +14,8 @@
   "created": "2017-07-28T12:05:00.000Z"
 },
 {
-  "id": "333",
-  "title": "The First Event!",
-  "details": "details for the first event right here.",
+  "title": "Event 3",
+  "details": "this is the third, and last event in the seed data",
   "start": "2017-09-01T15:00:00.000Z",
   "end": "2017-09-01T17:00:00.000Z",
   "created": "2017-07-28T01:00:00.000Z"
