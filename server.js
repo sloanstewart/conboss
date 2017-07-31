@@ -1,11 +1,14 @@
 /*jshint esversion:6*/
 
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const app = express();
 const {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
 const {User, Event} = require('./models');
+
+mongoose.Promise = global.Promise;
 
 app.use(morgan('common'));
 app.use(bodyParser.json());
@@ -28,9 +31,17 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/schedule", (req, res) => {
-  res
-  .status(200)
-  .sendFile(__dirname + '/views/schedule.html');
+  Event
+    .find()
+    .limit(100)
+    .then( events => {
+      res
+      // .sendFile(__dirname + '/views/schedule.html')
+      .status(200)
+      .json({
+        events: events
+      });
+    });
 });
 
 app.get("/users", (req, res) => {
@@ -46,30 +57,39 @@ app.use('*', function(req, res) {
 });
 
 let server;
-function runServer() {
-  const port = process.env.PORT || 8080;
+function runServer(databaseUrl=TEST_DATABASE_URL, port=PORT) {
   return new Promise((resolve, reject) => {
+    mongoose.connect(databaseUrl, err => {
+      if (err) {
+        return reject(err);
+      }
+    });
+
     server = app.listen(port, () => {
       console.log(`Listening on port ${port}`);
-      resolve(server);
+      resolve();
     })
     .on('error', err => {
+      mongoose.disconnect();
       reject(err);
     });
   });
 }
 
 function closeServer(){
-  return new Promise((resolve, reject) => {
-       console.log('Closing server');
-       server.close(err => {
-           if (err) {
-               return reject(err);
-           }
-           resolve();
-       });
-     });
+  return mongoose.disconnect().then(() => {
+    return new Promise((resolve, reject) => {
+      console.log('Closing server');
+      server.close(err => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
+    });
+  });
 }
+
 if (require.main === module) {
   runServer().catch(err => console.error(err));
 }

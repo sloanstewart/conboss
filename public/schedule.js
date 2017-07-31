@@ -28,7 +28,7 @@ var MOCK_EVENTS = {
 };
 
 function getEvents(callback) {
-  setTimeout(function() { callback(MOCK_EVENTS)}, 100);
+  setTimeout(function() { callback(MOCK_EVENTS) }, 100);
 }
 
 function displayEvents(data) {

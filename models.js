@@ -10,6 +10,7 @@ const userSchema = mongoose.Schema({
   location: String,
   bio: String,
   created: {type: Date, default: Date.now},
+  role: String,
   saved_events: []
 });
 
@@ -24,7 +25,9 @@ userSchema.methods.apiRepr = function() {
     name: this.fullName,
     location: this.location,
     bio: this.bio,
-    created: this.created
+    created: this.created,
+    role: this.role,
+    saved_events: this.saved_events
   };
 };
 
