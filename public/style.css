@@ -47,7 +47,7 @@ button, input[type=button] {
   text-align: center;
   margin: 0 auto;
   min-width: 300px;
-  max-width: 900px;
+  max-width: 600px;
 }
 
 .new-event-form label {

@@ -210,4 +210,36 @@ describe('Events API resource', function() {
       });
     });
   });
+
+  describe('PUT "/api/events/:id"', function() {
+    it('should update an existing event', function() {
+      const updateData = {
+        title: 'blah blah blah',
+        details: 'details etc etc etc',
+        start: '0001-01-01T13:01:00.000Z',
+        end: '0001-01-01T13:01:00.000Z'
+      };
+
+      return Event
+        .findOne()
+        .exec()
+        .then(function(event) {
+          updateData.id = event.id;
+
+          return chai.request(app)
+            .put(`/api/events/${event.id}`)
+            .send(updateData);
+        })
+        .then(function(_res) {
+          res.should.have.status(201); //http found (for redirect)
+          return Event.findById(updateData.id).exec();
+        })
+        .then(function(event) {
+          event.title.should.equal(updateData.title);
+          event.details.should.equal(updateData.details);
+          // event.details.should.equal(updateData.start);
+          // event.details.should.equal(updateData.end);
+        });
+    });
+  });
 });

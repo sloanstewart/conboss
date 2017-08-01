@@ -120,7 +120,7 @@ app.put('/api/events/:id', (req, res) => {
   Event
     .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
     .exec()
-    .then(updatedEvent => {res.status(200).json(updatedEvent);})
+    .then(updatedEvent => {res.status(201).json(updatedEvent);})
     .catch(err => res.status(500).json({message: 'Problem with updating event'}));
 });
 
