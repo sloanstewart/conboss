@@ -61,6 +61,14 @@ function getAndDisplayEvents() {
 
 function listeners() {
   document.addEventListener('click', function(event) {
+    if(event.target && event.target.className == 'edit') {
+      event.preventDefault();
+      const url = "/api/events/" + event.target.dataset.id;
+      console.log(url);
+      window.location=url;
+    }
+  });
+  document.addEventListener('click', function(event) {
     if(event.target && event.target.className == 'delete') {
       event.preventDefault();
       const url = "/api/events/" + event.target.dataset.id;

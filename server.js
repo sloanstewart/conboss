@@ -62,10 +62,29 @@ app.get("/events/new/", (req, res) => {
       .sendFile(__dirname + '/views/new-event.html');
 });
 
+app.get("/events/edit/", (req, res) => {
+      res
+      .status(200)
+      .sendFile(__dirname + '/views/edit-event.html');
+});
+
 app.get("/api/events", (req, res) => {
   Event
     .find()
     .limit(50 )
+    .then( events => {
+      res
+      // .sendFile(__dirname + '/views/schedule.html')
+      .status(200)
+      .json({
+        events: events
+      });
+    });
+});
+
+app.get("/api/events/:id", (req, res) => {
+  Event
+    .findById()
     .then( events => {
       res
       // .sendFile(__dirname + '/views/schedule.html')

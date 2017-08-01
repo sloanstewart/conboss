@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Conboss | New Event</title>
+    <title>Conboss | Edit Event</title>
     <meta name="description" content="Convention management made easy">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/style.css">
@@ -14,10 +14,10 @@
           <li><a href="../users">Users</a></li>
         </ul>
       </nav>
-      <h1>Conboss | New Event</h1>
+      <h1>Conboss | Edit Event</h1>
     </header>
     <main>
-      <form class="new-event" action="../api/events" enctype='application/json' method="put">
+      <form class="new-event-form" action="../api/events" enctype='application/json' method="put">
         <fieldset>
           <legend>Event Information</legend>
           <label for="title">Title*:</label>
@@ -28,7 +28,7 @@
           <input type="datetime-local" id="end" name="end" title="Please, provide an ending time for your event" value="" placeholder="" required>
           <label for="details">Details:</label>
           <textarea id="details" name="details" title="Please, provide details about your event" placeholder=""></textarea>
-          <button type="submit" id="submit" name="submit">Create Event</button>
+          <button type="submit" id="submit" name="submit">Confirm Edit</button>
         </fieldset>
       </form>
     </main>
