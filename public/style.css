@@ -5,7 +5,9 @@
 }
 
 body {
-
+  font-size: 16px;
+  line-height: 1.5em;
+  /*letter-spacing: 0.05em;*/
 }
 
 a, a:visited {
@@ -14,4 +16,63 @@ a, a:visited {
 
 a:hover, a:active {
   text-decoration: underline;
+}
+
+button, input[type=button] {
+  padding: 0.5em;
+  margin: 0.5em;
+  letter-spacing: 0.05em;
+  font: bold 1em sans-serif;
+}
+
+.new-event {
+  color: greenyellow;
+  background-color: transparent;
+  border: 2px solid greenyellow;
+}
+
+.edit {
+  color: khaki;
+  background-color: transparent;
+  border: 2px solid khaki;
+}
+
+.delete {
+  color: tomato;
+  background-color: transparent;
+  border: 2px solid tomato;
+}
+
+.new-event-form {
+  text-align: center;
+  margin: 0 auto;
+  min-width: 300px;
+  max-width: 900px;
+}
+
+.new-event-form label {
+  display: inline-block;
+  text-align: right;
+  width: 25%;
+  min-width: 85px;
+}
+
+.new-event-form input, textarea {
+  font: 1em sans-serif;
+  padding: 0.5em;
+  margin: 0.5em;
+  width: 60%;
+}
+
+.new-event-form textarea {
+  vertical-align: top;
+  height: 5em;
+}
+
+.new-event-form button {
+  display: block;
+  margin: 1em auto;
+  padding: 1em;
+  background-color: yellowgreen;
+  border: none;
 }

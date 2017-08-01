@@ -33,22 +33,24 @@
 
 function getEvents(callback) {
   const apiCall = {
+    method: "GET",
     url: "/api/events",
     data: "",
     dataType: "json",
-    type: "GET",
     success: callback
   };
   $.ajax(apiCall);
 }
 
 function displayEvents(data) {
-  for (index in data.events) {
+  for (let index in data.events) {
     $('.list').append(
-      '<li>' + data.events[index].title + '</li>' +
-      '<p>' + data.events[index].details + '</p>' +
+      '<li><h3>' + data.events[index].title + '</h3></li>' +
       '<p> Start: ' + data.events[index].start + '</p>' +
-      '<p> End: ' + data.events[index].end + '</p>'
+      '<p> End: ' + data.events[index].end + '</p>' +
+      '<p>' + data.events[index].details + '</p>' +
+      '<input type="button" class="edit" data-id="' + data.events[index]._id + '" value="Edit">' +
+      '<input type="button" class="delete" data-id="' + data.events[index]._id + '" value="Delete">'
     );
   }
 }
@@ -57,6 +59,22 @@ function getAndDisplayEvents() {
   getEvents(displayEvents);
 }
 
+function listeners() {
+  document.addEventListener('click', function(event) {
+    if(event.target && event.target.className == 'delete') {
+      event.preventDefault();
+      const url = "/api/events/" + event.target.dataset.id;
+      console.log(url);
+      $.ajax({
+        method: "DELETE",
+        url: url,
+        success: location.reload()
+      });
+    }
+  });
+}
+
 $(function() {
   getAndDisplayEvents();
+  listeners();
 });

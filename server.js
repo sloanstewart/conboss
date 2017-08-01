@@ -36,10 +36,30 @@ app.get("/users", (req, res) => {
   .sendFile(__dirname + '/views/users.html');
 });
 
+app.get("/api/users", (req, res) => {
+  Event
+    .find()
+    .limit(50 )
+    .then( users => {
+      res
+      // .sendFile(__dirname + '/views/schedule.html')
+      .status(200)
+      .json({
+        users: users
+      });
+    });
+});
+
 app.get("/events", (req, res) => {
       res
       .status(200)
       .sendFile(__dirname + '/views/events.html');
+});
+
+app.get("/events/new/", (req, res) => {
+      res
+      .status(200)
+      .sendFile(__dirname + '/views/new-event.html');
 });
 
 app.get("/api/events", (req, res) => {
@@ -61,7 +81,7 @@ app.post('/api/events', (req, res) => {
   for (let i=0; i<required.length; i++) {
     const field = required[i];
     if(!(field in req.body)) {
-      const message = 'Missing \`${field}\` in request body';
+      const message = `Missing data for required field "${field}" in request body`;
       console.error(message);
       return res.status(400).send(message);
     }
@@ -70,11 +90,16 @@ app.post('/api/events', (req, res) => {
   Event
     .create({
       title: req.body.title,
-      details: req.body.content,
+      details: req.body.details,
       start: req.body.start,
       end: req.body.end
+    })
+    .then(event => res.status(201).json(event))
+    .then(res.redirect(302, "/events"))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: "Did not post successfullly"});
     });
-
 });
 
 app.put('/api/events/:id', (req, res) => {
