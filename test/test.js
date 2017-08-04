@@ -132,7 +132,6 @@ function seedEventData() {
   for (let i=1; i<=10; i++) {
     seedData.push(generateEventData());
   }
-  console.log(seedData);
   // this will return a promise
   return Event.insertMany(seedData);
 }
@@ -198,16 +197,13 @@ describe('Events API resource', function() {
         it('should create a new event', function() {
       return chai.request(app)
       .post('/api/events')
-      .then(function(_res) {
-        res = _res;
-        // res.should.have.status(201);
-        // res.should.be.json;
-        res.body.should.have.lengthOf.at.least(1);
-        return Event.count();
+      .send(generateEventData())
+      .then(function(res) {
+        res.should.have.status(201);
+        res.should.be.json;
+
+        // this returns a single event, test that ONE event!
       })
-      .then(function(count){
-        res.body.events.should.have.lengthOf(count);
-      });
     });
   });
 
@@ -224,22 +220,21 @@ describe('Events API resource', function() {
         .findOne()
         .exec()
         .then(function(event) {
-          updateData.id = event.id;
+          updateData._id = event._id;
 
           return chai.request(app)
-            .put(`/api/events/${event.id}`)
+            .put(`/api/events/${event._id}`)
             .send(updateData);
         })
-        .then(function(_res) {
-          res.should.have.status(201); //http found (for redirect)
-          return Event.findById(updateData.id).exec();
-        })
-        .then(function(event) {
+        .then(function(res) {
+          res.should.have.status(201);
           event.title.should.equal(updateData.title);
           event.details.should.equal(updateData.details);
+          // return Event.findById(updateData.id).exec();
           // event.details.should.equal(updateData.start);
           // event.details.should.equal(updateData.end);
-        });
+        })
+        .catch(err => console.log(err));
     });
   });
 });

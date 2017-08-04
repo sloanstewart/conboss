@@ -62,29 +62,37 @@ app.get("/events/new/", (req, res) => {
       .sendFile(__dirname + '/views/new-event.html');
 });
 
-app.get("/events/edit/", (req, res) => {
+app.get("/events/edit/:id", (req, res) => {
+  Event
+  .findById(req.params.id)
+  .exec()
+  .then( event => {
+    res
+    .status(200)
+    .sendFile(__dirname + '/views/edit-event.html')
+    .then( event => {
+      $('#title').val(event.title);
+    });
+  });
+});
+
+// API ENDPOINTS
+app.get("/api/event/:id", (req, res) => {
+  Event
+    .findById(req.params.id)
+    .then( event => {
       res
       .status(200)
-      .sendFile(__dirname + '/views/edit-event.html');
+      .json({
+        events: event
+      });
+    });
 });
 
 app.get("/api/events", (req, res) => {
   Event
     .find()
     .limit(50 )
-    .then( events => {
-      res
-      // .sendFile(__dirname + '/views/schedule.html')
-      .status(200)
-      .json({
-        events: events
-      });
-    });
-});
-
-app.get("/api/events/:id", (req, res) => {
-  Event
-    .findById()
     .then( events => {
       res
       // .sendFile(__dirname + '/views/schedule.html')
@@ -114,7 +122,6 @@ app.post('/api/events', (req, res) => {
       end: req.body.end
     })
     .then(event => res.status(201).json(event))
-    .then(res.redirect(302, "/events"))
     .catch(err => {
       console.error(err);
       res.status(500).json({error: "Did not post successfullly"});

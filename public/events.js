@@ -59,11 +59,38 @@ function getAndDisplayEvents() {
   getEvents(displayEvents);
 }
 
+function createEventRedirect() {
+  window.location.replace("../");
+  return false;
+}
+
 function listeners() {
+  // NEED LISTENER FOR NEW EVENT SUBMISSION AND REDIRECT VIA CLIENT SIDE
+  document.addEventListener('click', function(event) {
+    if(event.target && event.target.className == 'create-event') {
+      event.preventDefault();
+      const formData = {
+        "title": $('#title').val(),
+        "details": $('#details').val(),
+        "start": $('#start').val(),
+        "end": $('#end').val()
+      };
+      $.ajax({
+        method: "POST",
+        url: "/api/events",
+        data: formData,
+        success: window.location.replace('./'),
+        error: function(err) {
+          console.error(err);
+        }
+      });
+    }
+  });
+
   document.addEventListener('click', function(event) {
     if(event.target && event.target.className == 'edit') {
       event.preventDefault();
-      const url = "/api/events/" + event.target.dataset.id;
+      const url = "/events/edit?id=" + event.target.dataset.id;
       console.log(url);
       window.location=url;
     }

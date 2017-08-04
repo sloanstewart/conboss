@@ -17,7 +17,7 @@
       <h1>Conboss | New Event</h1>
     </header>
     <main>
-      <form class="new-event-form" action="../api/events" enctype='application/json' method="post">
+      <form class="new-event-form" method="post" onsubmit="return createEventRedirect()">
         <fieldset>
           <legend>Event Information</legend>
           <label for="title">Title*:</label>
@@ -28,7 +28,8 @@
           <input type="datetime-local" id="end" name="end" title="Please, provide an ending time for your event" value="" placeholder="" required>
           <label for="details">Details:</label>
           <textarea id="details" name="details" title="Please, provide details about your event" placeholder=""></textarea>
-          <button type="submit" id="submit" name="submit">Create Event</button>
+          <label for="create-event"></label>
+          <button type="button" class="create-event" name="create-event">Create Event</button>
         </fieldset>
       </form>
     </main>
