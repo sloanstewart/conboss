@@ -10,6 +10,9 @@ const {User, Event} = require('./models');
 
 mongoose.Promise = global.Promise;
 
+// use ejs templates
+app.set('view engine', 'ejs');
+
 app.use(morgan('common'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -17,66 +20,64 @@ app.use(bodyParser.urlencoded({extended: true}));
 // Serve static files from '/public'
 app.use(express.static('public'));
 
-// Serve index.html to root
+// ROUTES
 app.get("/", (req, res) => {
   res
   .status(200)
-  .sendFile(__dirname + '/views/index.html');
+  .render('index');
 });
 
 app.get("/register", (req, res) => {
   res
   .status(200)
-  .sendFile(__dirname + '/views/register.html');
+  .render('register');
 });
 
 app.get("/users", (req, res) => {
   res
   .status(200)
-  .sendFile(__dirname + '/views/users.html');
+  .render('users');
 });
 
-app.get("/api/users", (req, res) => {
-  Event
-    .find()
-    .limit(50 )
-    .then( users => {
-      res
-      // .sendFile(__dirname + '/views/schedule.html')
-      .status(200)
-      .json({
-        users: users
-      });
-    });
-});
 
 app.get("/events", (req, res) => {
       res
       .status(200)
-      .sendFile(__dirname + '/views/events.html');
+      .render('events');
 });
 
 app.get("/events/new/", (req, res) => {
       res
       .status(200)
-      .sendFile(__dirname + '/views/new-event.html');
+      .render('new-event');
 });
 
 app.get("/events/edit/:id", (req, res) => {
   Event
   .findById(req.params.id)
   .exec()
-  .then( event => {
+    .then( event => {
+      const data = {
+        _id: event._id,
+        title: event.title,
+        start: event.start.toISOString().slice(0, -1),
+        end: event.end.toISOString().slice(0, -1),
+        details: event.details
+      };
+      return data;
+  })
+  .then( data => {
+    console.log(data);
     res
     .status(200)
-    .sendFile(__dirname + '/views/edit-event.html')
-    .then( event => {
-      $('#title').val(event.title);
-    });
+    .render('edit-event', data);
   });
 });
 
-// API ENDPOINTS
+
+
+
+// EVENTS API
 app.get("/api/event/:id", (req, res) => {
   Event
     .findById(req.params.id)
@@ -130,8 +131,10 @@ app.post('/api/events', (req, res) => {
 
 app.put('/api/events/:id', (req, res) => {
   if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
+    console.log(req.params.id);
+    console.log(req.body._id);
     res.status(400).json({
-      error: "Request path ID and request body ID values must match"
+      error: "Request path ID and request body _ID values must match"
     });
   }
 
@@ -139,7 +142,12 @@ app.put('/api/events/:id', (req, res) => {
   const updateableFields = ['title', 'details', 'start', 'end', 'users'];
   updateableFields.forEach(field => {
     if (field in req.body) {
-      updated[field] = req.body[field];
+      if(field === 'start' || field === 'end'){
+        updated[field] = new Date(req.body[field]);
+      }
+      else {
+        updated[field] = req.body[field];
+      }
     }
   });
 
@@ -147,7 +155,10 @@ app.put('/api/events/:id', (req, res) => {
     .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
     .exec()
     .then(updatedEvent => {res.status(201).json(updatedEvent);})
-    .catch(err => res.status(500).json({message: 'Problem with updating event'}));
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: err });
+    });
 });
 
 app.delete('/api/events/:id', (req, res) => {
@@ -161,10 +172,31 @@ app.delete('/api/events/:id', (req, res) => {
     });
 });
 
+
+
+
+// USERS API
+app.get("/api/users", (req, res) => {
+  Event
+  .find()
+  .limit(50 )
+  .then( users => {
+    res
+    // .sendFile(__dirname + '/views/schedule.html')
+    .status(200)
+    .json({
+      users: users
+    });
+  });
+});
+
+
+
+
 // 404 for requests to everything that's not specified
 app.use('*', function(req, res) {
   res.status(404)
-  .sendFile(__dirname + '/views/404.html');
+  .render('404');
 });
 
 let server;

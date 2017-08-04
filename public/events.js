@@ -1,36 +1,5 @@
-// var MOCK_EVENTS = {
-//   "events": [
-//     {
-//       "id": "111",
-//       "title": "The First Event!",
-//       "details": "details for the first event right here.",
-//       "start": "2017-08-01T18:00:00.000Z",
-//       "end": "2017-08-01T19:00:00.000Z",
-//       "created": "2017-07-28T12:00:00.000Z"
-//     },
-//     {
-//       "id": "222",
-//       "title": "Another Sweet event",
-//       "details": "details for the second event right here.",
-//       "start": "2017-08-01T20:00:00.000Z",
-//       "end": "2017-08-01T21:00:00.000Z",
-//       "created": "2017-07-28T12:05:00.000Z"
-//     },
-//     {
-//       "id": "333",
-//       "title": "The First Event!",
-//       "details": "details for the first event right here.",
-//       "start": "2017-09-01T15:00:00.000Z",
-//       "end": "2017-09-01T17:00:00.000Z",
-//       "created": "2017-07-28T01:00:00.000Z"
-//     },
-//   ]
-// };
-//
-// function getEvents(callback) {
-//   setTimeout(function() { callback(MOCK_EVENTS) }, 100);
-// }
 
+// Get and display all Events
 function getEvents(callback) {
   const apiCall = {
     method: "GET",
@@ -59,13 +28,34 @@ function getAndDisplayEvents() {
   getEvents(displayEvents);
 }
 
+
+// function getOneEvent(callback) {
+//   const apiCall = {
+//     method: "GET",
+//     url: "/api/event/:id",
+//     data: "",
+//     dataType: "json",
+//     success: callback
+//   };
+//   $.ajax(apiCall);
+// }
+//
+// function getAndDisplayOneEvent() {
+//   getOneEvent(displayOneEvent);
+// }
+
+// Redirect after creating New Event
 function createEventRedirect() {
-  window.location.replace("../");
+  window.location.replace("./");
   return false;
 }
-
+function editEventRedirect() {
+  window.location.replace("http://localhost:8080/events");
+  return false;
+}
+// BUTTONS
 function listeners() {
-  // NEED LISTENER FOR NEW EVENT SUBMISSION AND REDIRECT VIA CLIENT SIDE
+  // NEW EVENT
   document.addEventListener('click', function(event) {
     if(event.target && event.target.className == 'create-event') {
       event.preventDefault();
@@ -79,7 +69,10 @@ function listeners() {
         method: "POST",
         url: "/api/events",
         data: formData,
-        success: window.location.replace('./'),
+        success: function() {
+          console.log('New event created');
+          window.location.replace("/events");
+        },
         error: function(err) {
           console.error(err);
         }
@@ -88,13 +81,39 @@ function listeners() {
   });
 
   document.addEventListener('click', function(event) {
+    if(event.target && event.target.className == 'edit-event') {
+      event.preventDefault();
+      let formData = {
+        "_id": $('.edit-event').data('id'),
+        "title": $('#title').val(),
+        "start": $('#start').val(),
+        "end": $('#end').val(),
+        "details": $('#details').val()
+      };
+      $.ajax({
+        method: "PUT",
+        url: "/api/events/"+ formData._id,
+        data: formData,
+        success: function() {
+          console.log('Event edited');
+          window.location.replace("/events");
+        },
+        error: function(err) {
+          console.error(err);
+        }
+      });
+    }
+  });
+  // EDIT EVENT
+  document.addEventListener('click', function(event) {
     if(event.target && event.target.className == 'edit') {
       event.preventDefault();
-      const url = "/events/edit?id=" + event.target.dataset.id;
+      const url = "/events/edit/" + event.target.dataset.id;
       console.log(url);
       window.location=url;
     }
   });
+  // DELETE EVENT
   document.addEventListener('click', function(event) {
     if(event.target && event.target.className == 'delete') {
       event.preventDefault();
@@ -109,6 +128,7 @@ function listeners() {
   });
 }
 
+//ON LOAD
 $(function() {
   getAndDisplayEvents();
   listeners();
