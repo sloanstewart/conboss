@@ -9,7 +9,7 @@
       <% include header %>
     </header>
     <main>
-      <form class="new-event-form" method="post" onsubmit="return createEventRedirect()">
+      <form class="event-form" method="post" onsubmit="return createEventRedirect()">
         <fieldset>
           <legend>Event Information</legend>
           <label for="title">Title*:</label>
@@ -21,7 +21,7 @@
           <label for="details">Details:</label>
           <textarea id="details" name="details" title="Please, provide details about your event" placeholder=""></textarea>
           <label for="create-event"></label>
-          <button type="button" class="create-event" name="create-event">Create Event</button>
+          <button id="create-event" class="btn-green" name="create-event">Create Event</button>
         </fieldset>
       </form>
     </main>

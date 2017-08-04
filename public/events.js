@@ -14,12 +14,15 @@ function getEvents(callback) {
 function displayEvents(data) {
   for (let index in data.events) {
     $('.list').append(
-      '<li><h3>' + data.events[index].title + '</h3></li>' +
-      '<p> Start: ' + data.events[index].start + '</p>' +
-      '<p> End: ' + data.events[index].end + '</p>' +
-      '<p>' + data.events[index].details + '</p>' +
-      '<input type="button" class="edit" data-id="' + data.events[index]._id + '" value="Edit">' +
-      '<input type="button" class="delete" data-id="' + data.events[index]._id + '" value="Delete">'
+      '<div class="event-item">' +
+        '<h3 class="event-title">' + data.events[index].title + '</h3>' +
+        '<p><span class="event-time">' + data.events[index].start + ' - ' + data.events[index].end + '</span></p>' +
+        '<p class="event-details">' + data.events[index].details + '</p>' +
+        '<p>' +
+          '<button id="btn-edit" class="btn-yellow" data-id="' + data.events[index]._id + '">Edit</button>' +
+          '<button id="btn-delete" class="btn-red" data-id="' + data.events[index]._id + '">Delete</button>' +
+        '</p>' +
+      '</div>'
     );
   }
 }
@@ -57,7 +60,7 @@ function editEventRedirect() {
 function listeners() {
   // NEW EVENT
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.className == 'create-event') {
+    if(event.target && event.target.id == 'create-event') {
       event.preventDefault();
       const formData = {
         "title": $('#title').val(),
@@ -81,10 +84,10 @@ function listeners() {
   });
 
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.className == 'edit-event') {
+    if(event.target && event.target.id == 'edit-event') {
       event.preventDefault();
       let formData = {
-        "_id": $('.edit-event').data('id'),
+        "_id": $('#edit-event').data('id'),
         "title": $('#title').val(),
         "start": $('#start').val(),
         "end": $('#end').val(),
@@ -106,7 +109,7 @@ function listeners() {
   });
   // EDIT EVENT
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.className == 'edit') {
+    if(event.target && event.target.id == 'btn-edit') {
       event.preventDefault();
       const url = "/events/edit/" + event.target.dataset.id;
       console.log(url);
@@ -115,7 +118,7 @@ function listeners() {
   });
   // DELETE EVENT
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.className == 'delete') {
+    if(event.target && event.target.id == 'btn-delete') {
       event.preventDefault();
       const url = "/api/events/" + event.target.dataset.id;
       console.log(url);
