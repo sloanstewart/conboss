@@ -1,4 +1,7 @@
 
+
+// E V E N TS ============================
+
 // Get and display all Events
 function getEvents(callback) {
   const apiCall = {
@@ -44,6 +47,7 @@ function editEventRedirect() {
   window.location.replace("http://localhost:8080/events");
   return false;
 }
+
 // BUTTONS
 function listeners() {
   // NEW EVENT
@@ -119,8 +123,85 @@ function listeners() {
   });
 }
 
+// U S E R S ====================
+date = new Date().toLocaleDateString();
+var MOCK_USERS = {
+  "users": [
+    {
+      "_id": "42346asdgad8647ad",
+      "email": "ayylmao@memes.net",
+      "name": {
+        "firstName": "Jethro",
+        "lastName": "Whatevs"
+      },
+      "location": "Atlanta, GA",
+      "bio": "just a bruh, doin' big thangs tbh",
+      "created": date,
+      "role": "admin",
+      "saved_events": []
+    },
+    {
+      "_id": "4657afsdhj6asdgad8647ad",
+      "email": "ahack@gmail.com",
+      "name": {
+        "firstName": "Amy",
+        "lastName": "Hackler"
+      },
+      "location": "Nashville, TN",
+      "bio": "lovin' this web majic!",
+      "created": date,
+      "role": "user",
+      "saved_events": []
+    },
+    {
+      "_id": "gfjkased5fja4r4a7",
+      "email": "c.code@earthlink.net",
+      "name": {
+        "firstName": "Carrie",
+        "lastName": "Code"
+      },
+      "location": "THE INTERNET",
+      "bio": "I've spent more than 10hrs in my editor today.",
+      "created": date,
+      "role": "user",
+      "saved_events": []
+    },
+  ]
+};
+
+function getUsers(callback) {
+  setTimeout(function() { callback(MOCK_USERS)}, 100);
+}
+
+function displayUsers(data) {
+  for (index in data.users) {
+    $('.user-list').append(
+      '<div class="list-item">' +
+        '<h2 class="item-title">' + data.users[index].name.lastName + ', ' + data.users[index].name.firstName + '</h2>' +
+        '<p><span class="item-time">' + data.users[index].email + ' | Member since: ' + data.users[index].created + '</span></p>' +
+        '<p class="item-details">' + data.users[index].bio + '</p>' +
+        '<p>' +
+          
+          '<button id="btn-edit" class="btn-yellow" data-id="' + data.users[index]._id + '">Edit</button>' +
+          '<button id="btn-delete" class="btn-red" data-id="' + data.users[index]._id + '">Delete</button>' +
+        '</p>' +
+      '</div>'
+    );
+  }
+}
+
+function getAndDisplayUsers() {
+  getUsers(displayUsers);
+}
+
+$(function() {
+  getAndDisplayUsers();
+});
+
+
 //ON LOAD
 $(function() {
   getAndDisplayEvents();
+  getAndDisplayUsers();
   listeners();
 });
