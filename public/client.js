@@ -130,6 +130,7 @@ var MOCK_USERS = {
     {
       "_id": "42346asdgad8647ad",
       "email": "ayylmao@memes.net",
+      "username": "jwhat",
       "name": {
         "firstName": "Jethro",
         "lastName": "Whatevs"
@@ -143,6 +144,7 @@ var MOCK_USERS = {
     {
       "_id": "4657afsdhj6asdgad8647ad",
       "email": "ahack@gmail.com",
+      "username": "ahack26",
       "name": {
         "firstName": "Amy",
         "lastName": "Hackler"
@@ -156,6 +158,7 @@ var MOCK_USERS = {
     {
       "_id": "gfjkased5fja4r4a7",
       "email": "c.code@earthlink.net",
+      "username": "cc97",
       "name": {
         "firstName": "Carrie",
         "lastName": "Code"
@@ -175,15 +178,16 @@ function getUsers(callback) {
 
 function displayUsers(data) {
   for (index in data.users) {
+    let user = data.users[index];
     $('.user-list').append(
       '<div class="list-item">' +
-        '<h2 class="item-title">' + data.users[index].name.lastName + ', ' + data.users[index].name.firstName + '</h2>' +
-        '<p><span class="item-time">' + data.users[index].email + ' | Member since: ' + data.users[index].created + '</span></p>' +
-        '<p class="item-details">' + data.users[index].bio + '</p>' +
+        '<h2 class="item-title">' + user.username + '</h2>' +
+        '<p><span class="item-time">' + user.name.firstName + ' ' + user.name.lastName + ' | <a href=mailto:"' + user.email + '">' + user.email + '</a></span></p>' +
+        '<p class="item-details">' + user.bio + '</p>' +
         '<p>' +
-          
-          '<button id="btn-edit" class="btn-yellow" data-id="' + data.users[index]._id + '">Edit</button>' +
-          '<button id="btn-delete" class="btn-red" data-id="' + data.users[index]._id + '">Delete</button>' +
+
+          '<button id="btn-edit" class="btn-yellow" data-id="' + user._id + '">Edit</button>' +
+          '<button id="btn-delete" class="btn-red" data-id="' + user._id + '">Delete</button>' +
         '</p>' +
       '</div>'
     );
