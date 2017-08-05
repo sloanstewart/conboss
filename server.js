@@ -67,7 +67,6 @@ app.get("/events/edit/:id", (req, res) => {
       return data;
   })
   .then( data => {
-    console.log(data);
     res
     .status(200)
     .render('edit-event', data);

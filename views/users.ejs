@@ -1,26 +1,15 @@
 <html>
   <head>
-    <title>Conboss | Users</title>
-    <meta name="description" content="Convention management made easy">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style.css">
+    <% include head %>
   </head>
   <body>
     <header>
-      <nav>
-        <ul class="nav">
-          <li><a href="./">Login</a></li>
-          <li><a href="./events">Schedule</a></li>
-          <li><a href="./users">Users</a></li>
-        </ul>
+      <% include header %>
       </nav>
-      <h1>Conboss | Users</h1>
     </header>
     <main>
-      <ul class="list"></ul>
+      <ul class="user-list"></ul>
     </main>
-    <footer></footer>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/users.js" charset="utf-8"></script>
+    <footer><% include footer %></footer>
   </body>
 </html>

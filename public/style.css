@@ -5,10 +5,65 @@
 }
 
 body {
+  padding: 0;
+  margin: 0;
   color: #424242;
   font-size: 16px;
   line-height: 1.5em;
-  background-color: #ECEFF1;;
+  letter-spacing: 0.05em;
+  background-color: #37474F;
+}
+
+header {
+  padding: 0 1em;
+  margin: 0;
+  color: #B0BEC5;
+  background: #37474F;
+  overflow: auto;
+}
+.header {
+  max-width: 600px;
+  padding: 0;
+  margin: 0 auto;
+}
+
+header h1 {
+  vertical-align: middle;
+  display: inline-block;
+  padding: 0.25em 0;
+  margin: 0 auto;
+}
+
+nav {
+  float: right;
+}
+
+nav .nav-link {
+  color: #B0BEC5 !important;
+  display: inline-block;
+  padding: 0.5em;
+  min-width: 4em;
+}
+
+nav a:hover, nav a:focus  {
+  text-decoration: none;
+  background: #607D8B;
+}
+
+main {
+  text-align: center;
+  min-height: 125vh;
+  padding: 1em 2% 50% 2%;
+  margin: auto;
+  background: #ECEFF1;
+}
+
+footer {
+  padding: 8em 0 2em 0;
+  margin: auto;
+  text-align: center;
+  color: #B0BEC5;
+  background: #37474F;
 }
 
 p{
@@ -17,17 +72,22 @@ p{
 }
 
 a, a:visited {
+  color: #7A82CC;
   text-decoration: none;
 }
 
-a:hover, a:active {
+a:hover, a:focus {
   text-decoration: underline;
 }
 
+input, textarea {
+  border: none;
+}
+
 button, input[type=button] {
-  min-width: 5em;
+  min-width: 4em;
   padding: 0.5em;
-  margin: 0;
+  margin: 0 1em 0 0 ;
   letter-spacing: 0.05em;
   font: 1em sans-serif;
   background-color: #B0BEC5;
@@ -40,55 +100,60 @@ button:hover, button:focus {filter: brightness(90%);}
 .btn-green {background-color: #DCEDC8;}
 .btn-yellow {background-color: #FFECB3;}
 .btn-red {background-color: #FFCCBC;}
+.btn-centered {margin: 0em auto 1em auto;}
 
-.event-item {
-  width: 95%;
+
+.list-item {
+  text-align: left;
   min-width: 300px;
   max-width: 600px;
   padding: 1em;
-  margin: 1em auto;
+  margin-top: 0;
+  margin-bottom: 1em;
+  margin-right: auto;
+  margin-left: auto;
   background-color: #FFF;
 }
 
-.event-title {
+.item-title {
   padding: 0;
   margin: 0;
   color: #37474F;
   letter-spacing: 0.10em;
 }
 
-.event-time {
+.item-time {
   color: #607D8B;
   font-size: 0.75em;
   font-style: italic;
 }
-.event-details {
+.item-details {
   padding: 0 0 1em 0;
   margin: 0;
 }
 
-.event-form {
+form {
   text-align: center;
   margin: 0 auto;
   min-width: 300px;
   max-width: 600px;
 }
 
-.event-form label {
+form label {
   display: inline-block;
   text-align: right;
   width: 25%;
   min-width: 85px;
 }
 
-.event-form input, textarea {
+form input, textarea {
   font: 1em sans-serif;
   padding: 0.5em;
   margin: 0.5em;
   width: 60%;
 }
 
-.event-form textarea {
+form textarea {
   vertical-align: top;
   height: 5em;
 }

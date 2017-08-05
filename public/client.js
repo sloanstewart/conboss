@@ -12,13 +12,17 @@ function getEvents(callback) {
 }
 
 function displayEvents(data) {
+  const timeOptions = {};
   for (let index in data.events) {
-    $('.list').append(
-      '<div class="event-item">' +
-        '<h3 class="event-title">' + data.events[index].title + '</h3>' +
-        '<p><span class="event-time">' + data.events[index].start + ' - ' + data.events[index].end + '</span></p>' +
-        '<p class="event-details">' + data.events[index].details + '</p>' +
+    let start = new Date(data.events[index].start).toLocaleString();
+    let end = new Date(data.events[index].end).toLocaleString();
+    $('.event-list').append(
+      '<div class="list-item">' +
+        '<h2 class="item-title">' + data.events[index].title + '</h2>' +
+        '<p><span class="item-time">' + start + ' - ' + end + '</span></p>' +
+        '<p class="item-details">' + data.events[index].details + '</p>' +
         '<p>' +
+          '<button id="btn-save" class="btn-green" data-id="' + data.events[index]._id + '">Save</button>' +
           '<button id="btn-edit" class="btn-yellow" data-id="' + data.events[index]._id + '">Edit</button>' +
           '<button id="btn-delete" class="btn-red" data-id="' + data.events[index]._id + '">Delete</button>' +
         '</p>' +
@@ -30,22 +34,6 @@ function displayEvents(data) {
 function getAndDisplayEvents() {
   getEvents(displayEvents);
 }
-
-
-// function getOneEvent(callback) {
-//   const apiCall = {
-//     method: "GET",
-//     url: "/api/event/:id",
-//     data: "",
-//     dataType: "json",
-//     success: callback
-//   };
-//   $.ajax(apiCall);
-// }
-//
-// function getAndDisplayOneEvent() {
-//   getOneEvent(displayOneEvent);
-// }
 
 // Redirect after creating New Event
 function createEventRedirect() {
