@@ -10,9 +10,16 @@
     </header>
     <main>
       <form class="login" action="#" method="post">
-        <input type="text" name="email" id="email" placeholder="email" value="">
-        <input type="text" name="password" id="password" placeholder="password" value="">
-        <input type="button" name="register" id="register" value="Register">
+        <fieldset>
+          <legend>Register</legend>
+          <label for="register-username">Username:</label>
+          <input type="text" name="register-username" id="register-username" placeholder="" value="" title="Choose a username" required>
+          <label for="register-email">Email:</label>
+          <input type="email" name="register-email" id="register-email" placeholder="" value="" title="Please, provide a valid email address" required>
+          <label for="register-pass">Password:</label>
+          <input type="password" name="register-pass" id="register-pass" placeholder="" value="" title="Please, provide a password for your account" required>
+          <button name="register" id="register">Register</button>
+        </fieldset>
       </form>
       <p>Already have an account? <a href="../">Login</a></p>
     </main>

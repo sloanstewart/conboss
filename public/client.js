@@ -173,9 +173,10 @@ var MOCK_USERS = {
 };
 
 function getUsers(callback) {
-  setTimeout(function() { callback(MOCK_USERS)}, 100);
+  setTimeout(function() {callback(MOCK_USERS)}, 100);
 }
 
+// Look into using ejs template for this. I think this is messy.
 function displayUsers(data) {
   for (index in data.users) {
     let user = data.users[index];
