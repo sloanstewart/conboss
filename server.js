@@ -176,15 +176,15 @@ app.delete('/api/events/:id', (req, res) => {
 
 // USERS API
 app.get("/api/users", (req, res) => {
-  Event
+  User
   .find()
   .limit(50 )
   .then( users => {
+    console.log(users);
     res
-    // .sendFile(__dirname + '/views/schedule.html')
     .status(200)
     .json({
-      users: users
+      users
     });
   });
 });

@@ -1,4 +1,7 @@
 
+
+// E V E N TS ============================
+
 // Get and display all Events
 function getEvents(callback) {
   const apiCall = {
@@ -44,6 +47,7 @@ function editEventRedirect() {
   window.location.replace("http://localhost:8080/events");
   return false;
 }
+
 // BUTTONS
 function listeners() {
   // NEW EVENT
@@ -119,8 +123,98 @@ function listeners() {
   });
 }
 
+// U S E R S ====================
+// date = new Date().toLocaleDateString();
+// var MOCK_USERS = {
+//   "users": [
+//     {
+//       "_id": "42346asdgad8647ad",
+//       "email": "ayylmao@memes.net",
+//       "username": "jwhat",
+//       "name": {
+//         "firstName": "Jethro",
+//         "lastName": "Whatevs"
+//       },
+//       "location": "Atlanta, GA",
+//       "bio": "just a bruh, doin' big thangs tbh",
+//       "created": date,
+//       "role": "admin",
+//       "saved_events": []
+//     },
+//     {
+//       "_id": "4657afsdhj6asdgad8647ad",
+//       "email": "ahack@gmail.com",
+//       "username": "ahack26",
+//       "name": {
+//         "firstName": "Amy",
+//         "lastName": "Hackler"
+//       },
+//       "location": "Nashville, TN",
+//       "bio": "lovin' this web majic!",
+//       "created": date,
+//       "role": "user",
+//       "saved_events": []
+//     },
+//     {
+//       "_id": "gfjkased5fja4r4a7",
+//       "email": "c.code@earthlink.net",
+//       "username": "cc97",
+//       "name": {
+//         "firstName": "Carrie",
+//         "lastName": "Code"
+//       },
+//       "location": "THE INTERNET",
+//       "bio": "I've spent more than 10hrs in my editor today.",
+//       "created": date,
+//       "role": "user",
+//       "saved_events": []
+//     },
+//   ]
+// };
+
+function getUsers(callback) {
+  // setTimeout(function() {callback(MOCK_USERS)}, 100);
+  const apiCall = {
+    method: "GET",
+    url: "/api/users",
+    data: "",
+    dataType: "json",
+    success: callback
+  };
+  $.ajax(apiCall);
+}
+
+// Look into using ejs template for this. I think this is messy.
+function displayUsers(data) {
+  for (var index in data.users) {
+    let user = data.users[index];
+    $('.user-list').append(
+      '<div class="list-item">' +
+        '<h2 class="item-title">' + user.username + '</h2>' +
+        '<p><span class="item-time">' + user.name.firstName + ' ' + user.name.lastName + ' | <a href=mailto:"' + user.email + '">' + user.email + '</a></span></p>' +
+        '<p class="item-details">' + user.bio + '</p>' +
+        '<p>' +
+
+          '<button id="btn-edit" class="btn-yellow" data-id="' + user._id + '">Edit</button>' +
+          '<button id="btn-delete" class="btn-red" data-id="' + user._id + '">Delete</button>' +
+        '</p>' +
+      '</div>'
+    );
+  }
+}
+
+function getAndDisplayUsers() {
+  getUsers(displayUsers);
+}
+
+$(function() {
+  getAndDisplayUsers();
+});
+
+
 //ON LOAD
 $(function() {
   getAndDisplayEvents();
+  getAndDisplayUsers();
   listeners();
 });
