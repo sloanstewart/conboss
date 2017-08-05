@@ -5,7 +5,15 @@
 }
 
 body {
+  color: #424242;
+  font-size: 16px;
+  line-height: 1.5em;
+  background-color: #ECEFF1;;
+}
 
+p{
+  padding: 0;
+  margin: 0;
 }
 
 a, a:visited {
@@ -14,4 +22,73 @@ a, a:visited {
 
 a:hover, a:active {
   text-decoration: underline;
+}
+
+button, input[type=button] {
+  min-width: 5em;
+  padding: 0.5em;
+  margin: 0;
+  letter-spacing: 0.05em;
+  font: 1em sans-serif;
+  background-color: #B0BEC5;
+  border: none;
+  transition: all ease-in-out 0.2s;
+}
+button:hover, button:focus {filter: brightness(90%);}
+
+.btn-blue {background-color: cornflowerblue;}
+.btn-green {background-color: #DCEDC8;}
+.btn-yellow {background-color: #FFECB3;}
+.btn-red {background-color: #FFCCBC;}
+
+.event-item {
+  width: 95%;
+  min-width: 300px;
+  max-width: 600px;
+  padding: 1em;
+  margin: 1em auto;
+  background-color: #FFF;
+}
+
+.event-title {
+  padding: 0;
+  margin: 0;
+  color: #37474F;
+  letter-spacing: 0.10em;
+}
+
+.event-time {
+  color: #607D8B;
+  font-size: 0.75em;
+  font-style: italic;
+}
+.event-details {
+  padding: 0 0 1em 0;
+  margin: 0;
+}
+
+.event-form {
+  text-align: center;
+  margin: 0 auto;
+  min-width: 300px;
+  max-width: 600px;
+}
+
+.event-form label {
+  display: inline-block;
+  text-align: right;
+  width: 25%;
+  min-width: 85px;
+}
+
+.event-form input, textarea {
+  font: 1em sans-serif;
+  padding: 0.5em;
+  margin: 0.5em;
+  width: 60%;
+}
+
+.event-form textarea {
+  vertical-align: top;
+  height: 5em;
 }
