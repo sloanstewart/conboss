@@ -123,7 +123,34 @@ function listeners() {
   });
 
 
-  // confirm edit user button
+
+
+
+  // USER new button
+  document.addEventListener('click', function(event) {
+    if(event.target && event.target.id == 'create-user') {
+      event.preventDefault();
+      const formData = {
+        "username": $('#create-username').val(),
+        "email": $('#create-email').val(),
+        "password": $('#create-password').val()
+      };
+      $.ajax({
+        method: "POST",
+        url: "/api/user",
+        data: formData,
+        success: function() {
+          console.log('New user created');
+          window.location.replace("/users");
+        },
+        error: function(err) {
+          console.error(err);
+        }
+      });
+    }
+  });
+
+  // USER confirm edit button
     document.addEventListener('click', function(event) {
       if(event.target && event.target.id == 'confirm-edit-user') {
         event.preventDefault();
@@ -132,8 +159,10 @@ function listeners() {
           "username": $('#username').val(),
           "email": $('#email').val(),
           "password": $('#password').val(),
-          "firstName": $('#firstName').val(),
-          "lastName": $('#lastName').val(),
+          "name": {
+            "firstName": $('#firstName').val(),
+            "lastName": $('#lastName').val()
+          },
           "location": $('#details').val(),
           "bio": $('#bio').val()
         };
@@ -162,6 +191,19 @@ function listeners() {
     }
   });
 
+  // delete event button
+  document.addEventListener('click', function(event) {
+    if(event.target && event.target.id == 'delete-user') {
+      event.preventDefault();
+      const url = "/api/user/" + event.target.dataset.id;
+      console.log(url);
+      $.ajax({
+        method: "DELETE",
+        url: url,
+        success: window.location=('/users')
+      });
+    }
+  });
 
 } // <-- end of button listeners
 
@@ -238,7 +280,6 @@ function displayUsers(data) {
         '<p>' +
 
           '<button id="btn-edit-user" class="btn-yellow" data-id="' + user._id + '">Edit</button>' +
-          '<button id="btn-delete-user" class="btn-red" data-id="' + user._id + '">Delete</button>' +
         '</p>' +
       '</div>'
     );

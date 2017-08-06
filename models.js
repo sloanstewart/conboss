@@ -4,15 +4,15 @@ const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
   username: {type: String, required: true},
   email: {type: String, required: true},
-  password: String,
+  password: {type: String, required: true},
   name: {
-    firstName: String,
-    lastName: String
+    firstName: {type: String, default: "", required: false},
+    lastName: {type: String, default: "", required: false}
   },
-  location: String,
-  bio: String,
-  created: {type: Date, default: Date.now},
-  role: String,
+  location: {type: String, default: "", required: false},
+  bio: {type: String, default: "", required: false},
+  created: {type: Date, default: Date.now, required: true},
+  role: {type: String, default: "user", required: true},
   saved_events: []
 });
 

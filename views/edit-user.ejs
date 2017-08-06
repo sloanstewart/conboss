@@ -18,16 +18,18 @@
           <input type="email" id="email" name="email" title="Please provide a valid email address" value="<%- email %>" placeholder="" required>
           <label for="password">Password*:</label>
           <input type="text" id="password" name="password" title="Please provide a password" value="<%- password %>" placeholder="" required>
-          <label for="first-name">First name:</label>
-          <input type="text" id="first-name" name="first-name" title="Please provide your first name" value="<%- firstName %>">
-          <label for="last-name">Last name:</label>
-          <input type="text" id="last-name" name="last-name" title="Please provide your last name" value="<%- lastName %>">
+          <label for="firstName">First name:</label>
+          <input type="text" id="firstName" name="firstName" title="Please provide your first name" value="<%- firstName %>">
+          <label for="lastName">Last name:</label>
+          <input type="text" id="lastName" name="lastName" title="Please provide your last name" value="<%- lastName %>">
           <label for="location">Location:</label>
           <input type="location" id="location" name="location" title="Please provide your location" value="<%- location %>" placeholder="">
           <label for="bio">Bio:</label>
           <textarea id="bio" name="bio" title="Biographical info; have fun!" placeholder=""><%- bio %></textarea>
-          <p><span>Role: <% role %></span> <span>Created: <% created %></span></p>
+          <p><span>Role: <%- role %></span></p>
+          <p><span>Created: <%- created.toLocaleDateString() %></span></p>
           <button id="confirm-edit-user" class="btn-green" name="edit-user" data-id="<%= _id %>">Confirm Edit</button>
+          <button id="delete-user" class="btn-red" name="delete-user" data-id="<%= _id %>">Delete Account</button>
         </fieldset>
       </form>
     </main>

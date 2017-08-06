@@ -27,10 +27,10 @@ app.get("/", (req, res) => {
   .render('index');
 });
 
-app.get("/register", (req, res) => {
+app.get("/user/create", (req, res) => {
   res
   .status(200)
-  .render('register');
+  .render('create-user');
 });
 
 app.get("/users", (req, res) => {
@@ -202,10 +202,12 @@ app.get("/user/edit/:id", (req, res) => {
 
 
 // USERS API
+
+// read all USERS
 app.get("/api/users", (req, res) => {
   User
   .find()
-  .limit(50 )
+  .limit(50)
   .then( users => {
     res
     .status(200)
@@ -215,7 +217,39 @@ app.get("/api/users", (req, res) => {
   });
 });
 
-// PUT: edit/update user information
+// create USER
+app.post('/api/user', (req, res) => {
+  const required = ['username', 'email', 'password'];
+  for (let i=0; i<required.length; i++) {
+    const field = required[i];
+    if(!(field in req.body)) {
+      const message = `Missing data for required field "${field}" in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  User
+    .create({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      name: {
+        lastName: req.body.lastName,
+        firstName: req.body.firstName
+      },
+      location: req.body.location,
+      bio: req.body.bio,
+      role: req.body.role
+    })
+    .then(event => res.status(201).json(event))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: err});
+    });
+});
+
+// update USER information
 app.put('/api/user/:id', (req, res) => {
   if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
     // console.log(req.params.id);
@@ -241,6 +275,20 @@ app.put('/api/user/:id', (req, res) => {
       res.status(500).json({message: err });
     });
 });
+
+// delete USER
+app.delete('/api/user/:id', (req, res) => {
+  User
+    .findByIdAndRemove(req.params.id)
+    .exec()
+    .then(() => {
+      const message = `Deleted user ${req.params.id}`;
+      res.status(200).json({message: message});
+    });
+});
+
+
+
 
 // 404 for requests to everything that's not specified
 app.use('*', function(req, res) {
