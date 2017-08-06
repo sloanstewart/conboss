@@ -228,11 +228,11 @@ describe('Events API resource', function() {
         })
         .then(function(res) {
           res.should.have.status(201);
+          return Event.findById(updateData.id).exec();
           event.title.should.equal(updateData.title);
           event.details.should.equal(updateData.details);
-          // return Event.findById(updateData.id).exec();
-          // event.details.should.equal(updateData.start);
-          // event.details.should.equal(updateData.end);
+          // event.start.should.equal(updateData.start);
+          // event.end.should.equal(updateData.end);
         })
         .catch(err => console.log(err));
     });
