@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+  <head>
+    <% include head %>
+  </head>
+  <body>
+    <header>
+      <% include header %>
+    </header>
+    <main>
+      <form class="user-form" method="put">
+        <fieldset>
+          <legend>User Information</legend>
+          <label for="username">Username*:</label>
+          <input type="text" id="username" name="username" title="Please provide a username for your account" value="<%- username %>" placeholder="" required>
+          <label for="email">Email*:</label>
+          <input type="email" id="email" name="email" title="Please provide a valid email address" value="<%- email %>" placeholder="" required>
+          <label for="password">Password*:</label>
+          <input type="text" id="password" name="password" title="Please provide a password" value="<%- password %>" placeholder="" required>
+          <label for="first-name">First name:</label>
+          <input type="text" id="first-name" name="first-name" title="Please provide your first name" value="<%- firstName %>">
+          <label for="last-name">Last name:</label>
+          <input type="text" id="last-name" name="last-name" title="Please provide your last name" value="<%- lastName %>">
+          <label for="location">Location:</label>
+          <input type="location" id="location" name="location" title="Please provide your location" value="<%- location %>" placeholder="">
+          <label for="bio">Bio:</label>
+          <textarea id="bio" name="bio" title="Biographical info; have fun!" placeholder=""><%- bio %></textarea>
+          <p><span>Role: <% role %></span> <span>Created: <% created %></span></p>
+          <button id="confirm-edit-user" class="btn-green" name="edit-user" data-id="<%= _id %>">Confirm Edit</button>
+        </fieldset>
+      </form>
+    </main>
+    <footer>
+      <% include footer %>
+    </footer>
+  </body>
+</html>

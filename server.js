@@ -166,9 +166,36 @@ app.delete('/api/events/:id', (req, res) => {
     .exec()
     .then(() => {
       const message = `Deleted event ${req.params.id}`;
-      console.log(message);
       res.status(200).json({message: message});
     });
+});
+
+
+// USERS ROUTES
+app.get("/user/edit/:id", (req, res) => {
+  User
+  .findById(req.params.id)
+  .exec()
+  .then( user => {
+    const data = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      password: user.password,
+      firstName: user.name.firstName,
+      lastName: user.name.lastName,
+      location: user.location,
+      bio: user.bio,
+      role: user.role,
+      created: user.created
+    };
+    return data;
+  })
+  .then( data => {
+    res
+    .status(200)
+    .render('edit-user', data);
+  });
 });
 
 
@@ -180,7 +207,6 @@ app.get("/api/users", (req, res) => {
   .find()
   .limit(50 )
   .then( users => {
-    console.log(users);
     res
     .status(200)
     .json({
@@ -189,8 +215,32 @@ app.get("/api/users", (req, res) => {
   });
 });
 
+// PUT: edit/update user information
+app.put('/api/user/:id', (req, res) => {
+  if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
+    // console.log(req.params.id);
+    // console.log(req.body._id);
+    res.status(400).json({
+      error: "Request path ID and request body _ID values must match"
+    });
+  }
 
+  const updated = {};
+  const updateableFields = ['username', 'email', 'password', 'firstName', 'lastName', 'location', 'bio'];
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+        updated[field] = req.body[field];
+    }
+  });
 
+  User
+    .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+    .exec()
+    .then(updatedUser => {res.status(201).json(updatedUser);})
+    .catch(err => {
+      res.status(500).json({message: err });
+    });
+});
 
 // 404 for requests to everything that's not specified
 app.use('*', function(req, res) {
