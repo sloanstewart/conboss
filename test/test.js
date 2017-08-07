@@ -30,7 +30,7 @@ describe('Html pages', function() {
     });
   });
 
-  describe('GET "/register"', function(){
+  describe('GET "/user/create"', function(){
     before(function() {
       return runServer();
     });
@@ -41,7 +41,7 @@ describe('Html pages', function() {
 
     it('should return http status 200', function() {
       return chai.request(app)
-      .get('/register')
+      .get('/user/create')
       .then(function(res) {
         res.should.have.status(200);
       });
