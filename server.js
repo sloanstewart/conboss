@@ -260,13 +260,12 @@ app.put('/api/user/:id', (req, res) => {
   }
 
   const updated = {};
-  const updateableFields = ['username', 'email', 'password', 'firstName', 'lastName', 'location', 'bio'];
+  const updateableFields = ['username', 'email', 'password', 'name', 'location', 'bio'];
   updateableFields.forEach(field => {
     if (field in req.body) {
         updated[field] = req.body[field];
     }
   });
-
   User
     .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
     .exec()

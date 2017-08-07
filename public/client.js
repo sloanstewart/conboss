@@ -155,16 +155,16 @@ function listeners() {
       if(event.target && event.target.id == 'confirm-edit-user') {
         event.preventDefault();
         let formData = {
-          "_id": $('#confirm-edit-user').data('id'),
-          "username": $('#username').val(),
-          "email": $('#email').val(),
-          "password": $('#password').val(),
-          "name": {
-            "firstName": $('#firstName').val(),
-            "lastName": $('#lastName').val()
+          _id: $('#confirm-edit-user').data('id'),
+          username: $('#username').val(),
+          email: $('#email').val(),
+          password: $('#password').val(),
+          name: {
+            firstName: $('#firstName').val(),
+            lastName: $('#lastName').val()
           },
-          "location": $('#details').val(),
-          "bio": $('#bio').val()
+          location: $('#location').val(),
+          bio: $('#bio').val()
         };
         $.ajax({
           method: "PUT",
