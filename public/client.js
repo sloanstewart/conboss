@@ -48,9 +48,9 @@ function editEventRedirect() {
   return false;
 }
 
-// BUTTONS
+// BUTTON LISTENERS
 function listeners() {
-  // NEW EVENT
+  // new event button
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'create-event') {
       event.preventDefault();
@@ -74,12 +74,12 @@ function listeners() {
       });
     }
   });
-
+// confirm edit event button
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.id == 'edit-event') {
+    if(event.target && event.target.id == 'confirm-edit-event') {
       event.preventDefault();
       let formData = {
-        "_id": $('#edit-event').data('id'),
+        "_id": $('#confirm-edit-event').data('id'),
         "title": $('#title').val(),
         "start": $('#start').val(),
         "end": $('#end').val(),
@@ -99,7 +99,7 @@ function listeners() {
       });
     }
   });
-  // EDIT EVENT
+  // edit event button
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-edit') {
       event.preventDefault();
@@ -108,7 +108,7 @@ function listeners() {
       window.location=url;
     }
   });
-  // DELETE EVENT
+  // delete event button
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-delete') {
       event.preventDefault();
@@ -121,7 +121,91 @@ function listeners() {
       });
     }
   });
-}
+
+
+
+
+
+  // USER new button
+  document.addEventListener('click', function(event) {
+    if(event.target && event.target.id == 'create-user') {
+      event.preventDefault();
+      const formData = {
+        "username": $('#create-username').val(),
+        "email": $('#create-email').val(),
+        "password": $('#create-password').val()
+      };
+      $.ajax({
+        method: "POST",
+        url: "/api/user",
+        data: formData,
+        success: function() {
+          console.log('New user created');
+          window.location.replace("/users");
+        },
+        error: function(err) {
+          console.error(err);
+        }
+      });
+    }
+  });
+
+  // USER confirm edit button
+    document.addEventListener('click', function(event) {
+      if(event.target && event.target.id == 'confirm-edit-user') {
+        event.preventDefault();
+        let formData = {
+          _id: $('#confirm-edit-user').data('id'),
+          username: $('#username').val(),
+          email: $('#email').val(),
+          password: $('#password').val(),
+          name: {
+            firstName: $('#firstName').val(),
+            lastName: $('#lastName').val()
+          },
+          location: $('#location').val(),
+          bio: $('#bio').val()
+        };
+        $.ajax({
+          method: "PUT",
+          url: "/api/user/"+ formData._id,
+          data: formData,
+          success: function() {
+            console.log('User edited');
+            window.location.replace("/users");
+          },
+          error: function(err) {
+            console.error(err);
+          }
+        });
+      }
+    });
+
+  // edit user button
+  document.addEventListener('click', function(event) {
+    if(event.target && event.target.id == 'btn-edit-user') {
+      event.preventDefault();
+      const url = "/user/edit/" + event.target.dataset.id;
+      console.log(url);
+      window.location=url;
+    }
+  });
+
+  // delete event button
+  document.addEventListener('click', function(event) {
+    if(event.target && event.target.id == 'delete-user') {
+      event.preventDefault();
+      const url = "/api/user/" + event.target.dataset.id;
+      console.log(url);
+      $.ajax({
+        method: "DELETE",
+        url: url,
+        success: window.location=('/users')
+      });
+    }
+  });
+
+} // <-- end of button listeners
 
 // U S E R S ====================
 // date = new Date().toLocaleDateString();
@@ -195,8 +279,7 @@ function displayUsers(data) {
         '<p class="item-details">' + user.bio + '</p>' +
         '<p>' +
 
-          '<button id="btn-edit" class="btn-yellow" data-id="' + user._id + '">Edit</button>' +
-          '<button id="btn-delete" class="btn-red" data-id="' + user._id + '">Delete</button>' +
+          '<button id="btn-edit-user" class="btn-yellow" data-id="' + user._id + '">Edit</button>' +
         '</p>' +
       '</div>'
     );
