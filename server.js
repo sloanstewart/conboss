@@ -27,10 +27,10 @@ app.get("/", (req, res) => {
   .render('index');
 });
 
-app.get("/register", (req, res) => {
+app.get("/user/create", (req, res) => {
   res
   .status(200)
-  .render('register');
+  .render('create-user');
 });
 
 app.get("/users", (req, res) => {
@@ -166,27 +166,124 @@ app.delete('/api/events/:id', (req, res) => {
     .exec()
     .then(() => {
       const message = `Deleted event ${req.params.id}`;
-      console.log(message);
       res.status(200).json({message: message});
     });
+});
+
+
+// USERS ROUTES
+app.get("/user/edit/:id", (req, res) => {
+  User
+  .findById(req.params.id)
+  .exec()
+  .then( user => {
+    const data = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      password: user.password,
+      firstName: user.name.firstName,
+      lastName: user.name.lastName,
+      location: user.location,
+      bio: user.bio,
+      role: user.role,
+      created: user.created
+    };
+    return data;
+  })
+  .then( data => {
+    res
+    .status(200)
+    .render('edit-user', data);
+  });
 });
 
 
 
 
 // USERS API
+
+// read all USERS
 app.get("/api/users", (req, res) => {
   User
   .find()
-  .limit(50 )
+  .limit(50)
   .then( users => {
-    console.log(users);
     res
     .status(200)
     .json({
       users
     });
   });
+});
+
+// create USER
+app.post('/api/user', (req, res) => {
+  const required = ['username', 'email', 'password'];
+  for (let i=0; i<required.length; i++) {
+    const field = required[i];
+    if(!(field in req.body)) {
+      const message = `Missing data for required field "${field}" in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  User
+    .create({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      name: {
+        lastName: req.body.lastName,
+        firstName: req.body.firstName
+      },
+      location: req.body.location,
+      bio: req.body.bio,
+      role: req.body.role
+    })
+    .then(event => res.status(201).json(event))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: err});
+    });
+});
+
+// update USER information
+app.put('/api/user/:id', (req, res) => {
+  if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
+    // console.log(req.params.id);
+    // console.log(req.body._id);
+    res.status(400).json({
+      error: "Request path ID and request body _ID values must match"
+    });
+  }
+
+  const updated = {};
+  const updateableFields = ['username', 'email', 'password', 'name', 'location', 'bio'];
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+        updated[field] = req.body[field];
+    }
+  });
+  User
+    .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+    .exec()
+    .then(updatedUser => {res.status(201).json(updatedUser);})
+    .catch(err => {
+      res.status(500).json({message: err });
+    });
+});
+
+// delete USER
+app.delete('/api/user/:id', (req, res) => {
+  User
+    .findByIdAndRemove(req.params.id)
+    .exec()
+    .then(() => {
+      const message = `Deleted user ${req.params.id}`;
+      res.status(200).json({message: message});
+    });
 });
 
 
