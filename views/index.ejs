@@ -9,14 +9,15 @@
       <% include header %>
     </header>
     <main>
-      <form class="login" action="" method="get">
+      <!-- /api/auth/login -->
+      <form class="login" action="" method="post">
         <fieldset>
           <legend>Login</legend>
-          <label for="email">Email:</label>
-          <input type="email" name="login-email" id="login-email" placeholder="" value="" title="Please enter the email address associated with your account" required>
-          <label for="login-pass">Password:</label>
-          <input type="password" name="login-pass" id="login-pass" placeholder="" value="" title="Please enter the password for your account" required>
-          <button name="login" id="login">Login</button>
+          <label for="username">Username:</label>
+          <input type="text" name="username" id="username" placeholder="" value="" title="Please enter the email address associated with your account" required>
+          <label for="password">Password:</label>
+          <input type="password" name="password" id="password" placeholder="" value="" title="Please enter the password for your account" required>
+          <button id="login">Login</button>
         </fieldset>
       </form>
       <p>Don't have an account? <a href="../user/create">Sign Up</a></p>

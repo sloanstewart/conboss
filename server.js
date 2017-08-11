@@ -1,21 +1,35 @@
 /*jshint esversion:6*/
-
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const app = express();
+const passport =require('passport');
+
 const {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
 const {User, Event} = require('./models');
 
+const {router: authRouter, basicStrategy, jwtStrategy} = require('./auth');
+
 mongoose.Promise = global.Promise;
 
+const app = express();
 // use ejs templates
 app.set('view engine', 'ejs');
 
+// http logging
 app.use(morgan('common'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+// auth via passport
+app.use(passport.initialize());
+passport.use(basicStrategy);
+passport.use(jwtStrategy);
+
+app.use('/api/auth/', authRouter);
+
 
 // Serve static files from '/public'
 app.use(express.static('public'));
@@ -219,33 +233,109 @@ app.get("/api/users", (req, res) => {
 
 // create USER
 app.post('/api/user', (req, res) => {
+
+  // check if there is a request body
+  if (!req.body) {
+    return res.status(400).json({message: 'No request body'});
+  }
+
+  // ensure there is data in every field
   const required = ['username', 'email', 'password'];
   for (let i=0; i<required.length; i++) {
     const field = required[i];
     if(!(field in req.body)) {
-      const message = `Missing data for required field "${field}" in request body`;
+      const message = `Missing data for "${field}" in request body`;
       console.error(message);
       return res.status(400).send(message);
     }
   }
 
-  User
-    .create({
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-      name: {
-        lastName: req.body.lastName,
-        firstName: req.body.firstName
-      },
-      location: req.body.location,
-      bio: req.body.bio,
-      role: req.body.role
+  let {username, email, password} = req.body;
+  // trim out the junk! Need an error about space in required fields...
+  username = username.trim();
+  email = email.trim();
+  password = password.trim();
+  // check that email and password are strings
+  if (typeof username !== 'string') {
+    return res.status(422).json({message: 'username must be a string'});
+  }
+  if (typeof email !== 'string') {
+    return res.status(422).json({message: 'email must be a string'});
+  }
+  if (typeof password !== 'string') {
+    return res.status(422).json({message: 'password must be a string'});
+  }
+
+  // const sizedFields = {
+  //   username: {
+  //     min: 5,
+  //     max: 50 // that's reasonable, right?
+  //   },
+  //   password: {
+  //     min: 10,
+  //     max: 72 // bcrypt max
+  //   }
+  // };
+  // const tooSmallField = Object.keys(sizedFields).find(field =>
+  //   'min' in sizedFields[field] &&
+  //   req.body[field].trim().length < sizedFields[field].min
+  // );
+  // const tooLargeField = Object.keys(sizedFields).find (field =>
+  //   'max' in sizedFields[field] &&
+  //   req.body[field].trim().length < sizedFields[field].max
+  // );
+  //
+  // if (tooSmallField || tooLargeField) {
+  //   return res.status(422).json({
+  //     code: 442,
+  //     reason: 'ValidationError',
+  //     message: tooSmallField ?
+  //       'Must be at least ${sizedFields[tooSmallField].min} characters long' :
+  //       'Must be at least ${sizedFields[tooLargeField].max} characters long',
+  //       location: tooSmallField || tooLargeField
+  //   });
+  // }
+
+
+  return User
+    .find({username})
+    .count()
+    .exec()
+    .then(count => {
+      if (count > 0) {
+        return Promise.reject({
+          code: 422,
+          reason: 'ValidationError',
+          message: 'username already in use',
+          location: 'username'
+        });
+      }
+      // if user does not exist, hash password
+      return User.hashPassword(password);
     })
-    .then(event => res.status(201).json(event))
+    .then(hash => {
+      return User
+        .create({
+          username: username,
+          email: email,
+          password: hash,
+          name: {
+            lastName: req.body.lastName,
+            firstName: req.body.firstName
+          },
+          location: req.body.location,
+          bio: req.body.bio,
+          role: req.body.role
+        });
+    })
+    .then(user => {
+      return res.status(201).json(user.apiRepr());
+    })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({error: err});
+      if (err.reason === 'ValidationError') {
+        return res.status(err.code).json(err);
+      }
+      res.status(500).json({code: 500, message: 'Internal server error'});
     });
 });
 

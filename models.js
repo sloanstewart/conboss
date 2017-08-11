@@ -1,7 +1,8 @@
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 // USERS
-const userSchema = mongoose.Schema({
+const UserSchema = mongoose.Schema({
   username: {type: String, required: true},
   email: {type: String, required: true},
   password: {type: String, required: true},
@@ -16,12 +17,13 @@ const userSchema = mongoose.Schema({
   saved_events: []
 });
 
-userSchema.virtual('fullName').get(function() {
+UserSchema.virtual('fullName').get(function() {
   return `
   ${this.name.firstName} ${this.name.lastName}`.trim();
 });
 
-userSchema.methods.apiRepr = function() {
+// the nice public USER without password and a nice looking fullName!
+UserSchema.methods.apiRepr = function() {
   return {
     id: this._id,
     name: this.fullName,
@@ -33,8 +35,21 @@ userSchema.methods.apiRepr = function() {
   };
 };
 
+UserSchema.methods.validatePassword = function(password) {
+  return bcrypt
+    .compare(password, this.password)
+    .then(isValid => isValid);
+};
+
+UserSchema.statics.hashPassword = function(password) {
+  return bcrypt
+    .hash(password, 10)
+    .then(hash => hash);
+};
+
+
 // EVENTS
-const eventSchema = mongoose.Schema({
+const EventSchema = mongoose.Schema({
   title: {type: String, required: true},
   details: String,
   start: Date,
@@ -43,7 +58,7 @@ const eventSchema = mongoose.Schema({
   created: {type: Date, default: Date.now}
 });
 
-const User = mongoose.model('User', userSchema);
-const Event = mongoose.model('Event', eventSchema);
+const User = mongoose.model('User', UserSchema);
+const Event = mongoose.model('Event', EventSchema);
 
 module.exports = {User, Event};
