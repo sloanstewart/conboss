@@ -14,12 +14,14 @@ const createAuthToken = user => {
 
 const router = express.Router();
 
+// /api/auth/login
 router.post('/login',
   // The user provides a username and password to login
   passport.authenticate('basic', {session: false}),
   (req, res) => {
     const authToken = createAuthToken(req.user.apiRepr());
-    res.json({authToken});
+    // res.json({message: "here's ya damn token",token: authToken});
+    res.cookie('token', authToken, {httpOnly: true}).status(301).redirect('/../secret')
   }
 );
 

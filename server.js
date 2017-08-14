@@ -35,6 +35,12 @@ app.use('/api/auth/', authRouter);
 app.use(express.static('public'));
 
 // ROUTES
+//   protected test route
+app.get("/secret", passport.authenticate('jwt', {session: false}), (req, res) => {
+  res.json("Sweet, you are an authorized user, myguy.")
+});
+
+
 app.get("/", (req, res) => {
   res
   .status(200)
