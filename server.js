@@ -37,7 +37,7 @@ app.use(express.static('public'));
 // ROUTES
 //   protected test route
 app.get("/secret", passport.authenticate('jwt', {session: false}), (req, res) => {
-  res.json("Sweet, you are an authorized user, myguy.")
+  res.json("You are authorized to see this great page!");
 });
 
 

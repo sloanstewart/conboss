@@ -21,7 +21,8 @@ router.post('/login',
   (req, res) => {
     const authToken = createAuthToken(req.user.apiRepr());
     // res.json({message: "here's ya damn token",token: authToken});
-    res.cookie('token', authToken, {httpOnly: true}).status(301).redirect('/../secret')
+    res.status(200).header('Authorization', 'Bearer '+  authToken).send();
+    // .status(301).redirect('/../secret');
   }
 );
 
