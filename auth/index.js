@@ -1,4 +1,4 @@
 const {router} = require('./router');
-const {basicStrategy, jwtStrategy} = require('./strategies');
+const {localStrategy, basicStrategy, jwtStrategy} = require('./strategies');
 
-module.exports = {router, basicStrategy, jwtStrategy};
+module.exports = {router, localStrategy, basicStrategy, jwtStrategy};

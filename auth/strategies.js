@@ -10,8 +10,6 @@ const {JWT_SECRET} = require('../config');
 
 const localStrategy = passport.use(new LocalStrategy(
   function(username, password, done) {
-    console.log(username);
-    console.log(password);
     User.findOne({ username: username }, function(err, user) {
       if (err) { return done(err); }
       if (!user) {
@@ -20,6 +18,7 @@ const localStrategy = passport.use(new LocalStrategy(
       if (!user.validatePassword(password)) {
         return done(null, false, { message: 'Incorrect password.' });
       }
+      console.log('Login accepted.');
       return done(null, user);
     });
   }

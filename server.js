@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require("express-session");
+const MongoStore = require('connect-mongo')(session);
 const passport =require('passport');
 const {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
 const {User, Event} = require('./models');
@@ -21,11 +22,13 @@ app.use(morgan('common'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
+app.use(flash());
 app.use(cookieParser());
 app.use(session({
   secret: 'supersecret',
   resave: false,
   saveUninitialized: false,
+  store: new MongoStore({url: DATABASE_URL})
   // cookie: { secure: true } //use with https
 }));
 app.use(passport.initialize());
@@ -33,7 +36,6 @@ app.use(passport.session());
 passport.use(basicStrategy);
 passport.use(jwtStrategy);
 app.use('/api/auth/', authRouter);
-app.use(flash());
 // ROUTES
 //   protected test route
 app.get("/secret",
@@ -45,8 +47,8 @@ app.get("/secret",
 });
 
 app.get("/", (req, res) => {
-  console.log(req.user);
-  console.log(req.isAuthenticated());
+  console.log('User: '+req.user.username);
+  console.log('Authenticated: '+req.isAuthenticated());
   res
   .status(200)
   .render('index');

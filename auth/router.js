@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const router = express.Router();
 const flash = require('connect-flash');
+const {User, Event} = require('../models');
 const createAuthToken = user => {
   return jwt.sign({user}, config.JWT_SECRET, {
     subject: user.username,
@@ -15,7 +16,7 @@ const createAuthToken = user => {
 // /api/auth/login
 router.post('/login',
   passport.authenticate('local',
-    {session: false,
+    {
       successRedirect: '/events',
       failureRedirect: '/'
     })
@@ -31,8 +32,8 @@ router.post('/refresh',
   // expiration
   passport.authenticate('jwt', {session: false}),
   (req, res) => {
-    const authToken = createAuthToken(req.user);
-    res.json({authToken});
+    const token = createAuthToken(req.user);
+    res.json({token});
   }
 );
 
