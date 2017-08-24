@@ -1,14 +1,31 @@
 const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const {BasicStrategy} = require('passport-http');
 const {
   Strategy: JwtStrategy,
   ExtractJwt
 } = require('passport-jwt');
-
 const {User} = require('../models');
 const {JWT_SECRET} = require('../config');
 
-const basicStrategy = new BasicStrategy((username, password, callback) => {
+const localStrategy = passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log(username);
+    console.log(password);
+    User.findOne({ username: username }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validatePassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+const basicStrategy = new BasicStrategy((username, password, done) => {
   let user;
   User
     .findOne({username: username})
@@ -29,13 +46,13 @@ const basicStrategy = new BasicStrategy((username, password, callback) => {
           message: 'Incorrect username or password',
         });
       }
-      return callback(null, user);
+      return done(null, user);
     })
     .catch(err => {
       if (err.reason === 'LoginError') {
-        return callback(null, false, err);
+        return done(null, false, err);
       }
-      return callback(err, false);
+      return done(err, false);
     });
 });
 
@@ -45,8 +62,8 @@ const jwtStrategy = new JwtStrategy({
     algorithms: ['HS256']
   },
   (payload, done) => {
-    done(null, payload.user)
+    return done(null, payload.user)
   }
 );
 
-module.exports = {basicStrategy, jwtStrategy};
+module.exports = {localStrategy, basicStrategy, jwtStrategy};

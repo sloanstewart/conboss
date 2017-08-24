@@ -4,44 +4,49 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+const session = require("express-session");
 const passport =require('passport');
-
 const {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
 const {User, Event} = require('./models');
-
-const {router: authRouter, basicStrategy, jwtStrategy} = require('./auth');
+const {router: authRouter, localStrategy, basicStrategy, jwtStrategy} = require('./auth');
+const flash = require('connect-flash');
 
 mongoose.Promise = global.Promise;
 
 const app = express();
-// use ejs templates
 app.set('view engine', 'ejs');
 
-// http logging
 app.use(morgan('common'));
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
-// auth via passport
+app.use(express.static('public'));
+app.use(cookieParser());
+app.use(session({
+  secret: 'supersecret',
+  resave: false,
+  saveUninitialized: false,
+  // cookie: { secure: true } //use with https
+}));
 app.use(passport.initialize());
+app.use(passport.session());
 passport.use(basicStrategy);
 passport.use(jwtStrategy);
-
 app.use('/api/auth/', authRouter);
-
-
-// Serve static files from '/public'
-app.use(express.static('public'));
-
+app.use(flash());
 // ROUTES
 //   protected test route
-app.get("/secret", passport.authenticate('jwt', {session: false}), (req, res) => {
-  res.json("You are authorized to see this great page!");
+app.get("/secret",
+  passport.authenticate('jwt', {session: false}),
+  (req, res) => {
+    return res.json({
+      message: "You are authorized to see this!",
+      user: req.user});
 });
 
-
 app.get("/", (req, res) => {
+  console.log(req.user);
+  console.log(req.isAuthenticated());
   res
   .status(200)
   .render('index');

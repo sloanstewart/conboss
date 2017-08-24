@@ -1,9 +1,9 @@
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-
 const config = require('../config');
-
+const router = express.Router();
+const flash = require('connect-flash');
 const createAuthToken = user => {
   return jwt.sign({user}, config.JWT_SECRET, {
     subject: user.username,
@@ -12,19 +12,19 @@ const createAuthToken = user => {
   });
 };
 
-const router = express.Router();
-
 // /api/auth/login
 router.post('/login',
-  // The user provides a username and password to login
-  passport.authenticate('basic', {session: false}),
-  (req, res) => {
-    const authToken = createAuthToken(req.user.apiRepr());
-    // res.json({message: "here's ya damn token",token: authToken});
-    res.status(200).header('Authorization', 'Bearer '+  authToken).send();
-    // .status(301).redirect('/../secret');
-  }
+  passport.authenticate('local',
+    {session: false,
+      successRedirect: '/events',
+      failureRedirect: '/'
+    })
 );
+
+router.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 
 router.post('/refresh',
   // The user exchanges an existing valid JWT for a new one with a later
@@ -35,5 +35,15 @@ router.post('/refresh',
     res.json({authToken});
   }
 );
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
 module.exports = {router};
