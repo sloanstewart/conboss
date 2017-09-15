@@ -47,7 +47,7 @@ app.get("/secret",
 });
 
 app.get("/", (req, res) => {
-  console.log('User: '+req.user.username);
+  // console.log('User: '+req.user.username);
   console.log('Authenticated: '+req.isAuthenticated());
   res
   .status(200)
@@ -61,9 +61,16 @@ app.get("/user/create", (req, res) => {
 });
 
 app.get("/users", (req, res) => {
-  res
-  .status(200)
-  .render('users');
+  if (req.isAuthenticated()) {
+    console.log('user authenticated; rendering...');
+    res
+      .status(200)
+      .render('users');
+  }
+  else {
+    console.log('user not authenticated; redirecting...');
+    res.redirect("/");
+  }
 });
 
 
