@@ -81,15 +81,23 @@ app.get("/events", (req, res) => {
 });
 
 app.get("/events/new/", (req, res) => {
-      res
-      .status(200)
-      .render('new-event');
+  if (req.isAuthenticated()) {
+    res
+    .status(200)
+    .render('new-event');
+  }
+  else {
+    console.log('Must be authenticated to create events');
+    res.redirect('/');
+  }
+
 });
 
 app.get("/events/edit/:id", (req, res) => {
-  Event
-  .findById(req.params.id)
-  .exec()
+  if (req.isAuthenticated()) {
+    Event
+    .findById(req.params.id)
+    .exec()
     .then( event => {
       const data = {
         _id: event._id,
@@ -99,12 +107,17 @@ app.get("/events/edit/:id", (req, res) => {
         details: event.details
       };
       return data;
-  })
-  .then( data => {
-    res
-    .status(200)
-    .render('edit-event', data);
-  });
+    })
+    .then( data => {
+      res
+      .status(200)
+      .render('edit-event', data);
+    });
+  }
+  else {
+    console.log('Must be authenticated to edit events');
+    res.redirect('/');
+  }
 });
 
 
@@ -163,28 +176,28 @@ app.post('/api/events', (req, res) => {
 });
 
 app.put('/api/events/:id', (req, res) => {
-  if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
-    console.log(req.params.id);
-    console.log(req.body._id);
-    res.status(400).json({
-      error: "Request path ID and request body _ID values must match"
-    });
-  }
-
-  const updated = {};
-  const updateableFields = ['title', 'details', 'start', 'end', 'users'];
-  updateableFields.forEach(field => {
-    if (field in req.body) {
-      if(field === 'start' || field === 'end'){
-        updated[field] = new Date(req.body[field]);
-      }
-      else {
-        updated[field] = req.body[field];
-      }
+  if (req.isAuthenticated()) {
+    if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
+      console.log(req.params.id);
+      console.log(req.body._id);
+      res.status(400).json({
+        error: "Request path ID and request body _ID values must match"
+      });
     }
-  });
 
-  Event
+    const updated = {};
+    const updateableFields = ['title', 'details', 'start', 'end', 'users'];
+    updateableFields.forEach(field => {
+      if (field in req.body) {
+        if(field === 'start' || field === 'end'){
+          updated[field] = new Date(req.body[field]);
+        }
+        else {
+          updated[field] = req.body[field];
+        }
+      }
+    });
+    Event
     .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
     .exec()
     .then(updatedEvent => {res.status(201).json(updatedEvent);})
@@ -192,16 +205,27 @@ app.put('/api/events/:id', (req, res) => {
       console.error(err);
       res.status(500).json({message: err });
     });
+  }
+  else {
+    console.log('Must be authenticated to update events');
+    res.redirect('/');
+  }
 });
 
 app.delete('/api/events/:id', (req, res) => {
-  Event
+  if (req.isAuthenticated()) {
+    Event
     .findByIdAndRemove(req.params.id)
     .exec()
     .then(() => {
       const message = `Deleted event ${req.params.id}`;
       res.status(200).json({message: message});
     });
+  }
+  else {
+    console.log('Must be authenticated to delete events');
+    res.redirect('/');
+  }
 });
 
 
