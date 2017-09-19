@@ -251,6 +251,12 @@ app.get("/api/users", (req, res) => {
   });
 });
 
+// Logout User
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/api/auth/logout');
+});
+
 // create USER
 app.post('/api/user', (req, res) => {
 

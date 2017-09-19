@@ -21,7 +21,7 @@ router.post('/login',
       failureRedirect: '/'
     })
 );
-
+// /api/auth/logout
 router.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
