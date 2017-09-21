@@ -59,11 +59,16 @@ app.get("/", (req, res) => {
 
 
 // EVENT ROUTES
-
 app.get("/events", (req, res) => {
-      res
-      .status(200)
-      .render('events');
+  if (req.isAuthenticated()) {
+    res
+    .status(200)
+    .render('events');
+  }
+  else {
+    console.log('Must be authenticated to view events');
+    res.redirect('/');
+  }
 });
 
 app.get("/events/new/", (req, res) => {
@@ -76,7 +81,6 @@ app.get("/events/new/", (req, res) => {
     console.log('Must be authenticated to create events');
     res.redirect('/');
   }
-
 });
 
 app.get("/events/edit/:id", (req, res) => {
