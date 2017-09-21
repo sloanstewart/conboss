@@ -36,8 +36,10 @@ app.use(passport.session());
 passport.use(basicStrategy);
 passport.use(jwtStrategy);
 app.use('/api/auth/', authRouter);
+
+
 // ROUTES
-//   protected test route
+// JWT protected test route
 app.get("/secret",
   passport.authenticate('jwt', {session: false}),
   (req, res) => {
@@ -46,6 +48,7 @@ app.get("/secret",
       user: req.user});
 });
 
+// Landing Page
 app.get("/", (req, res) => {
   // console.log('User: '+req.user.username);
   console.log('Authenticated: '+req.isAuthenticated());
@@ -54,25 +57,8 @@ app.get("/", (req, res) => {
   .render('index');
 });
 
-app.get("/user/create", (req, res) => {
-  res
-  .status(200)
-  .render('create-user');
-});
 
-app.get("/users", (req, res) => {
-  if (req.isAuthenticated()) {
-    console.log('user authenticated; rendering...');
-    res
-      .status(200)
-      .render('users');
-  }
-  else {
-    console.log('user not authenticated; redirecting...');
-    res.redirect("/");
-  }
-});
-
+// EVENT ROUTES
 
 app.get("/events", (req, res) => {
       res
@@ -230,6 +216,44 @@ app.delete('/api/events/:id', (req, res) => {
 
 
 // USERS ROUTES
+
+// Login User
+app.get("/login", (req, res) => {
+  // console.log('User: '+req.user.username);
+  console.log('Authenticated: '+req.isAuthenticated());
+  res
+  .status(200)
+  .render('login');
+});
+
+// Create User
+app.get("/user/create", (req, res) => {
+  res
+  .status(200)
+  .render('create-user');
+});
+
+// Logout User
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/api/auth/logout');
+});
+
+// Get All Users
+app.get("/users", (req, res) => {
+  if (req.isAuthenticated()) {
+    console.log('user authenticated; rendering...');
+    res
+      .status(200)
+      .render('users');
+  }
+  else {
+    console.log('user not authenticated; redirecting...');
+    res.redirect("/");
+  }
+});
+
+// Edit User
 app.get("/user/edit/:id", (req, res) => {
   User
   .findById(req.params.id)
@@ -273,12 +297,6 @@ app.get("/api/users", (req, res) => {
       users
     });
   });
-});
-
-// Logout User
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/api/auth/logout');
 });
 
 // create USER
@@ -345,7 +363,6 @@ app.post('/api/user', (req, res) => {
   //       location: tooSmallField || tooLargeField
   //   });
   // }
-
 
   return User
     .find({username})
