@@ -225,22 +225,53 @@ app.delete('/api/events/:id', (req, res) => {
 app.get("/login", (req, res) => {
   // console.log('User: '+req.user.username);
   console.log('Authenticated: '+req.isAuthenticated());
-  res
-  .status(200)
-  .render('login');
+  if (!req.isAuthenticated()) {
+    res
+    .status(200)
+    .render('login');
+  }
+  else {
+    console.log('Must be logged out to log in!');
+    res.redirect("/dashboard");
+  }
 });
 
 // Create User
 app.get("/user/create", (req, res) => {
-  res
-  .status(200)
-  .render('create-user');
+  if (!req.isAuthenticated()) {
+    res
+    .status(200)
+    .render('create-user');
+  }
+  else {
+    console.log('Must be logged out to create new user!');
+    // res.redirect("/login");
+  }
 });
 
 // Logout User
 app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/api/auth/logout');
+  if (req.isAuthenticated()) {
+    req.logout();
+    res.redirect('/api/auth/logout');
+  }
+  else {
+    console.log('Must be logged in to log out!');
+    res.redirect("/login");
+  }
+});
+
+// User Dashboard
+app.get("/dashboard", (req, res) => {
+  if (req.isAuthenticated()) {
+    res
+    .status(200)
+    .render('dashboard');
+  }
+  else {
+    console.log('Must be logged in to view your dashboard.');
+    res.redirect("/login");
+  }
 });
 
 // Get All Users
@@ -253,35 +284,47 @@ app.get("/users", (req, res) => {
   }
   else {
     console.log('user not authenticated; redirecting...');
-    res.redirect("/");
+    res.redirect("/login");
   }
 });
 
 // Edit User
 app.get("/user/edit/:id", (req, res) => {
-  User
-  .findById(req.params.id)
-  .exec()
-  .then( user => {
-    const data = {
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      password: user.password,
-      firstName: user.name.firstName,
-      lastName: user.name.lastName,
-      location: user.location,
-      bio: user.bio,
-      role: user.role,
-      created: user.created
-    };
-    return data;
-  })
-  .then( data => {
-    res
-    .status(200)
-    .render('edit-user', data);
-  });
+  if (req.isAuthenticated()) {
+    if (req.user.id == req.params.id) {
+      console.log('User match, edit away my dude');
+      User
+      .findById(req.params.id)
+      .exec()
+      .then( user => {
+        const data = {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          firstName: user.name.firstName,
+          lastName: user.name.lastName,
+          location: user.location,
+          bio: user.bio,
+          role: user.role,
+          created: user.created
+        };
+        return data;
+      })
+      .then( data => {
+        res
+        .status(200)
+        .render('edit-user', data);
+      });
+    }
+    else {
+      console.error('Cannot edit other user\'s data.');
+    }
+  }
+  else {
+    console.log('Must be logged in to edit user');
+    res.redirect("/login");
+  }
 });
 
 
