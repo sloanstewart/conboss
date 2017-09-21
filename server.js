@@ -264,12 +264,51 @@ app.get('/logout', function(req, res){
 // User Dashboard
 app.get("/dashboard", (req, res) => {
   if (req.isAuthenticated()) {
+    var id = req.user.id;
     res
     .status(200)
-    .render('dashboard');
+    .redirect('/user/dashboard/'+id);
   }
   else {
     console.log('Must be logged in to view your dashboard.');
+    res.redirect("/login");
+  }
+});
+
+app.get("/user/dashboard/:id", (req, res) => {
+  if (req.isAuthenticated()) {
+    if (req.user.id == req.params.id) {
+      console.log('User match, loading dashboard...');
+      User
+      .findById(req.params.id)
+      .exec()
+      .then( user => {
+        const data = {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          firstName: user.name.firstName,
+          lastName: user.name.lastName,
+          location: user.location,
+          bio: user.bio,
+          role: user.role,
+          created: user.created
+        };
+        return data;
+      })
+      .then( data => {
+        res
+        .status(200)
+        .render('dashboard', data);
+      });
+    }
+    else {
+      console.error('Cannot access other user\'s data.');
+    }
+  }
+  else {
+    console.log('Must be logged in to access dashboard');
     res.redirect("/login");
   }
 });
