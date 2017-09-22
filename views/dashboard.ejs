@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+  <head>
+    <% include head %>
+  </head>
+  <body>
+    <header>
+      <% include header %>
+    </header>
+    <main>
+        <section id="user-info">
+          <form class="user-form" method="put">
+            <fieldset>
+              <legend>User Information</legend>
+              <label for="username">Username*:</label>
+              <input disabled type="text" id="username" name="username" title="Please provide a username for your account" value="<%- username %>" placeholder="" required>
+              <label for="email">Email*:</label>
+              <input disabled type="email" id="email" name="email" title="Please provide a valid email address" value="<%- email %>" placeholder="" required>
+              <label for="firstName">First name:</label>
+              <input disabled type="text" id="firstName" name="firstName" title="Please provide your first name" value="<%- firstName %>">
+              <label for="lastName">Last name:</label>
+              <input disabled type="text" id="lastName" name="lastName" title="Please provide your last name" value="<%- lastName %>">
+              <label for="location">Location:</label>
+              <input disabled type="text" id="location" name="location" title="Please provide your location" value="<%- location %>" placeholder="">
+              <label for="bio">Bio:</label>
+              <textarea disabled id="bio" name="bio" title="Biographical info; have fun!" placeholder=""><%- bio %></textarea>
+              <p><span>Role: <%- role %></span></p>
+              <p><span>Created: <%- created.toLocaleDateString() %></span></p>
+              <!-- <button id="edit-user" class="btn-yellow" name="edit-user" data-id="<%= _id %>">Edit</button> -->
+              <!-- <button id="delete-user" class="btn-red" name="delete-user" data-id="<%= _id %>">Delete Account</button> -->
+            </fieldset>
+          </form>
+        </section>
+        <section id="saved-events">
+          <p>Event list here...</p>
+        </section>
+    </main>
+    <footer>
+      <% include footer %>
+    </footer>
+  </body>
+</html>
