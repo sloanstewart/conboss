@@ -25,7 +25,7 @@ function displayEvents(data) {
         '<p><span class="item-time">' + start + ' - ' + end + '</span></p>' +
         '<p class="item-details">' + data.events[index].details + '</p>' +
         '<p>' +
-          '<button id="btn-view" class="" data-id="' + data.events[index]._id + '">View</button>' +
+          '<button id="btn-view" class="" data-id="' + data.events[index]._id + '">Details</button>' +
           // '<button id="btn-save" class="btn-green" data-id="' + data.events[index]._id + '">Save</button>' +
           // '<button id="btn-edit" class="btn-yellow" data-id="' + data.events[index]._id + '">Edit</button>' +
           // '<button id="btn-delete" class="btn-red" data-id="' + data.events[index]._id + '">Delete</button>' +
@@ -41,11 +41,13 @@ function getAndDisplayEvents() {
 
 // Redirect after creating New Event
 function createEventRedirect() {
-  window.location.replace("./");
+  let id = document.URL.substring(document.URL.lastIndexOf('/')+1);
+  window.location.replace("./view/"+id);
   return false;
 }
 function editEventRedirect() {
-  window.location.replace("http://localhost:8080/events");
+  let id = document.URL.substring(document.URL.lastIndexOf('/')+1);
+  window.location.replace("./view/"+id);
   return false;
 }
 
@@ -75,6 +77,7 @@ function listeners() {
       });
     }
   });
+
 // confirm edit event button
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'confirm-edit-event') {
@@ -92,7 +95,7 @@ function listeners() {
         data: formData,
         success: function() {
           console.log('Event edited');
-          window.location.replace("/events");
+          window.location.replace("/events/view/" + formData._id);
         },
         error: function(err) {
           console.error(err);
@@ -100,6 +103,7 @@ function listeners() {
       });
     }
   });
+
   // view event button
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-view') {
@@ -109,32 +113,36 @@ function listeners() {
       window.location=url;
     }
   });
+
   // edit event button
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-edit') {
+      let id = document.URL.substring(document.URL.lastIndexOf('/')+1);
       event.preventDefault();
-      const url = "/events/edit/" + event.target.dataset.id;
+      const url = "/events/edit/" + id;
       console.log(url);
       window.location=url;
     }
   });
+
   // delete event button
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-delete') {
       event.preventDefault();
-      const url = "/api/events/" + event.target.dataset.id;
+      let id = document.URL.substring(document.URL.lastIndexOf('/')+1);
+      const url = "/api/events/" + id;
       console.log(url);
       $.ajax({
         method: "DELETE",
         url: url,
-        success: location.reload()
+        success: window.location.replace("./events")
       });
     }
   });
 
 
 
-
+s
 
   // USER new button
   document.addEventListener('click', function(event) {
