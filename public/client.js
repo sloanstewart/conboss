@@ -114,6 +114,28 @@ function listeners() {
     }
   });
 
+  // save event button
+    document.addEventListener('click', function(event) {
+      if(event.target && event.target.id == 'btn-save') {
+        event.preventDefault();
+        let formData = {
+          "_id": $('#btn-save').data('id')
+        };
+        $.ajax({
+          method: "PUT",
+          url: "/api/events/save/"+ formData._id,
+          data: formData,
+          success: function() {
+            console.log('Event saved to user');
+            window.location.replace("/events/view/" + formData._id);
+          },
+          error: function(err) {
+            console.error(err);
+          }
+        });
+      }
+    });
+
   // edit event button
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-edit') {
@@ -140,9 +162,6 @@ function listeners() {
     }
   });
 
-
-
-s
 
   // USER new button
   document.addEventListener('click', function(event) {

@@ -253,6 +253,44 @@ app.delete('/api/events/:id', (req, res) => {
   }
 });
 
+// save event to user
+app.put('/api/events/save/:id', (req, res) => {
+  if (req.isAuthenticated()) {
+    if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
+      console.log(req.params.id);
+      console.log(req.body._id);
+      res.status(400).json({
+        error: "Request path ID and request body _ID values must match"
+      });
+    }
+
+    const updated = {};
+    const updateableFields = ['title', 'details', 'start', 'end', 'users'];
+    updateableFields.forEach(field => {
+      if (field in req.body) {
+        if(field === 'start' || field === 'end'){
+          updated[field] = new Date(req.body[field]);
+        }
+        else {
+          updated[field] = req.body[field];
+        }
+      }
+    });
+    Event
+    .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+    .exec()
+    .then(updatedEvent => {res.status(201).json(updatedEvent);})
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: err });
+    });
+  }
+  else {
+    console.log('Must be authenticated to save events');
+    res.redirect('/login');
+  }
+});
+
 
 // USERS ROUTES
 app.get("/user/edit/:id", (req, res) => {
