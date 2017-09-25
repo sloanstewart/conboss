@@ -120,7 +120,32 @@ app.get("/events/edit/:id", (req, res) => {
   }
 });
 
-
+app.get("/events/view/:id", (req, res) => {
+  if (req.isAuthenticated()) {
+    Event
+    .findById(req.params.id)
+    .exec()
+    .then( event => {
+      const data = {
+        _id: event._id,
+        title: event.title,
+        start: event.start.toISOString().slice(0, -1),
+        end: event.end.toISOString().slice(0, -1),
+        details: event.details
+      };
+      return data;
+    })
+    .then( data => {
+      res
+      .status(200)
+      .render('event-view', data);
+    });
+  }
+  else {
+    console.log('Must be authenticated to edit events');
+    res.redirect('/');
+  }
+});
 
 
 // EVENTS API

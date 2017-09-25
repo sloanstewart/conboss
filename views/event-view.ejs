@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+  <head>
+    <% include head %>
+  </head>
+  <body>
+    <header>
+      <% include header %>
+    </header>
+    <main>
+      <form class="event-form" method="put">
+        <fieldset>
+          <legend>Event Information</legend>
+          <!-- <p id="_id"><%= _id %></p> -->
+          <label for="title">Title*:</label>
+          <input disabled type="text" id="title" name="title" title="Please, provide a title for your event" value="<%- title %>" placeholder="" required>
+          <label for="start">Start Time*:</label>
+          <input disabled type="datetime-local" id="start" name="start" title="Please, provide a starting time for your event" value="<%- start %>" placeholder="" required>
+          <label for="end">End Time*:</label>
+          <input disabled type="datetime-local" id="end" name="end" title="Please, provide an ending time for your event" value="<%- end %>" required>
+          <label for="details">Details:</label>
+          <textarea disabled id="details" name="details" title="Please, provide details about your event" placeholder=""><%- details %></textarea>
+          <button id="btn-save" class="" data-id="' + data.events[index]._id + '">Save</button>
+          <button id="btn-edit" class="btn-yellow" data-id="' + data.events[index]._id + '">Edit</button>
+          <button id="btn-delete" class="btn-red" data-id="' + data.events[index]._id + '">Delete</button>
+        </fieldset>
+      </form>
+    </main>
+    <footer>
+      <% include footer %>
+    </footer>
+  </body>
+</html>

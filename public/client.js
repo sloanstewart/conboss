@@ -25,9 +25,10 @@ function displayEvents(data) {
         '<p><span class="item-time">' + start + ' - ' + end + '</span></p>' +
         '<p class="item-details">' + data.events[index].details + '</p>' +
         '<p>' +
-          '<button id="btn-save" class="btn-green" data-id="' + data.events[index]._id + '">Save</button>' +
-          '<button id="btn-edit" class="btn-yellow" data-id="' + data.events[index]._id + '">Edit</button>' +
-          '<button id="btn-delete" class="btn-red" data-id="' + data.events[index]._id + '">Delete</button>' +
+          '<button id="btn-view" class="" data-id="' + data.events[index]._id + '">View</button>' +
+          // '<button id="btn-save" class="btn-green" data-id="' + data.events[index]._id + '">Save</button>' +
+          // '<button id="btn-edit" class="btn-yellow" data-id="' + data.events[index]._id + '">Edit</button>' +
+          // '<button id="btn-delete" class="btn-red" data-id="' + data.events[index]._id + '">Delete</button>' +
         '</p>' +
       '</div>'
     );
@@ -97,6 +98,15 @@ function listeners() {
           console.error(err);
         }
       });
+    }
+  });
+  // view event button
+  document.addEventListener('click', function(event) {
+    if(event.target && event.target.id == 'btn-view') {
+      event.preventDefault();
+      const url = "/events/view/" + event.target.dataset.id;
+      console.log(url);
+      window.location=url;
     }
   });
   // edit event button
