@@ -36,8 +36,10 @@ app.use(passport.session());
 passport.use(basicStrategy);
 passport.use(jwtStrategy);
 app.use('/api/auth/', authRouter);
+
+
 // ROUTES
-//   protected test route
+// JWT protected test route
 app.get("/secret",
   passport.authenticate('jwt', {session: false}),
   (req, res) => {
@@ -46,6 +48,7 @@ app.get("/secret",
       user: req.user});
 });
 
+// Landing Page
 app.get("/", (req, res) => {
   // console.log('User: '+req.user.username);
   console.log('Authenticated: '+req.isAuthenticated());
@@ -54,30 +57,18 @@ app.get("/", (req, res) => {
   .render('index');
 });
 
-app.get("/user/create", (req, res) => {
-  res
-  .status(200)
-  .render('create-user');
-});
 
-app.get("/users", (req, res) => {
+// EVENT ROUTES
+app.get("/events", (req, res) => {
   if (req.isAuthenticated()) {
-    console.log('user authenticated; rendering...');
     res
-      .status(200)
-      .render('users');
+    .status(200)
+    .render('events');
   }
   else {
-    console.log('user not authenticated; redirecting...');
-    res.redirect("/");
+    console.log('Must be authenticated to view events');
+    res.redirect('/');
   }
-});
-
-
-app.get("/events", (req, res) => {
-      res
-      .status(200)
-      .render('events');
 });
 
 app.get("/events/new/", (req, res) => {
@@ -90,7 +81,6 @@ app.get("/events/new/", (req, res) => {
     console.log('Must be authenticated to create events');
     res.redirect('/');
   }
-
 });
 
 app.get("/events/edit/:id", (req, res) => {
@@ -293,30 +283,150 @@ app.put('/api/events/save/:id', (req, res) => {
 
 
 // USERS ROUTES
-app.get("/user/edit/:id", (req, res) => {
-  User
-  .findById(req.params.id)
-  .exec()
-  .then( user => {
-    const data = {
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      password: user.password,
-      firstName: user.name.firstName,
-      lastName: user.name.lastName,
-      location: user.location,
-      bio: user.bio,
-      role: user.role,
-      created: user.created
-    };
-    return data;
-  })
-  .then( data => {
+
+// Login User
+app.get("/login", (req, res) => {
+  // console.log('User: '+req.user.username);
+  console.log('Authenticated: '+req.isAuthenticated());
+  if (!req.isAuthenticated()) {
     res
     .status(200)
-    .render('edit-user', data);
-  });
+    .render('login');
+  }
+  else {
+    console.log('Must be logged out to log in!');
+    res.redirect("/dashboard");
+  }
+});
+
+// Create User
+app.get("/user/create", (req, res) => {
+  if (!req.isAuthenticated()) {
+    res
+    .status(200)
+    .render('create-user');
+  }
+  else {
+    console.log('Must be logged out to create new user!');
+    // res.redirect("/login");
+  }
+});
+
+// Logout User
+app.get('/logout', function(req, res){
+  if (req.isAuthenticated()) {
+    req.logout();
+    res.redirect('/api/auth/logout');
+  }
+  else {
+    console.log('Must be logged in to log out!');
+    res.redirect("/login");
+  }
+});
+
+// User Dashboard
+app.get("/dashboard", (req, res) => {
+  if (req.isAuthenticated()) {
+    var id = req.user.id;
+    res
+    .status(200)
+    .redirect('/user/dashboard/'+id);
+  }
+  else {
+    console.log('Must be logged in to view your dashboard.');
+    res.redirect("/login");
+  }
+});
+
+app.get("/user/dashboard/:id", (req, res) => {
+  if (req.isAuthenticated()) {
+    if (req.user.id == req.params.id) {
+      console.log('User match, loading dashboard...');
+      User
+      .findById(req.params.id)
+      .exec()
+      .then( user => {
+        const data = {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          firstName: user.name.firstName,
+          lastName: user.name.lastName,
+          location: user.location,
+          bio: user.bio,
+          role: user.role,
+          created: user.created
+        };
+        return data;
+      })
+      .then( data => {
+        res
+        .status(200)
+        .render('dashboard', data);
+      });
+    }
+    else {
+      console.error('Cannot access other user\'s data.');
+    }
+  }
+  else {
+    console.log('Must be logged in to access dashboard');
+    res.redirect("/login");
+  }
+});
+
+// Get All Users
+app.get("/users", (req, res) => {
+  if (req.isAuthenticated()) {
+    console.log('user authenticated; rendering...');
+    res
+      .status(200)
+      .render('users');
+  }
+  else {
+    console.log('user not authenticated; redirecting...');
+    res.redirect("/login");
+  }
+});
+
+// Edit User
+app.get("/user/edit/:id", (req, res) => {
+  if (req.isAuthenticated()) {
+    if (req.user.id == req.params.id) {
+      console.log('User match, edit away my dude');
+      User
+      .findById(req.params.id)
+      .exec()
+      .then( user => {
+        const data = {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          firstName: user.name.firstName,
+          lastName: user.name.lastName,
+          location: user.location,
+          bio: user.bio,
+          role: user.role,
+          created: user.created
+        };
+        return data;
+      })
+      .then( data => {
+        res
+        .status(200)
+        .render('edit-user', data);
+      });
+    }
+    else {
+      console.error('Cannot edit other user\'s data.');
+    }
+  }
+  else {
+    console.log('Must be logged in to edit user');
+    res.redirect("/login");
+  }
 });
 
 
@@ -336,12 +446,6 @@ app.get("/api/users", (req, res) => {
       users
     });
   });
-});
-
-// Logout User
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/api/auth/logout');
 });
 
 // create USER
@@ -408,7 +512,6 @@ app.post('/api/user', (req, res) => {
   //       location: tooSmallField || tooLargeField
   //   });
   // }
-
 
   return User
     .find({username})

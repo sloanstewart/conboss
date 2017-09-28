@@ -222,7 +222,7 @@ function listeners() {
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-edit-user') {
       event.preventDefault();
-      const url = "/user/edit/" + event.target.dataset.id;
+      const url = "user/edit/" + event.target.dataset.id;
       console.log(url);
       window.location=url;
     }
