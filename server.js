@@ -244,35 +244,46 @@ app.delete('/api/events/:id', (req, res) => {
 });
 
 // TODO save event to user
-
-// find User by ID
-// check if eventID already exits
-// if eventID does not exist:
-//    push eventID to saved_events array
-// if eventID exists :
-//    throw error > 'event already exists'
 app.put('/api/events/save/:id', (req, res) => {
   // check user is authenticated and request matches
   if (req.isAuthenticated()) {
-    if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
-      console.log(req.params.id);
-      console.log(req.body._id);
-      res.status(400).json({
-        error: "Request path ID and request body _ID values must match"
-      });
-    }
-
+    // if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
+    //   console.log(req.params.id);
+    //   console.log(req.body._id);
+    //   res.status(400).json({
+    //     error: "Request path ID and request body _ID values must match"
+    //   });
+    // }
+    // find User by ID
     User
-    .findByIdAndUpdate(
-      req.params.id,
-      {$push: {"saved_events": req.params.id}},
-      {new: true})
-    .exec()
-    .then(updatedUser => {res.status(201).json(updatedUser);})
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({message: err });
-    });
+    .findById(
+      req.user.id
+    )
+    // if eventID does not exist:
+    //    push eventID to saved_events array
+    .then(() => {
+      if (!saved_events.includes(req.params.id)) {
+        User
+        .findByIdAndUpdate(
+          req.user.id,
+          {$push: {
+            saved_events: {id: req.params.id}
+          }},
+          {new: true})
+        .exec()
+        .then(updatedUser => {res.status(201).json(updatedUser);})
+        .catch(err => {
+          console.error(err);
+          res.status(500).json({message: err });
+        });
+      }
+      // if eventID exists :
+      //    throw error > 'event already exists'
+      else {
+        console.log('Event' + req.params.id + 'already saved to this user');
+        window.alert('Event already saved');
+      }
+    })
   }
   else {
     authMessage = 'Must be authenticated to save events';
@@ -357,7 +368,8 @@ app.get("/user/dashboard/:id", (req, res) => {
           location: user.location,
           bio: user.bio,
           role: user.role,
-          created: user.created
+          created: user.created,
+          saved_events: user.saved_events
         };
         return data;
       })

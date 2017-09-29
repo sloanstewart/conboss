@@ -119,16 +119,14 @@ function listeners() {
       if(event.target && event.target.id == 'btn-save') {
         var id = document.URL.substring(document.URL.lastIndexOf('/')+1);
         event.preventDefault();
-        var formData = {
-          "_id": $('#btn-save').data('id')
-        };
         $.ajax({
           method: "PUT",
-          url: "/api/events/save/"+ formData._id,
-          data: formData,
+          url: "/api/events/save/"+ id,
+          data: id,
           success: function() {
             console.log('Event saved to user');
-            window.location.replace("/events/view/" + formData._id);
+            window.alert('Saved event' + id);
+            window.location.replace("/events/view/" + id);
           },
           error: function(err) {
             console.error(err);
