@@ -243,8 +243,16 @@ app.delete('/api/events/:id', (req, res) => {
   }
 });
 
-// save event to user
+// TODO save event to user
+
+// find User by ID
+// check if eventID already exits
+// if eventID does not exist:
+//    push eventID to saved_events array
+// if eventID exists :
+//    throw error > 'event already exists'
 app.put('/api/events/save/:id', (req, res) => {
+  // check user is authenticated and request matches
   if (req.isAuthenticated()) {
     if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
       console.log(req.params.id);
@@ -254,30 +262,20 @@ app.put('/api/events/save/:id', (req, res) => {
       });
     }
 
-    const updated = {};
-    const updateableFields = ['title', 'details', 'start', 'end', 'users'];
-    updateableFields.forEach(field => {
-      if (field in req.body) {
-        if(field === 'start' || field === 'end'){
-          updated[field] = new Date(req.body[field]);
-        }
-        else {
-          updated[field] = req.body[field];
-        }
-      }
-    });
-    Event
+    User
     .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
     .exec()
-    .then(updatedEvent => {res.status(201).json(updatedEvent);})
+    .then(updatedUser => {res.status(201).json(updatedUser);})
     .catch(err => {
       console.error(err);
       res.status(500).json({message: err });
     });
   }
   else {
-    console.log('Must be authenticated to save events');
-    res.redirect('/login');
+    authMessage = 'Must be authenticated to save events';
+    console.log(authMessage);
+    window.alert(authMessage);
+    // res.redirect('/login');
   }
 });
 
