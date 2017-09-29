@@ -9,18 +9,14 @@
       <% include header %>
     </header>
     <main>
-      <!-- /api/auth/login -->
-      <form class="login" action="/api/auth/login" method="post">
-        <fieldset>
-          <legend>Login</legend>
-          <label for="username">Username:</label>
-          <input type="text" name="username" id="username" placeholder="" value="" title="Please enter the email address associated with your account" required>
-          <label for="password">Password:</label>
-          <input type="password" name="password" id="password" placeholder="" value="" title="Please enter the password for your account" required>
-          <button id="login">Login</button>
-        </fieldset>
-      </form>
-      <p>Don't have an account? <a href="../user/create">Sign Up</a></p>
+      <section class="section hero">
+        <h1>ConBoss</h1>
+        <h3>The ultimate app</h3>
+        <button class="btn-green" type="button" name="CTA" onclick="location.href='/login'">Get Started</button>
+      </section>
+      <section class="section" id="about">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada dignissim lorem, ac sagittis est porta sed. In facilisis sollicitudin turpis, ut bibendum dolor iaculis at. Vivamus nunc augue, dapibus vel aliquet ac, auctor vel sapien. Maecenas id rhoncus lacus. Nam viverra elementum eleifend. Morbi et tempor libero. Quisque accumsan vehicula suscipit. Maecenas ac magna a mauris placerat euismod. Morbi ac odio sit amet nisl venenatis sagittis ut eget nisi. Maecenas ornare malesuada vestibulum. Duis eget turpis sagittis, semper diam iaculis, convallis ex. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc pretium tellus in leo rhoncus dignissim.
+      </section>
     </main>
     <footer>
       <% include footer %>
