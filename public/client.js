@@ -108,17 +108,18 @@ function listeners() {
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-view') {
       event.preventDefault();
-      const url = "/events/view/" + event.target.dataset.id;
+      var url = "/events/view/" + event.target.dataset.id;
       console.log(url);
       window.location=url;
     }
   });
-
+  // TODO tie this save button in with the backend
   // save event button
     document.addEventListener('click', function(event) {
       if(event.target && event.target.id == 'btn-save') {
+        var id = document.URL.substring(document.URL.lastIndexOf('/')+1);
         event.preventDefault();
-        let formData = {
+        var formData = {
           "_id": $('#btn-save').data('id')
         };
         $.ajax({
@@ -139,9 +140,9 @@ function listeners() {
   // edit event button
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-edit') {
-      let id = document.URL.substring(document.URL.lastIndexOf('/')+1);
+      var id = document.URL.substring(document.URL.lastIndexOf('/')+1);
       event.preventDefault();
-      const url = "/events/edit/" + id;
+      var url = "/events/edit/" + id;
       console.log(url);
       window.location=url;
     }
@@ -151,13 +152,17 @@ function listeners() {
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-delete') {
       event.preventDefault();
-      let id = document.URL.substring(document.URL.lastIndexOf('/')+1);
-      const url = "/api/events/" + id;
+      var id = document.URL.substring(document.URL.lastIndexOf('/')+1);
+      var url = "/api/events/" + id;
       console.log(url);
       $.ajax({
         method: "DELETE",
         url: url,
-        success: window.location.replace("./events")
+        success: 
+        function() {
+          window.alert('event deleted')
+          window.location.replace("../")
+        }
       });
     }
   });

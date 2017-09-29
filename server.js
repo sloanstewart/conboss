@@ -263,7 +263,10 @@ app.put('/api/events/save/:id', (req, res) => {
     }
 
     User
-    .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+    .findByIdAndUpdate(
+      req.params.id,
+      {$push: {"saved_events": req.params.id}},
+      {new: true})
     .exec()
     .then(updatedUser => {res.status(201).json(updatedUser);})
     .catch(err => {
