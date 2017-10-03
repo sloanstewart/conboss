@@ -262,13 +262,11 @@ app.put('/api/events/save/:id', (req, res) => {
     // if eventID does not exist:
     //    push eventID to saved_events array
     .then(() => {
-      if (!saved_events.includes(req.params.id)) {
+      if (!req.user.saved_events.includes(req.params.id)) {
         User
         .findByIdAndUpdate(
           req.user.id,
-          {$push: {
-            saved_events: {id: req.params.id}
-          }},
+          {$push: {saved_events: req.params.id}},
           {new: true})
         .exec()
         .then(updatedUser => {res.status(201).json(updatedUser);})
