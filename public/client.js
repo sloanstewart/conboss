@@ -26,9 +26,6 @@ function displayEvents(data) {
         '<p class="item-details">' + data.events[index].details + '</p>' +
         '<p>' +
           '<button id="btn-view" class="" data-id="' + data.events[index]._id + '">Details</button>' +
-          // '<button id="btn-save" class="btn-green" data-id="' + data.events[index]._id + '">Save</button>' +
-          // '<button id="btn-edit" class="btn-yellow" data-id="' + data.events[index]._id + '">Edit</button>' +
-          // '<button id="btn-delete" class="btn-red" data-id="' + data.events[index]._id + '">Delete</button>' +
         '</p>' +
       '</div>'
     );
