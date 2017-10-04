@@ -11,24 +11,91 @@ color: #7A82CC;
 * {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: Roboto, sans-serif;
 }
 
 body {
   padding: 0;
   margin: 0;
   color: #424242;
-  font-size: 16px;
-  line-height: 1.5em;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
   letter-spacing: 0.05em;
-  background-color: #37474F;
+  color: rgba(0,0,0,0.87);
+  background-color: #eeeeee;
+}
+
+.text-body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
+}
+.text-caption {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 32px;
+}
+.text-button {
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 32px;
+}
+.text-menu {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 32px;
+}
+.text-subhead {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 32px;
+}
+.text-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 44px;
+}
+.text-headline {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 44px;
+}
+.text-display-1 {
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 52px;
+}
+.text-display-2 {
+  font-size: 45px;
+  font-weight: 400;
+  line-height: 64px;
+}
+.text-display-3 {
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 64px;
+}
+.text-display-4 {
+  font-size: 112px;
+  font-weight: 300;
+  line-height: 128px;
+  letter-spacing: -5px;
+}
+h1, h2, h3, h4 {
+  margin: 0;
+}
+
+.centered {
+  text-align: center;
 }
 
 header {
   padding: 0 1em;
   margin: 0;
   color: #B0BEC5;
-  background: #37474F;
+  background-color: #37474F;
   overflow: auto;
 }
 .header {
@@ -57,23 +124,33 @@ nav .nav-link {
 
 nav a:hover, nav a:focus  {
   text-decoration: none;
-  background: #607D8B;
+  background-color: #607D8B;
 }
 
 main {
+  max-width: 960px;
   text-align: center;
-  min-height: 125vh;
-  padding: 1em 2% 50% 2%;
+  padding: 0 1rem;
+  margin: 0;
+  background-color: transparent;
+}
+
+section {
+  padding: 1rem;
   margin: auto;
-  background: #ECEFF1;
+  background-color: none;
+}
+
+.hero {
+  text-align: center;
 }
 
 footer {
-  padding: 8em 0 2em 0;
+  padding: 1rem 0 1rem 0;
   margin: auto;
   text-align: center;
   color: #B0BEC5;
-  background: #37474F;
+  /* background: #37474F; */
 }
 
 p{
@@ -94,24 +171,37 @@ input, textarea {
   border: none;
 }
 
-button, input[type=button] {
-  min-width: 4em;
-  padding: 0.5em;
-  margin: 0 1em 0 0 ;
-  letter-spacing: 0.05em;
-  font: 1em sans-serif;
-  background-color: #B0BEC5;
+button, input[type=button], .btn {
+  padding: 0 3rem;
+  margin: 1em;
+  min-width: 88px;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 36px;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 2px;
   border: none;
-  transition: all ease-in-out 0.2s;
+  outline: none;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  cursor: pointer;
+  user-select: none;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
 }
+
+.btn-large {
+  height: 54px;
+  line-height: 54px;
+}
+
 button:hover, button:focus {filter: brightness(90%);}
 
 .btn-blue {background-color: #7A82CC;}
 .btn-green {background-color: #DCEDC8;}
 .btn-yellow {background-color: #FFECB3;}
 .btn-red {background-color: #FFCCBC;}
-.btn-centered {margin: 0em auto 1em auto;}
-
 
 .list-item {
   text-align: left;

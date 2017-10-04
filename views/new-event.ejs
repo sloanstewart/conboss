@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<html>
-  <head>
-    <% include head %>
-  </head>
-  <body>
-    <header>
-      <% include header %>
-    </header>
-    <main>
+<% include head %>
       <form class="event-form" method="post" onsubmit="return createEventRedirect()">
         <fieldset>
           <legend>Event Information</legend>
@@ -24,9 +14,4 @@
           <button id="create-event" class="btn-green" name="create-event">Create Event</button>
         </fieldset>
       </form>
-    </main>
-    <footer>
-      <% include footer %>
-    </footer>
-  </body>
-</html>
+<% include footer %>

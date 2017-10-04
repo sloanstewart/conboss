@@ -1,29 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<html>
-  <head>
-    <% include head %>
-  </head>
-  <body>
-    <header>
-      <% include header %>
-    </header>
-    <main>
-      <!-- /api/auth/login -->
-      <form class="login" action="/api/auth/login" method="post">
-        <fieldset>
-          <legend>Login</legend>
-          <label for="username">Username:</label>
-          <input type="text" name="username" id="username" placeholder="" value="" title="Please enter the email address associated with your account" required>
-          <label for="password">Password:</label>
-          <input type="password" name="password" id="password" placeholder="" value="" title="Please enter the password for your account" required>
-          <button id="login">Login</button>
-        </fieldset>
-      </form>
-      <p>Don't have an account? <a href="../user/create">Sign Up</a></p>
-    </main>
-    <footer>
-      <% include footer %>
-    </footer>
-  </body>
-</html>
+<% include head %>
+      <section>
+        <!-- /api/auth/login -->
+        <form class="login" action="/api/auth/login" method="post">
+          <fieldset>
+            <legend>Login</legend>
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" placeholder="" value="" title="Please enter the email address associated with your account" required>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" placeholder="" value="" title="Please enter the password for your account" required>
+            <button id="login">Login</button>
+          </fieldset>
+        </form>
+        <p>Don't have an account? <a href="../user/create">Sign Up</a></p>
+<% include footer %>

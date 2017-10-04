@@ -1,19 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<html>
-  <head>
-    <% include head %>
-  </head>
-  <body>
-    <header>
-      <% include header %>
-    </header>
-    <main>
-      <button id="btn-add-event" class="btn-centered" name="new-event" onclick="location.href='/events/new'">Add Event</button>
+<% include head %>
+      <button class="btn-large" id="btn-add-event" name="new-event" onclick="location.href='/events/new'">Add Event</button>
       <div class="event-list"></div>
-    </main>
-    <footer>
-        <% include footer %>
-    </footer>
-  </body>
-</html>
+<% include footer %>

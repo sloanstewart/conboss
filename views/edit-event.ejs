@@ -1,32 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<html>
-  <head>
-    <% include head %>
-  </head>
-  <body>
-    <header>
-      <% include header %>
-    </header>
-    <main>
-      <form class="event-form" method="put">
-        <fieldset>
-          <legend>Event Information</legend>
-          <!-- <p id="_id"><%= _id %></p> -->
-          <label for="title">Title*:</label>
-          <input type="text" id="title" name="title" title="Please, provide a title for your event" value="<%- title %>" placeholder="" required>
-          <label for="start">Start Time*:</label>
-          <input type="datetime-local" id="start" name="start" title="Please, provide a starting time for your event" value="<%- start %>" placeholder="" required>
-          <label for="end">End Time*:</label>
-          <input type="datetime-local" id="end" name="end" title="Please, provide an ending time for your event" value="<%- end %>" required>
-          <label for="details">Details:</label>
-          <textarea id="details" name="details" title="Please, provide details about your event" placeholder=""><%- details %></textarea>
-          <button id="confirm-edit-event" class="btn-green" name="edit-event" data-id="<%= _id %>">Confirm Edit</button>
-        </fieldset>
-      </form>
-    </main>
-    <footer>
-      <% include footer %>
-    </footer>
-  </body>
-</html>
+<% include head %>
+      <section>
+        <form class="event-form" method="put">
+          <fieldset>
+            <legend>Event Information</legend>
+            <!-- <p id="_id"><%= _id %></p> -->
+            <label for="title">Title*:</label>
+            <input type="text" id="title" name="title" title="Please, provide a title for your event" value="<%- title %>" placeholder="" required>
+            <label for="start">Start Time*:</label>
+            <input type="datetime-local" id="start" name="start" title="Please, provide a starting time for your event" value="<%- start %>" placeholder="" required>
+            <label for="end">End Time*:</label>
+            <input type="datetime-local" id="end" name="end" title="Please, provide an ending time for your event" value="<%- end %>" required>
+            <label for="details">Details:</label>
+            <textarea id="details" name="details" title="Please, provide details about your event" placeholder=""><%- details %></textarea>
+            <button id="confirm-edit-event" class="btn-green" name="edit-event" data-id="<%= _id %>">Confirm Edit</button>
+          </fieldset>
+        </form>
+      </section>
+<% include footer %>
