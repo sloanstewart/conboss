@@ -20,13 +20,15 @@ function displayEvents(data) {
     let start = new Date(data.events[index].start).toLocaleString();
     let end = new Date(data.events[index].end).toLocaleString();
     $('.event-list').append(
-      '<div class="list-item">' +
-        '<h2 class="item-title">' + data.events[index].title + '</h2>' +
-        '<p><span class="item-time">' + start + ' - ' + end + '</span></p>' +
-        '<p class="item-details">' + data.events[index].details + '</p>' +
-        '<p>' +
-          '<button id="btn-view" class="" data-id="' + data.events[index]._id + '">Details</button>' +
-        '</p>' +
+      '<div class="list-item card">' +
+        '<div class="dialog-content">' +
+          '<span class="text-title">' + data.events[index].title + '</span>' +
+          '<p class="text-subhead">' + start + ' - ' + end + '</p>' +
+          '<p class="">' + data.events[index].details + '</p>' +
+          '</div>' +
+          '<div class="dialog-button-container">' +
+            '<a class="text-button" id="btn-view" data-id="' + data.events[index]._id + '" href="">Details</a>' +
+          '</div>' +
       '</div>'
     );
   }
