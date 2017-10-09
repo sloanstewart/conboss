@@ -354,6 +354,7 @@ app.get("/user/dashboard/:id", (req, res) => {
       console.log('User match, loading dashboard...');
       User
       .findById(req.params.id)
+      .populate('saved_events')
       .exec()
       .then( user => {
         const data = {

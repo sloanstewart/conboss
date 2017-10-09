@@ -2,10 +2,10 @@
 <% include head %>
         <style>
           #user-info {
-            display: none;
+            display: block;
           }
         </style>
-        <a onclick="toggleUser()">Show User Info</a>
+        <a onclick="toggleUser()">User Info</a>
         <section id="user-info">
           <form class="user-form" id="user-form" method="put">
             <fieldset>
@@ -35,10 +35,12 @@
           </p>
         </section>
         <section id="saved-events">
+          <!-- TODO loop through events with EJS -->
           <div class="saved-event-list"><%- saved_events %></div>
         </section>
         <script>
           function toggleUser() {
+            console.log("toggle user");
             var x = document.getElementById("user-info");
             if (x.style.display === "none") {
                 x.style.display = "block";

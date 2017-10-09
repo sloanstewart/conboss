@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 // USERS
 const UserSchema = mongoose.Schema({
@@ -14,7 +15,10 @@ const UserSchema = mongoose.Schema({
   bio: {type: String, default: "", required: false},
   created: {type: Date, default: Date.now, required: true},
   role: {type: String, default: "user", required: true},
-  saved_events: {type: Array, default: []}
+  // saved_events: {type: Array, default: []}
+  saved_events: [
+    {type: Schema.Types.ObjectId,
+    ref: 'Event'}]
 });
 
 UserSchema.virtual('fullName').get(function() {
@@ -32,6 +36,9 @@ UserSchema.methods.apiRepr = function() {
     created: this.created,
     role: this.role,
     saved_events: this.saved_events
+    // saved_events: [
+    //   {type: Schema.Types.ObjectId,
+    //   ref: 'Event'} ]
   };
 };
 

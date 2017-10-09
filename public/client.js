@@ -14,6 +14,8 @@ function getEvents(callback) {
   $.ajax(apiCall);
 }
 
+// TODO clean this JUNK up! 
+// https://stackoverflow.com/questions/38179077/what-is-the-proper-way-to-loop-through-an-array-in-an-ejs-template-after-an-ajax
 function displayEvents(data) {
   const timeOptions = {};
   for (let index in data.events) {
