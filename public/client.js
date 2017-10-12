@@ -213,7 +213,7 @@ function listeners() {
           data: formData,
           success: function() {
             console.log('User edited');
-            window.location.replace("/users");
+            window.location.replace("/dashboard");
           },
           error: function(err) {
             console.error(err);
@@ -226,7 +226,7 @@ function listeners() {
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'btn-edit-user') {
       event.preventDefault();
-      const url = "user/edit/" + event.target.dataset.id;
+      const url = "../edit/" + event.target.dataset.id;
       console.log(url);
       window.location=url;
     }
