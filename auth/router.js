@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const router = express.Router();
 const flash = require('connect-flash');
-const {User, Event} = require('../models');
+const {User} = require('../models/user');
 
 const createAuthToken = user => {
   return jwt.sign({user}, config.JWT_SECRET, {

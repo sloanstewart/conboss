@@ -9,7 +9,8 @@ const session = require("express-session");
 const MongoStore = require('connect-mongo')(session);
 const passport =require('passport');
 const {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
-const {User, Event} = require('./models');
+const {Event} = require('./models/event');
+const {User} = require('./models/user');
 const {router: authRouter, localStrategy, basicStrategy, jwtStrategy} = require('./auth');
 const flash = require('connect-flash');
 
