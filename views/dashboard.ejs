@@ -18,8 +18,11 @@
                   <!-- <p class=""> <%= event.details %> </p> -->
                 </div>
                 <div class="dialog-button-container">
-                  <a class="text-button" id="btn" data-id=" event._id + " href="../../events/view/<%= event._id%>">Details</a>
-                  <a class="text-button" id="btn" data-id=" event._id + " href="#">Remove</a>
+                  <a class="text-button" id="btn-details" data-id=" event._id + " href="../../events/view/<%= event._id%>">Details</a>
+                  <a class="text-button" id="btn-remove" data-id=" event._id + " href="../../api/events/remove/<%= event._id%>">Remove</a>
+                  <form action="../../api/events/remove/<%= event._id%>" method="put">
+                      <input type="submit" class="text-input" value="remove">
+                    </form>
                 </div>
             </div>
             <% } %>

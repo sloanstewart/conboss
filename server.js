@@ -293,6 +293,54 @@ app.put('/api/events/save/:id', (req, res) => {
   }
 });
 
+// remove event from saved
+
+app.put('/api/events/remove/:id', (req, res) => {
+  // check user is authenticated and request matches
+  if (req.isAuthenticated()) {
+    // if (!(req.params.id && req.body._id && req.params.id === req.body._id)) {
+    //   console.log(req.params.id);
+    //   console.log(req.body._id);
+    //   res.status(400).json({
+    //     error: "Request path ID and request body _ID values must match"
+    //   });
+    // }
+    // find User by ID
+    User
+    .findById(
+      req.user.id
+    )
+    // if eventID does not exist:
+    //    push eventID to saved_events array
+    .then(() => {
+      // this seems totally backwards, what is happening?
+      if (!req.user.saved_events.includes(req.params.id)) {
+        User
+        .findByIdAndUpdate(
+          req.user.id,
+          {$pull: {saved_events: req.params.id}}
+        )
+        .exec()
+        .then(updatedUser => {res.status(201).json(updatedUser);})
+        .catch(err => {
+          console.error(err);
+          res.status(500).json({message: err });
+        });
+      }
+      // throw error if eventID does not exist
+      else {
+        console.log('Event ' + req.params.id + ' is not saved to this user');
+      }
+    })
+  }
+  else {
+    authMessage = 'Must be authenticated to remove events';
+    console.log(authMessage);
+    window.alert(authMessage);
+    // res.redirect('/login');
+  }
+});
+
 
 // USERS ROUTES
 
