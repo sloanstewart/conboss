@@ -54,6 +54,24 @@ function editEventRedirect() {
 
 // BUTTON LISTENERS
 function listeners() {
+  // remove saved event button
+  document.addEventListener('click', function(event) {
+    if(event.target && event.target.id == 'btn-remove') {
+      event.preventDefault();
+      const eventId = event.target.dataset.id;
+      $.ajax({
+        method: "PUT",
+        url: "/api/events/remove/"+ eventId,
+        success: function(res) {
+          window.location.reload();
+        },
+        error: function(err) {
+          console.error(err);
+        }
+      });
+    }
+  });
+
   // new event button
   document.addEventListener('click', function(event) {
     if(event.target && event.target.id == 'create-event') {

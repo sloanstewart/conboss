@@ -306,32 +306,19 @@ app.put('/api/events/remove/:id', (req, res) => {
     //   });
     // }
     // find User by ID
-    User
-    .findById(
-      req.user.id
-    )
-    // if eventID does not exist:
-    //    push eventID to saved_events array
-    .then(() => {
-      // this seems totally backwards, what is happening?
-      if (!req.user.saved_events.includes(req.params.id)) {
-        User
-        .findByIdAndUpdate(
-          req.user.id,
-          {$pull: {saved_events: req.params.id}}
-        )
-        .exec()
-        .then(updatedUser => {res.status(201).json(updatedUser);})
-        .catch(err => {
-          console.error(err);
-          res.status(500).json({message: err });
-        });
-      }
-      // throw error if eventID does not exist
-      else {
-        console.log('Event ' + req.params.id + ' is not saved to this user');
-      }
-    })
+    console.log(req.params.id);
+      User
+      .findByIdAndUpdate(
+        req.user.id,
+        {$pull: {saved_events: req.params.id}},
+        {new: true}
+      )
+      .exec()
+      .then(updatedUser => {res.status(201).json(updatedUser);})
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({message: err });
+      });
   }
   else {
     authMessage = 'Must be authenticated to remove events';
