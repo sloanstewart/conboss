@@ -244,7 +244,7 @@ app.delete('/api/events/:id', (req, res) => {
   }
 });
 
-// TODO save event to user
+// save event to user
 app.put('/api/events/save/:id', (req, res) => {
   // check user is authenticated and request matches
   if (req.isAuthenticated()) {
@@ -276,6 +276,7 @@ app.put('/api/events/save/:id', (req, res) => {
           res.status(500).json({message: err });
         });
       }
+  // TODO: fix saving events that are already saved
       // if eventID exists :
       //    throw error > 'event already exists'
       else {

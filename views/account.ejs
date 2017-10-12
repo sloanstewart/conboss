@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<% include head %>
+        <section id="title">
+            <h1 class="text-title">Account</h1>
+        </section>
+        <section id="user-info">
+          <form class="user-form" id="user-form" method="put">
+            <fieldset>
+              <legend>User Information</legend>
+              <label for="username">Username*:</label>
+              <input disabled type="text" id="username" name="username" title="username for your account" value="<%- username %>" placeholder="" required>
+              <label for="email">Email*:</label>
+              <input disabled type="email" id="email" name="email" title="valid email address" value="<%- email %>" placeholder="" required>
+              <label for="firstName">First name:</label>
+              <input disabled type="text" id="firstName" name="firstName" title="User's first name" value="<%- firstName %>">
+              <label for="lastName">Last name:</label>
+              <input disabled type="text" id="lastName" name="lastName" title="User's last name" value="<%- lastName %>">
+              <label for="location">Location:</label>
+              <input disabled type="text" id="location" name="location" title="User's location" value="<%- location %>" placeholder="">
+              <label for="bio">Bio:</label>
+              <textarea disabled id="bio" name="bio" title="Biographical info." placeholder=""><%- bio %></textarea>
+              <label for="role">Role:</label>
+              <input disabled type="text" id="role" name="role" title="role for your account" value="<%- role %>" placeholder="" required>
+              <label for="created">Created:</label>
+              <input disabled type="text" id="created" name="created" title="created date for your account" value="<%- created %>" placeholder="" required>
+            </fieldset>
+          </form>
+          <p>
+            <a id="btn-edit-user" class="text-button" name="edit-user" data-id="<%= _id %>">Edit User</a>
+            <!-- <button id="delete-user" class="btn-red" name="delete-user" data-id="<%= _id %>">Delete Account</button> -->
+          </p>
+        </section>
+<% include footer %>
+
