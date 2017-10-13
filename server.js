@@ -277,7 +277,7 @@ app.put('/api/events/save/:id', (req, res) => {
     else {
       let err = 'Event ' + req.params.id + ' already saved to this user';
       console.log(err);
-      window.alert(err);
+      // window.alert(err);
     }
   }
   else {
