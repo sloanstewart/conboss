@@ -255,35 +255,28 @@ app.put('/api/events/save/:id', (req, res) => {
     //     error: "Request path ID and request body _ID values must match"
     //   });
     // }
-    // find User by ID
-    User
-    .findById(
-      req.user.id
-    )
     // if eventID does not exist:
     //    push eventID to saved_events array
-    .then(() => {
-      if (!req.user.saved_events.includes(req.params.id)) {
-        User
-        .findByIdAndUpdate(
-          req.user.id,
-          {$push: {saved_events: req.params.id}},
-          {new: true})
-        .exec()
-        .then(updatedUser => {res.status(201).json(updatedUser);})
-        .catch(err => {
-          console.error(err);
-          res.status(500).json({message: err });
-        });
-      }
-  // TODO: fix saving events that are already saved
-      // if eventID exists :
-      //    throw error > 'event already exists'
-      else {
-        console.log('Event' + req.params.id + 'already saved to this user');
-        window.alert('Event already saved');
-      }
-    })
+    if (!req.user.saved_events.includes(req.params.id)) {
+      User
+      .findByIdAndUpdate(
+        req.user.id,
+        {$push: {saved_events: req.params.id}},
+        {new: true})
+      .exec()
+      .then(updatedUser => {res.status(201).json(updatedUser);})
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({message: err });
+      });
+    }
+// TODO: fix saving events that are already saved
+    // if eventID exists :
+    //    throw error > 'event already exists'
+    else {
+      console.log('Event' + req.params.id + 'already saved to this user');
+      window.alert('Event already saved');
+    }
   }
   else {
     authMessage = 'Must be authenticated to save events';
@@ -294,7 +287,6 @@ app.put('/api/events/save/:id', (req, res) => {
 });
 
 // remove event from saved
-
 app.put('/api/events/remove/:id', (req, res) => {
   // check user is authenticated and request matches
   if (req.isAuthenticated()) {
@@ -306,19 +298,18 @@ app.put('/api/events/remove/:id', (req, res) => {
     //   });
     // }
     // find User by ID
-    console.log(req.params.id);
-      User
-      .findByIdAndUpdate(
-        req.user.id,
-        {$pull: {saved_events: req.params.id}},
-        {new: true}
-      )
-      .exec()
-      .then(updatedUser => {res.status(201).json(updatedUser);})
-      .catch(err => {
-        console.error(err);
-        res.status(500).json({message: err });
-      });
+    User
+    .findByIdAndUpdate(
+      req.user.id,
+      {$pull: {saved_events: req.params.id}},
+      {new: true}
+    )
+    .exec()
+    .then(updatedUser => {res.status(201).json(updatedUser);})
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: err });
+    });
   }
   else {
     authMessage = 'Must be authenticated to remove events';
