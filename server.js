@@ -255,9 +255,11 @@ app.put('/api/events/save/:id', (req, res) => {
     //     error: "Request path ID and request body _ID values must match"
     //   });
     // }
-    // if eventID does not exist:
-    //    push eventID to saved_events array
-    if (!req.user.saved_events.includes(req.params.id)) {
+    // if eventID does not exist: push eventID to saved_events array
+    console.log(req.user.saved_events);
+    console.log(req.params.id);
+    console.log(req.user.saved_events.indexOf(req.params.id) !== -1);
+    if (!req.user.saved_events.indexOf(req.params.id) ) {
       User
       .findByIdAndUpdate(
         req.user.id,
@@ -271,11 +273,11 @@ app.put('/api/events/save/:id', (req, res) => {
       });
     }
 // TODO: fix saving events that are already saved
-    // if eventID exists :
-    //    throw error > 'event already exists'
+    // if eventID exists : throw error > 'event already exists'
     else {
-      console.log('Event' + req.params.id + 'already saved to this user');
-      window.alert('Event already saved');
+      let err = 'Event ' + req.params.id + ' already saved to this user';
+      console.log(err);
+      window.alert(err);
     }
   }
   else {
