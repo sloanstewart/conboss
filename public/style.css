@@ -143,7 +143,6 @@ header {
   padding: 73px 16px 0px 16px;
   margin: 0;
   border: 0;
-  vertical-align: baseline;
   color: var(--text-light);
   background-color: var(--secondary-normal);
   box-shadow: 0 2px 5px rgba(0,0,0,.26);
@@ -154,9 +153,6 @@ header {
 header .text-headline{
   color: var(--text-light);
   line-height: 56px;
-}
-.header-wrapper {
-  
 }
 
 nav {
@@ -176,11 +172,6 @@ main {
   margin: 128px auto 0 auto;
   /* text-align: center; */
   background-color: transparent;
-}
-
-section {
-  /* padding: 1rem; */
-  /* margin: auto; */
 }
 
 .hero {
