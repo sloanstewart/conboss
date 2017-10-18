@@ -256,10 +256,7 @@ app.put('/api/events/save/:id', (req, res) => {
     //   });
     // }
     // if eventID does not exist: push eventID to saved_events array
-    console.log(req.user.saved_events);
-    console.log(req.params.id);
-    console.log(req.user.saved_events.indexOf(req.params.id) !== -1);
-    if (!req.user.saved_events.indexOf(req.params.id) ) {
+    if ( req.user.saved_events.indexOf(req.params.id) == -1 ) {
       User
       .findByIdAndUpdate(
         req.user.id,
@@ -277,13 +274,14 @@ app.put('/api/events/save/:id', (req, res) => {
     else {
       let err = 'Event ' + req.params.id + ' already saved to this user';
       console.log(err);
-      // window.alert(err);
+      res.status(400).json({message: err});      
     }
   }
   else {
     authMessage = 'Must be authenticated to save events';
     console.log(authMessage);
     window.alert(authMessage);
+    res.status(401).json({message: authMessage});
     // res.redirect('/login');
   }
 });
