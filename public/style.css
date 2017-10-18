@@ -29,9 +29,10 @@ html body {
   padding: 0;
   margin: 0;
   width: 100%;
+  min-width: 300px;
   height: 100vh;
   color:var(--text-dark);
-  font-size: 0.875rem;
+  font-size: 100%;
   font-weight: 400;
   line-height: 1.78em;
   -webkit-font-smoothing: antialiased;
@@ -46,13 +47,14 @@ html body {
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
 }
 p {
+  font-size: 0.875rem;
   color: var(--text-grey);
   line-height: 24px;
   margin: 0 auto .5em auto;
   word-wrap: break-word;
 }
 .text-body {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 25px;
 }
@@ -66,7 +68,7 @@ p {
   height: 36px;
   padding: 8px;
   margin: 8px;
-  font-size: 14px;
+  font-size: 0.875rem;
   text-transform: uppercase;
   font-weight: 600;
   line-height: 36px;
@@ -81,43 +83,43 @@ p {
   background-color: rgba(153, 153, 153, 0.40);
 }
 .text-menu {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 36px;
 }
 .text-subhead {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 36px;
 }
 .text-title {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 600;
   line-height: 44px;
   text-transform: capitalize;
 }
 .text-headline {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 400;
   line-height: 44px;
 }
 .text-display-1 {
-  font-size: 34px;
+  font-size: 2.125rem;
   font-weight: 400;
   line-height: 52px;
 }
 .text-display-2 {
-  font-size: 45px;
+  font-size: 2.812rem;
   font-weight: 400;
   line-height: 64px;
 }
 .text-display-3 {
-  font-size: 56px;
+  font-size: 3.5rem;
   font-weight: 400;
   line-height: 64px;
 }
 .text-display-4 {
-  font-size: 112px;
+  font-size: 8rem;
   font-weight: 300;
   line-height: 128px;
   letter-spacing: -5px;
@@ -147,6 +149,7 @@ header {
   box-shadow: 0 2px 5px rgba(0,0,0,.26);
   z-index: 1;
   line-height: 56px;
+  transition: var(--transition);
 }
 
 header .text-headline{
@@ -166,19 +169,33 @@ nav a.text-button {
 
 main {
   flex: 1 0 auto;
-  min-width: 300px;
-  padding: 0 16px;
-  margin: 180px auto 0 auto;
+  padding: 0;
+  margin: 18rem 0 0 0;
   background-color: transparent;
-  transition: max-width 0.2s ease-in;
+  transition: var(--transition);
 }
 
 section {
   text-align: center;
 }
 
-.hero {
-  text-align: center;
+.hero h1{
+  display: inline-block;
+  /* font-size: 20vw; */
+}
+
+.event-list, .saved-event-list {
+  min-height: 80vh; /* Hack: prevents ADD EVENT button from showing */
+}
+
+.list-item {
+  text-align: left;
+  margin: 0;
+  transition: var(--transition);
+}
+
+.list-item.card {
+  border-radius: 0;
 }
 
 fieldset {
@@ -267,13 +284,7 @@ button:hover, button:focus {filter: brightness(90%);}
 .btn-yellow {background-color: #FFECB3;}
 .btn-red {background-color: #FFCCBC;}
 
-.list-item {
-  text-align: left;
-  margin-top: 0;
-  margin-bottom: 1em;
-  margin-right: auto;
-  margin-left: auto;
-}
+
 
 /* .item-title {
   padding: 0;
@@ -316,17 +327,26 @@ form textarea {
 
 @media only screen and (min-width: 320px) {
   main {
-    max-width: 320px;
+    min-width: 300px;
   }
 }
 @media only screen and (min-width: 480px) {
   main {
-    max-width: 480px;
+    width
   }
 }
 @media only screen and (min-width: 600px) {
   main {
-    max-width: 580px;
+    width: 100%;
+    max-width: 600px;
+    padding: 0 16px;
+    margin: 11.25rem auto 0 auto;
+  }
+  .list-item {
+    margin: 0 auto 1em auto;
+  }
+  .list-item.card {
+    border-radius: 2px;
   }
 }
 @media only screen and (min-width: 840px) {
@@ -335,11 +355,12 @@ form textarea {
 }
 @media only screen and (min-width: 960px) {
   main {
-    max-width: 960px;
+    
   }
 }
 @media only screen and (min-width: 1280px) {
   main {
+    max-width: 960px;
   }
 }
 @media only screen and (min-width: 1440px) {

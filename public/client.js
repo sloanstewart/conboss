@@ -19,9 +19,14 @@ function getEvents(callback) {
 function displayEvents(data) {
   const timeOptions = {};
   for (let index in data.events) {
-    let start = new Date(data.events[index].start).toLocaleString();
-    let end = new Date(data.events[index].end).toLocaleString();
-    $('.event-list').append(
+    let dateOptions = {month: "short",
+                        day: "2-digit",
+                        year: "numeric",
+                        hour: "numeric",
+                        minute: "numeric"};
+    let start = new Date(data.events[index].start).toLocaleString('en-US',dateOptions);
+    let end = new Date(data.events[index].end).toLocaleString('en-US',dateOptions);
+    $newItem = $(
       '<div class="list-item card">' +
         '<div class="dialog-content">' +
           '<span class="text-title">' + data.events[index].title + '</span>' +
@@ -31,8 +36,8 @@ function displayEvents(data) {
           '<div class="dialog-button-container">' +
             '<a class="text-button" id="btn-view" data-id="' + data.events[index]._id + '" href="">Details</a>' +
           '</div>' +
-      '</div>'
-    );
+      '</div>')
+      .appendTo('.event-list');
   }
 }
 
@@ -132,7 +137,6 @@ function listeners() {
       window.location=url;
     }
   });
-  // TODO tie this save button in with the backend
   // save event button
     document.addEventListener('click', function(event) {
       if(event.target && event.target.id == 'btn-save') {

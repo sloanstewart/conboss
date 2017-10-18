@@ -4,16 +4,21 @@
         <section id="title">
             <h1 class="text-title"><%- username %>'s Schedule</h1>
         </section>
-        <section id="saved-events">
+        <section class="saved-event-list">
           <!-- TODO this should really be a list, not 'cards' -->
           <% for (var i = 0; i < saved_events.length; i++) {
-            let event = saved_events[i] 
-            let start = new Date(event.start).toLocaleString();
-            let end = new Date(event.end).toLocaleString();
+            let event = saved_events[i]
+            let dateOptions = {month: "short",
+                                day: "2-digit",
+                                year: "numeric",
+                                hour: "numeric",
+                                minute: "numeric"};
+            let start = new Date(event.start).toLocaleString('en-US',dateOptions);
+            let end = new Date(event.end).toLocaleString('en-US',dateOptions);
           %>
             <div class="list-item card">
                 <div class="dialog-content">
-                  <a class="text-title" href="../../events/view/<%= event._id %>"> <%= event.title %> </a>
+                  <span class="text-title" href="../../events/view/<%= event._id %>"> <%= event.title %> </span>
                   <p class="text-subhead"> <%= start %>  -  <%= end %></p>
                   <!-- <p class=""> <%= event.details %> </p> -->
                 </div>
