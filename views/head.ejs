@@ -13,4 +13,15 @@
     <header>
       <% include header %>
     </header>
+    <!-- Nav Drawer -->
+    <nav class="nav-drawer" id="nav-drawer">
+        <a href="javascript:void(0)" class="nav-drawer-close text-button" onclick="closeNav()">&times;</a>
+          <a class="text-button" href="/login">Login</a>
+          <a class="text-button" href="/logout">Logout</a>
+          <a class="text-button" href="/events">Events</a>
+          <!-- <a class="text-button" href="/users">Users</a> -->
+          <a class="text-button" href="/dashboard">Dashboard</a>
+        
+    </nav>
     <main>
+        <div class="nav-drawer-overlay" id="nav-drawer-overlay" onclick="closeNav()"></div>
