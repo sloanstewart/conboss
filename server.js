@@ -17,19 +17,23 @@ const flash = require('connect-flash');
 mongoose.Promise = global.Promise;
 
 const app = express();
+// flash
+  app.use(cookieParser('suh dude?'));
+  app.use(flash());
+
+// ejs
 app.set('view engine', 'ejs');
 
 app.use(morgan('common'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
-app.use(flash());
-app.use(cookieParser());
 app.use(session({
   secret: 'supersecret',
   resave: false,
   saveUninitialized: false,
-  store: new MongoStore({url: DATABASE_URL})
+  store: new MongoStore({url: DATABASE_URL}),
+  cookie: {maxAge: 60000}
   // cookie: { secure: true } //use with https
 }));
 app.use(passport.initialize());
@@ -40,6 +44,14 @@ app.use('/api/auth/', authRouter);
 
 
 // ROUTES
+
+//flash test
+app.get("/flash", (req, res) => {
+  req.flash('info', 'ayyy lmao');
+  res.redirect('/');
+});
+
+
 // JWT protected test route
 app.get("/secret",
   passport.authenticate('jwt', {session: false}),
@@ -53,9 +65,10 @@ app.get("/secret",
 app.get("/", (req, res) => {
   // console.log('User: '+req.user.username);
   console.log('Authenticated: '+req.isAuthenticated());
+  console.log(req.flash('info'));
   res
   .status(200)
-  .render('index');
+  .render('index', {messages: req.flash('info') });
 });
 
 
