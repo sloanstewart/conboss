@@ -40,6 +40,23 @@ html, body {
   text-rendering: optimizeLegibility;
   background-color: var(--background);
 }
+
+a, a:visited {
+  font-weight: 600;
+  color: var(--secondary-normal);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: var(--transition);
+}
+
+a:hover, a:focus {
+  text-decoration: none;
+  color: var(--secondary-dark);
+  cursor: pointer;
+  user-select: none;
+}
+
 .card {
   background-color: #ffffff;
   border-radius: 2px;
@@ -138,6 +155,7 @@ header {
   left: 0;
   right: 0;
   width: 100%;
+  height: 56px;
   padding: 0 50px;
   margin: 0;
   border: 0;
@@ -228,8 +246,9 @@ nav a.text-button {
 
 main {
   flex: 1 0 auto;
+  min-height: 100vh;
   padding: 0;
-  margin: 18rem 0 0 0;
+  margin: 3.5rem auto;
   background-color: transparent;
   transition: var(--transition);
 }
@@ -270,28 +289,13 @@ legend {
 footer {
   flex-shrink: 0;
   width: 100%;
-  height: 50px;
+  height: 96px;
   padding: 1rem 0;
   margin: auto;
   text-align: center;
-  color: #B0BEC5;
-  /* background: #37474F; */
-}
-
-a, a:visited {
-  font-weight: 600;
-  color: var(--secondary-normal);
-  text-decoration: none;
-  cursor: pointer;
-  user-select: none;
-  transition: var(--transition);
-}
-
-a:hover, a:focus {
-  text-decoration: none;
-  color: var(--secondary-dark);
-  cursor: pointer;
-  user-select: none;
+  line-height: 96px;
+  color:var(--text-light);
+  background-color: var(--secondary-normal);
 }
 
 input, textarea {
@@ -405,7 +409,6 @@ form textarea {
     width: 100%;
     max-width: 600px;
     padding: 0 16px;
-    margin: 11.25rem auto 0 auto;
   }
   .list-item {
     margin: 0 auto 1em auto;
