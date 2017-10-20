@@ -1,33 +1,34 @@
 /*jshint esversion:6*/
 require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
-const session = require("express-session");
-const MongoStore = require('connect-mongo')(session);
-const passport =require('passport');
-const {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
-const {Event} = require('./models/event');
-const {User} = require('./models/user');
-const {router: authRouter, localStrategy, basicStrategy, jwtStrategy} = require('./auth');
-const flash = require('connect-flash');
+var express = require('express');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
+var cookieParser = require('cookie-parser');
+var session = require("express-session");
+var MongoStore = require('connect-mongo')(session);
+var passport =require('passport');
+var {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
+var {Event} = require('./models/event');
+var {User} = require('./models/user');
+var {router: authRouter, localStrategy, basicStrategy, jwtStrategy} = require('./auth');
+var flash = require('connect-flash');
 
 mongoose.Promise = global.Promise;
 
-const app = express();
-// flash
-  app.use(cookieParser('suh dude?'));
-  app.use(flash());
+var app = express();
+app.use(express.static('public'));
 
-// ejs
+// ejs templating
 app.set('view engine', 'ejs');
 
+// typical config
 app.use(morgan('common'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static('public'));
+app.use(cookieParser('cookiesecret'));
+
+// express session
 app.use(session({
   secret: 'supersecret',
   resave: false,
@@ -36,19 +37,25 @@ app.use(session({
   cookie: {maxAge: 60000}
   // cookie: { secure: true } //use with https
 }));
+
+// passport authentication
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(basicStrategy);
 passport.use(jwtStrategy);
 app.use('/api/auth/', authRouter);
 
+// flash
+app.use(flash());
 
-// ROUTES
 
-//flash test
+
+// ROUTES ===================
+
+//flash test route
 app.get("/flash", (req, res) => {
-  req.flash('info', 'ayyy lmao');
-  res.redirect('/');
+  req.flash('info', 'ayyy lmao this is a flash message');
+  res.redirect(301, '/');
 });
 
 
@@ -63,12 +70,10 @@ app.get("/secret",
 
 // Landing Page
 app.get("/", (req, res) => {
-  // console.log('User: '+req.user.username);
   console.log('Authenticated: '+req.isAuthenticated());
-  console.log(req.flash('info'));
   res
   .status(200)
-  .render('index', {messages: req.flash('info') });
+  .render('index', { message: req.flash('info') });
 });
 
 
