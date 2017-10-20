@@ -60,12 +60,18 @@ app.get("/flash", (req, res) => {
 
 
 // JWT protected test route
-app.get("/secret",
+app.get("/jwt",
   passport.authenticate('jwt', {session: false}),
   (req, res) => {
-    return res.json({
-      message: "You are authorized to see this!",
-      user: req.user});
+    if (req.isAuthenticated == true) {
+      return res.json({
+        message: "You have a mighty dank JWT and are authorized to see this!",
+        user: req.user});
+    }
+    else {
+      return res.json({
+        message: "You are not JWT authorized." });
+    }
 });
 
 // Landing Page
