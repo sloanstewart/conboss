@@ -64,13 +64,17 @@ app.get("/jwt",
   passport.authenticate('jwt', {session: false}),
   (req, res) => {
     if (req.isAuthenticated == true) {
+      var success = "You have a mighty dank JWT and are authorized to see this!";
+      req.flash('info', success);
       return res.json({
-        message: "You have a mighty dank JWT and are authorized to see this!",
+        message: success,
         user: req.user});
     }
     else {
+      var failure = 'You are not JWT Authorized';
+      req.flash('info', failure );      
       return res.json({
-        message: "You are not JWT authorized." });
+        message: failure });
     }
 });
 
@@ -98,13 +102,17 @@ app.get("/events", (req, res) => {
 
 app.get("/events/new/", (req, res) => {
   if (req.isAuthenticated()) {
+    var success = 'You must be authenticated to create events';
+    req.flash('info', success );
     res
     .status(200)
     .render('new-event');
   }
   else {
+    var failure = 'You must be authenticated to create events';
+    req.flash('info', failure );
     console.log('Must be authenticated to create events');
-    res.redirect('/');
+    res.redirect(301, '/');
   }
 });
 
@@ -131,7 +139,7 @@ app.get("/events/edit/:id", (req, res) => {
   }
   else {
     console.log('Must be authenticated to edit events');
-    res.redirect('/');
+    res.redirect(301, '/');
   }
 });
 
@@ -158,7 +166,7 @@ app.get("/events/view/:id", (req, res) => {
   }
   else {
     console.log('Must be authenticated to edit events');
-    res.redirect('/');
+    res.redirect(301, '/');
   }
 });
 
@@ -251,7 +259,7 @@ app.put('/api/events/:id', (req, res) => {
     res.redirect('/');
   }
 });
-
+// delete event
 app.delete('/api/events/:id', (req, res) => {
   if (req.isAuthenticated()) {
     Event
@@ -346,6 +354,19 @@ app.put('/api/events/remove/:id', (req, res) => {
 
 // USERS ROUTES
 
+// Create User
+app.get("/user/create", (req, res) => {
+  if (!req.isAuthenticated()) {
+    res
+    .status(200)
+    .render('create-user');
+  }
+  else {
+    console.log('Must be logged out to create new user!');
+    // res.redirect("/login");
+  }
+});
+
 // Login User
 app.get("/login", (req, res) => {
   // console.log('User: '+req.user.username);
@@ -357,20 +378,7 @@ app.get("/login", (req, res) => {
   }
   else {
     console.log('Must be logged out to log in!');
-    res.redirect("/dashboard");
-  }
-});
-
-// Create User
-app.get("/user/create", (req, res) => {
-  if (!req.isAuthenticated()) {
-    res
-    .status(200)
-    .render('create-user');
-  }
-  else {
-    console.log('Must be logged out to create new user!');
-    // res.redirect("/login");
+    // res.redirect(301, "/dashboard");
   }
 });
 

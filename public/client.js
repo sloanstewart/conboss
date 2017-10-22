@@ -24,6 +24,46 @@ function closeNav() {
   , 150);
 }
 
+// HIDE THE DAMN LINKS 
+
+
+// AUTHENTICATION ============================
+$('#login').on('click', function(e) {
+  e.preventDefault();
+  var username = $('#username').val();
+  var password = $('#password').val();
+  const apiCall = {
+    method: "POST",
+    url: "/api/auth/login",
+    data: {'username': username,
+            'password': password},
+    dataType: "json",
+    success: function(data) {
+      localStorage.setItem('token', data.token);
+      // window.location.replace("/dashboard");
+    }
+  };
+  $.ajax(apiCall);
+});
+
+$('#logout').on('click', function(e) {
+  e.preventDefault();
+  var username = $('#username').val();
+  var password = $('#password').val();
+  const apiCall = {
+    method: "GET",
+    url: "/api/auth/logout",
+    data: {'username': username},
+    dataType: "json",
+    success: function(data) {
+      localStorage.removeItem('token', data.token);
+      window.location.replace("/");
+    }
+  };
+  $.ajax(apiCall);
+});
+
+
 
 
 // E V E N TS ============================

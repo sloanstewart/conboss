@@ -7,25 +7,36 @@ const flash = require('connect-flash');
 const {User} = require('../models/user');
 
 const createAuthToken = user => {
-  return jwt.sign({user}, config.JWT_SECRET, {
-    subject: user.username,
-    expiresIn: config.JWT_EXPIRY,
-    algorithm: 'HS256'
-  });
+  return jwt.sign(
+    {id: user.id},
+    config.JWT_SECRET,
+    { 
+      // subject: user.username,
+      expiresIn: config.JWT_EXPIRY,
+      algorithm: 'HS256'}
+  );
 };
 
 // /api/auth/login
 router.post('/login',
-  passport.authenticate('local',
-    {
-      successRedirect: '/events',
-      failureRedirect: '/'
-    })
+  // passport.authenticate('local', {  successRedirect: '/events',
+  //                                   failureRedirect: '/' })
+  passport.authenticate(
+    'local', {
+    session: false
+  }),
+  (req, res) => {
+    const token = createAuthToken(req.user);
+    res
+    .status(200)
+    .json({token})
+  }
 );
+
 // /api/auth/logout
 router.get('/logout', function(req, res){
   req.logout();
-  res.redirect('/');
+  res.redirect(301, '/');
 });
 
 router.post('/refresh',

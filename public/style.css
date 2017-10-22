@@ -244,6 +244,37 @@ nav a.text-button {
   transition: var(--transition);  
 }
 
+/*Flash message toast */
+.toast {
+  position: fixed;
+  left: 20px;
+  bottom: -100px;
+  background-color: #323232;
+  padding: 12px 24px 17px 24px;
+  vertical-align: middle;
+  color: #fff;
+  box-shadow: 0 7px 18px rgba(0,0,0,0.2);
+  border-radius: 2px;
+  -webkit-animation: peek 3s forwards;
+  -webkit-animation-delay: 0.2s;
+  animation: peek 3s forwards;
+  animation-delay: 0.2s;
+}
+
+@-webkit-keyframes peek {
+  0% { bottom: -100px; opacity: 0; }
+  10% { bottom: 20px; opacity: 1; }
+  90% { bottom: 20px; opacity: 1; }
+  100% { bottom: -100px; opacity: 0; }
+}
+
+@keyframes peek {
+  0% { bottom: -100px; opacity: 0; }
+  10% { bottom: 20px; opacity: 1; }  
+  90% { bottom: 20px; opacity: 1; }
+  100% { bottom: -100px; opacity: 0; }
+}
+
 main {
   flex: 1 0 auto;
   min-height: 100vh;
