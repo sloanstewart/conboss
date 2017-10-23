@@ -6,24 +6,33 @@ const router = express.Router();
 const flash = require('connect-flash');
 const {User} = require('../models/user');
 
+// bad changes??? 
+// const createAuthToken = user => {
+//   return jwt.sign(
+//     {id: user.id},
+//     config.JWT_SECRET,
+//     { 
+//       // subject: user.username,
+//       expiresIn: config.JWT_EXPIRY,
+//       algorithm: 'HS256'}
+//   );
+// };
+
 const createAuthToken = user => {
-  return jwt.sign(
-    {id: user.id},
-    config.JWT_SECRET,
-    { 
-      // subject: user.username,
-      expiresIn: config.JWT_EXPIRY,
-      algorithm: 'HS256'}
-  );
+    return jwt.sign({user}, config.JWT_SECRET, {
+    subject: user.username,
+    expiresIn: config.JWT_EXPIRY,
+    algorithm: 'HS256'
+  });
 };
 
 // /api/auth/login
 router.post('/login',
-  // passport.authenticate('local', {  successRedirect: '/events',
-  //                                   failureRedirect: '/' })
   passport.authenticate(
     'local', {
-    session: false
+    session: false,
+    successRedirect: '/dashboard',
+    failureRedirect: '/login'
   }),
   (req, res) => {
     const token = createAuthToken(req.user);
