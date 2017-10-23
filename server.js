@@ -1,22 +1,26 @@
 /*jshint esversion:6*/
 require('dotenv').config();
-var express = require('express');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
-var session = require("express-session");
-var MongoStore = require('connect-mongo')(session);
-var passport =require('passport');
-var {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
-var {Event} = require('./models/event');
-var {User} = require('./models/user');
-var {router: authRouter, localStrategy, basicStrategy, jwtStrategy} = require('./auth');
-var flash = require('connect-flash');
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+// const session = require("express-session"); 10/23 auth overhaul
+// const MongoStore = require('connect-mongo')(session);
+const passport = require('passport');
+const {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
+const {Event} = require('./models/event');
+const {User} = require('./models/user');
+const {router: authRouter, localStrategy, basicStrategy, jwtStrategy} = require('./auth');
+const flash = require('connect-flash');
+
+// 10/23 auth overhaul
+// const expressJwt = require('express-jwt');
+// const authenticate = expressJwt({secret: 'super secret'});
 
 mongoose.Promise = global.Promise;
 
-var app = express();
+const app = express();
 app.use(express.static('public'));
 
 // ejs templating
@@ -29,20 +33,20 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser('cookiesecret'));
 
 // express session
-app.use(session({
-  secret: 'supersecret',
-  resave: false,
-  saveUninitialized: false,
-  store: new MongoStore({url: DATABASE_URL}),
-  cookie: {maxAge: 60000}
+// app.use(session({
+//   secret: 'supersecret',
+//   resave: false,
+//   saveUninitialized: false,
+//   store: new MongoStore({url: DATABASE_URL}),
+//   cookie: {maxAge: 60000}
   // cookie: { secure: true } //use with https
-}));
+// }));
 
 // passport authentication
 app.use(passport.initialize());
-app.use(passport.session());
-passport.use(basicStrategy);
-passport.use(jwtStrategy);
+// app.use(passport.session()); 10/23 auth overhaul
+// passport.use(basicStrategy);
+// passport.use(jwtStrategy);
 app.use('/api/auth/', authRouter);
 
 // flash
@@ -52,7 +56,7 @@ app.use(flash());
 
 // ROUTES ===================
 
-//flash test route
+// flash test route
 app.get("/flash", (req, res) => {
   req.flash('info', 'ayyy lmao this is a flash message');
   res.redirect(301, '/');
@@ -61,7 +65,7 @@ app.get("/flash", (req, res) => {
 
 // JWT protected test route
 app.get("/jwt",
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('local', {session: false}),
   (req, res) => {
     if (req.isAuthenticated == true) {
       var success = "You have a mighty dank JWT and are authorized to see this!";

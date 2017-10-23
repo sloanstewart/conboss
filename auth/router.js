@@ -6,24 +6,22 @@ const router = express.Router();
 const flash = require('connect-flash');
 const {User} = require('../models/user');
 
-const createAuthToken = user => {
+const createAuthToken = ({user}) => {
   return jwt.sign(
     {id: user.id},
-    config.JWT_SECRET,
-    { 
-      // subject: user.username,
+    config.JWT_SECRET, { 
       expiresIn: config.JWT_EXPIRY,
-      algorithm: 'HS256'}
-  );
+      algorithm: 'HS256'
+    });
 };
 
 // /api/auth/login
 router.post('/login',
-  // passport.authenticate('local', {  successRedirect: '/events',
-  //                                   failureRedirect: '/' })
   passport.authenticate(
     'local', {
-    session: false
+    session: false,
+    // successRedirect: '/dashboard',
+    // failureRedirect: '/login'
   }),
   (req, res) => {
     const token = createAuthToken(req.user);
