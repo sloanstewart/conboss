@@ -40,7 +40,11 @@ $('#login').on('click', function(e) {
     dataType: "json",
     success: function(data) {
       localStorage.setItem('token', data.token);
+      console.log('token stored \n' + 'localStorage: ' + JSON.stringify(localStorage, null, 4));
       // window.location.replace("/dashboard");
+    },
+    error: function() {
+      console.log('Login ERROR');
     }
   };
   $.ajax(apiCall);
@@ -51,14 +55,18 @@ $('#logout').on('click', function(e) {
   var username = $('#username').val();
   var password = $('#password').val();
   localStorage.removeItem('token');
-  console.log('Logged out.');
+  console.log('token removed \n' + 'localStorage: ' + JSON.stringify(localStorage, null, 4));
   const apiCall = {
     method: "GET",
-    url: "/api/auth/logout",
+    url: "/logout",
     data: {'username': username},
     dataType: "json",
-    success: function(data) {
+    success: function() {
+      console.log('Logged out.');
       window.location.replace("/");
+    },
+    error: function() {
+      console.log('Logout error - server');
     }
   };
   $.ajax(apiCall);
