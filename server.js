@@ -4,14 +4,14 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
+// var cookieParser = require('cookie-parser');
 var session = require("express-session");
 var MongoStore = require('connect-mongo')(session);
 var passport =require('passport');
 var {DATABASE_URL,TEST_DATABASE_URL, PORT} = require('./config');
 var {Event} = require('./models/event');
 var {User} = require('./models/user');
-var {router: authRouter, localStrategy, basicStrategy, jwtStrategy} = require('./auth');
+var {router: authRouter, basicStrategy, jwtStrategy} = require('./auth');
 var flash = require('connect-flash');
 
 mongoose.Promise = global.Promise;
@@ -26,7 +26,7 @@ app.set('view engine', 'ejs');
 app.use(morgan('common'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser('cookiesecret'));
+// app.use(cookieParser('cookiesecret'));
 
 // express session
 app.use(session({
@@ -61,7 +61,7 @@ app.get("/flash", (req, res) => {
 
 // JWT protected test route
 app.get("/jwt",
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('basic', {session: false}),
   (req, res) => {
     if (req.isAuthenticated == true) {
       var success = "You have a mighty dank JWT and are authorized to see this!";
@@ -378,7 +378,7 @@ app.get("/login", (req, res) => {
   }
   else {
     console.log('Must be logged out to log in!');
-    // res.redirect(301, "/dashboard");
+    res.redirect(301, "/dashboard");
   }
 });
 
@@ -409,6 +409,7 @@ app.get("/dashboard", (req, res) => {
 });
 
 app.get("/user/dashboard/:id", (req, res) => {
+  console.log('auth is: ' + req.auth);
   if (req.isAuthenticated()) {
     if (req.user.id == req.params.id) {
       console.log('User match, loading dashboard...');
@@ -444,7 +445,7 @@ app.get("/user/dashboard/:id", (req, res) => {
   }
   else {
     console.log('Must be logged in to access dashboard');
-    res.redirect("/login");
+    // res.redirect("/login");
   }
 });
 

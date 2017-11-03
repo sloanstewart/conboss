@@ -29,10 +29,8 @@ const createAuthToken = user => {
 // /api/auth/login
 router.post('/login',
   passport.authenticate(
-    'local', {
-    session: false,
-    successRedirect: '/dashboard',
-    failureRedirect: '/login'
+    'basic', {
+    session: false
   }),
   (req, res) => {
     const token = createAuthToken(req.user);
@@ -44,8 +42,8 @@ router.post('/login',
 
 // /api/auth/logout
 router.get('/logout', function(req, res){
+  // console.log('User ' + req.user.username + ' logged out.')
   req.logout();
-  res.redirect(301, '/');
 });
 
 router.post('/refresh',

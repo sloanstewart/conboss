@@ -50,13 +50,14 @@ $('#logout').on('click', function(e) {
   e.preventDefault();
   var username = $('#username').val();
   var password = $('#password').val();
+  localStorage.removeItem('token');
+  console.log('Logged out.');
   const apiCall = {
     method: "GET",
     url: "/api/auth/logout",
     data: {'username': username},
     dataType: "json",
     success: function(data) {
-      localStorage.removeItem('token', data.token);
       window.location.replace("/");
     }
   };
@@ -70,12 +71,18 @@ $('#logout').on('click', function(e) {
 
 // Get and display all Events
 function getEvents(callback) {
+  // get jwt from localstorage
+  var token = localStorage.getItem('token');
   const apiCall = {
     method: "GET",
     url: "/api/events",
     data: "",
     dataType: "json",
-    success: callback
+    success: callback,
+    // send jwt in auth header
+    beforeSend: function (xhr) {
+      xhr.setRequestHeader("Authorization", 'Bearer '+ token);
+    }
   };
   $.ajax(apiCall);
 }

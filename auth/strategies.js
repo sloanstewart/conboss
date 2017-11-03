@@ -5,24 +5,25 @@ const {
   Strategy: JwtStrategy,
   ExtractJwt
 } = require('passport-jwt');
+
 const {User} = require('../models/user');
 const {JWT_SECRET} = require('../config');
 
-const localStrategy = passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validatePassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      console.log('Login accepted.');
-      return done(null, user);
-    });
-  }
-));
+// const localStrategy = passport.use(new LocalStrategy(
+//   function(username, password, done) {
+//     User.findOne({ username: username }, function(err, user) {
+//       if (err) { return done(err); }
+//       if (!user) {
+//         return done(null, false, { message: 'Incorrect username.' });
+//       }
+//       if (!user.validatePassword(password)) {
+//         return done(null, false, { message: 'Incorrect password.' });
+//       }
+//       console.log('Login accepted.');
+//       return done(null, user);
+//     });
+//   }
+// ));
 
 const basicStrategy = new BasicStrategy((username, password, done) => {
   let user;
@@ -65,4 +66,4 @@ const jwtStrategy = new JwtStrategy({
   }
 );
 
-module.exports = {localStrategy, basicStrategy, jwtStrategy};
+module.exports = {basicStrategy, jwtStrategy};
