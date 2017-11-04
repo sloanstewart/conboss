@@ -29,9 +29,7 @@ const createAuthToken = user => {
 // /api/auth/login
 router.post('/login',
   passport.authenticate(
-    'basic', {
-    session: false
-  }),
+    'basic', {session: false}),
   (req, res) => {
     const token = createAuthToken(req.user);
     res

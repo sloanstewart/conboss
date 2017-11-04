@@ -62,6 +62,7 @@ const jwtStrategy = new JwtStrategy({
     algorithms: ['HS256']
   },
   (payload, done) => {
+    console.log('jwt confirmed');
     return done(null, payload.user)
   }
 );

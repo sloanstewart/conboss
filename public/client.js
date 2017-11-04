@@ -24,10 +24,16 @@ function closeNav() {
   , 150);
 }
 
-// HIDE THE DAMN LINKS 
-
-
 // AUTHENTICATION ============================
+// if ( localStorage.token ) {
+//   console.log('there IS a token');
+//   $.ajaxSetup({
+//     beforeSend: function(xhr) {
+//         xhr.setRequestHeader('Authorization', 'Bearer' + localStorage.token);
+//     }
+//   });
+// }
+
 $('#login').on('click', function(e) {
   e.preventDefault();
   var username = $('#username').val();
@@ -79,18 +85,12 @@ $('#logout').on('click', function(e) {
 
 // Get and display all Events
 function getEvents(callback) {
-  // get jwt from localstorage
-  var token = localStorage.getItem('token');
   const apiCall = {
     method: "GET",
     url: "/api/events",
     data: "",
     dataType: "json",
     success: callback,
-    // send jwt in auth header
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader("Authorization", 'Bearer '+ token);
-    }
   };
   $.ajax(apiCall);
 }

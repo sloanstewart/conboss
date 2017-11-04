@@ -40,15 +40,28 @@ app.use(session({
 
 // passport authentication
 app.use(passport.initialize());
-app.use(passport.session());
 passport.use(basicStrategy);
 passport.use(jwtStrategy);
 app.use('/api/auth/', authRouter);
+app.use(passport.session());
 
 // flash
 app.use(flash());
 
+// Send token in auth header for ever request
+// app.use( (req, res, next) => {
+//   if(!req.headers.authorization) {
+//     return res.status(401).end()
+//   }
+//   else {
+//     return res.status(200).json({message: 'yo there is a token here'});
+//   }
 
+//   var token = req.headers.authorization.split(' ')[1]
+//   console.log('TOKEN: ' + token);
+
+//   return next();
+// });
 
 // ROUTES ===================
 
@@ -61,21 +74,22 @@ app.get("/flash", (req, res) => {
 
 // JWT protected test route
 app.get("/jwt",
-  passport.authenticate('basic', {session: false}),
+  passport.authenticate('jwt', {session: false}),
   (req, res) => {
-    if (req.isAuthenticated == true) {
-      var success = "You have a mighty dank JWT and are authorized to see this!";
-      req.flash('info', success);
-      return res.json({
-        message: success,
-        user: req.user});
-    }
-    else {
-      var failure = 'You are not JWT Authorized';
-      req.flash('info', failure );      
-      return res.json({
-        message: failure });
-    }
+    return res.json({message: 'jwt is good!'});
+    // if (req.isAuthenticated == true) {
+    //   var success = 'Authenticate success';
+    //   req.flash('info', success);
+    //   return res.json({
+    //     message: success,
+    //     user: req.user});
+    // }
+    // else {
+    //   var failure = 'Authenticate failed';
+    //   req.flash('info', failure );      
+    //   return res.json({
+    //     message: failure });
+    // }
 });
 
 // Landing Page
@@ -383,7 +397,7 @@ app.get("/login", (req, res) => {
 });
 
 // Logout User
-app.get('/logout', function(req, res){
+app.get('/logout', (req, res) => {
   if (req.isAuthenticated()) {
     req.logout();
     res.redirect('/api/auth/logout');
@@ -395,18 +409,24 @@ app.get('/logout', function(req, res){
 });
 
 // User Dashboard
-app.get("/dashboard", (req, res) => {
-  if (req.isAuthenticated()) {
-    var id = req.user.id;
-    res
-    .status(200)
-    .redirect('/user/dashboard/'+id);
-  }
-  else {
-    console.log('Must be logged in to view your dashboard.');
-    res.redirect("/login");
-  }
-});
+app.get("/dashboard",
+  passport.authenticate('jwt'),
+  (req, res) => {
+    console.log('dashboard redirecting...');
+    res.redirect( '/user/dashboard/' + req.user.id );
+  });
+// app.get("/dashboard", (req, res) => {
+//   if (req.isAuthenticated()) {
+//     var id = req.user.id;
+//     res
+//     .status(200)
+//     .redirect('/user/dashboard/'+id);
+//   }
+//   else {
+//     console.log('Must be logged in to view your dashboard.');
+//     res.redirect("/login");
+//   }
+// });
 
 app.get("/user/dashboard/:id", (req, res) => {
   console.log('auth is: ' + req.auth);
