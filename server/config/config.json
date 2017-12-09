@@ -1,0 +1,14 @@
+{
+    "test": {
+        "PORT": 8080,
+        "MONGODB_URI": "mongodb://localhost:27017/ConbossTest",
+        "JWT_SECRET": "sdfg454f890fg405/*-+*/9/-=2135dfghjl5adsfgkl6w35jadfrh_(09_23sd/9+",
+        "JWT_EXPIRY": "1d"
+    },
+    "development": {
+        "PORT": 8080,
+        "MONGODB_URI": "mongodb://localhost:27017/Conboss",
+        "JWT_SECRET": "gh67678o][564awdr+75857*-tj87dfrtuj*/5467+*-889-p+*98dfh",
+        "JWT_EXPIRY": "1d"
+    }
+}
