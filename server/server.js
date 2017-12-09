@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get("/", (req, res) => {
   res
   .status(200)
-  .render('index', { message: req.flash('info') });
+  .render('index');
 });
 
 
