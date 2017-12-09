@@ -60,7 +60,7 @@ const UserSchema = mongoose.Schema({
       default: "user",
       required: true
     },
-
+    savedEvents: [],
     tokens: [{
         access: {
             type: String,
