@@ -5,16 +5,20 @@ const Event = mongoose.model('Event', {
     type: String,
     required: true,
     minlength: 1,
+    trim: true,
+    unique: true
+  },
+  details: {
+    type: String,
     trim: true
   },
-  details: String,
   start: {
     type: Date,
-    required: true
+    // required: true
   },
   end: {
     type: Date,
-    required: true
+    // required: true
   },
   users: [],
   created: {
@@ -22,10 +26,10 @@ const Event = mongoose.model('Event', {
     required: true,
     default: Date.now
   },
-  _creator: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true
-  }
+  // _creator: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: true
+  // }
 });
 
 module.exports = {Event};
