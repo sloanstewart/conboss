@@ -7,7 +7,7 @@ const {
 } = require('passport-jwt');
 
 const {User} = require('../models/user');
-const {JWT_SECRET} = require('../config');
+const {JWT_SECRET} = require('./../config/config');
 
 // const localStrategy = passport.use(new LocalStrategy(
 //   function(username, password, done) {

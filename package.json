@@ -2,7 +2,7 @@
   "name": "conboss",
   "version": "1.0.0",
   "description": "Convention management app",
-  "main": "server.js",
+  "main": "server/server",
   "dependencies": {
     "bcrypt": "^1.0.2",
     "bcryptjs": "^2.4.3",
@@ -31,7 +31,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "start": "nodemon server"
+    "start": "nodemon server/server.js"
   },
   "repository": {
     "type": "git",

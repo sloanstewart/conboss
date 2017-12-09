@@ -4,7 +4,7 @@ const chaiHttp = require('chai-http');
 
 const should = chai.should();
 const {app, bodyParser, runServer, closeServer} = require('../server');
-const {TEST_DATABASE_URL} = require('../config');
+const {TEST_DATABASE_URL} = require('./../server/config/config');
 const {Event} = require('../models/event');
 const {User} = require('../models/user');
 

@@ -25,14 +25,6 @@ function closeNav() {
 }
 
 // AUTHENTICATION ============================
-// if ( localStorage.token ) {
-//   console.log('there IS a token');
-//   $.ajaxSetup({
-//     beforeSend: function(xhr) {
-//         xhr.setRequestHeader('Authorization', 'Bearer' + localStorage.token);
-//     }
-//   });
-// }
 
 $('#login').on('click', function(e) {
   e.preventDefault();
