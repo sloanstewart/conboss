@@ -63,7 +63,7 @@ app.get('/events', (req, res) => {
   })
 });
 
-app.get('/events/:id', (req, res) => {
+app.get('/events/:id', authenticate, (req, res) => {
   let id = req.params.id;
 
   if(!ObjectID.isValid(id)) {

@@ -13,24 +13,24 @@ beforeEach(populateEvents);
 
 describe('POST /events', () => {
     it('should create a new Event', (done) => {
-        var text = 'Test event text';
+        var title = "test event";
 
         request(app)
             .post('/events')
             .set('x-auth', users[0].tokens[0].token)
-            .send({text})
+            .send({title})
             .expect(200)
             .expect((res) => {
-                expect(res.body.text).toBe(text);
+                expect(res.body.title).toBe(title);
             })
             .end((err, res) => {
                 if (err) {
                     return done(err);
                 }
 
-                Todo.find({text}).then((events) => {
+                Event.find({title}).then((events) => {
                     expect(events.length).toBe(1);
-                    expect(events[0].text).toBe(text);
+                    expect(events[0].title).toBe(title);
                     done();
                 }).catch((err) => done(e));
             });
@@ -47,7 +47,7 @@ describe('POST /events', () => {
                     return done(err);
                 }
 
-                Todo.find().then((events) => {
+                Event.find().then((events) => {
                     expect(events.length).toBe(2);
                     done();
                 }).catch((e) => done(e));
@@ -62,7 +62,7 @@ describe('GET /events', () => {
             .set('x-auth', users[0].tokens[0].token)
             .expect(200)
             .expect((res) => {
-                expect(res.body.events.length).toBe(1);
+                expect(res.body.events.length).toBe(2 );
             })
             .end(done);
     });
@@ -75,17 +75,17 @@ describe('GET /events/:id', () => {
             .set('x-auth', users[0].tokens[0].token)
             .expect(200)
             .expect((res) => {
-                expect(res.body.event.text).toBe(events[0].text);
+                expect(res.body.event.title).toBe(events[0].title);
             }).end(done);
     });
 
-    it('should not return event doc created by other user', (done) => {
-        request(app)
-            .get(`/events/${events[1]._id.toHexString()}`)
-            .set('x-auth', users[0].tokens[0].token)
-            .expect(404)
-            .end(done);
-    });
+    // it('should not return event doc created by other user', (done) => {
+    //     request(app)
+    //         .get(`/events/${events[1]._id.toHexString()}`)
+    //         .set('x-auth', users[0].tokens[0].token)
+    //         .expect(404)
+    //         .end(done);
+    // });
 
     it('should return a 404 if event not found', (done) => {
         var id = new ObjectID().toHexString();
@@ -106,7 +106,7 @@ describe('GET /events/:id', () => {
 });
 
 describe('DELETE /events/:id', () => {
-    it('should remove a event', (done) =>{
+    it('should remove an event', (done) =>{
         var id = events[1]._id.toHexString();
 
         request(app)
@@ -120,7 +120,7 @@ describe('DELETE /events/:id', () => {
                     return done(err);
                 }
 
-                event.findById(id).then( (event) => {
+                Event.findById(id).then( (event) => {
                     expect(event).toBeFalsy();
                     done();
                 }).catch((err) => done(err));
@@ -146,44 +146,18 @@ describe('DELETE /events/:id', () => {
 describe('PATCH /events:id', () => {
     it('should update the event', (done) => {
         var id = events[0]._id.toHexString();
-        var text = "updated text";
+        var title = "updated title";
 
         request(app)
             .patch(`/events/${id}`)
             .send({
-                text,
-                completed: true
+                title,
+                details: "suh dude"
             })
             .expect(200)
             .expect((res) => {
-                expect(res.body.event.text).toBe(text);
-                expect(res.body.event.completed).toBe(true);
-                expect(typeof(res.body.event.completedAt)).toEqual('number');
-            })
-            .end(done);
-    });
-
-    it('should clear completedAt when event is not completed', (done) => {
-    //     // grab id of second event item     
-    //     // update text, set completed to false
-    //     // 200
-    //     // res.body.text shows change, completed is false, completedAt is null .toNotExist
-
-        var id = events[1]._id.toHexString();
-        var text = "updated text!";
-
-
-        request(app)
-            .patch(`/events/${id}`)
-            .send({
-                text,
-                completed: false
-            })
-            .expect(200)
-            .expect((res) => {
-                expect(res.body.event.text).toBe(text);
-                expect(res.body.event.completed).toBe(false);
-                expect(res.body.event.completedAt).toBeNull();
+                expect(res.body.event.title).toBe(title);
+                expect(res.body.event.details).toBe("suh dude");
             })
             .end(done);
     });
