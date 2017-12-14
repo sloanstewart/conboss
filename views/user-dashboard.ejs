@@ -6,8 +6,8 @@
         </section>
         <section class="saved-event-list">
           <!-- TODO this should really be a list, not 'cards' -->
-          <% for (var i = 0; i < saved_events.length; i++) {
-            let event = saved_events[i]
+          <% for (var i = 0; i < savedEvents.length; i++) {
+            let event = savedEvents[i]
             let dateOptions = {month: "short",
                                 day: "2-digit",
                                 year: "numeric",
@@ -29,7 +29,7 @@
             </div>
             <% } %>
           <!-- TODO loop through events with EJS -->
-          <!-- <div class="saved-event-list"><%- saved_events %></div> -->
+          <!-- <div class="saved-event-list"><%- savedEvents %></div> -->
         </section>
 <% include footer %>
 

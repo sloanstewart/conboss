@@ -30,22 +30,99 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
-// Landing Page
+// handleRequest = (req, res) => {
+
+// }
+
+// Front end routes
 app.get("/", (req, res) => {
   res
   .status(200)
   .render('index');
 });
 
+app.get("/signup", (req, res) => {
+  res
+  .status(200)
+  .render('user-new');
+});
 
-// EVENTS
-app.post('/events', (req, res) => {
+app.get("/login", (req, res) => {
+  res
+  .status(200)
+  .render('user-login');
+});
+
+app.get("/dashboard/:id", (req, res) => {
+  let id = req.params.id;
+  
+  if(!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+  
+  User
+  .findById(id)
+  .populate('savedEvents')
+  .exec()
+  // .then( user => {
+    //   // const data = {
+      //   //   _id: user._id,
+      //   //   username: user.username,
+      //   //   email: user.email,
+      //   //   password: user.password,
+      //   //   firstName: user.name.firstName,
+      //   //   lastName: user.name.lastName,
+      //   //   location: user.location,
+      //   //   bio: user.bio,
+      //   //   role: user.role,
+      //   //   created: user.created,
+      //   //   savedEvents: user.savedEvents
+      //   // };
+      //   return user;
+      // })
+      .then( user => {
+        res
+        .status(200)
+        .render('user-dashboard', user);
+      });
+    })
+    
+    app.get("/events", (req, res) => {
+      res
+      .status(200)
+      .render('event-all');
+    });
+
+    app.get("/event/new", (req, res) => {
+      res
+      .status(200)
+      .render('event-new');
+    });
+
+    app.get("/event/:id", (req, res) => {
+      res
+      .status(200)
+      .render('event-details');
+    });
+
+    app.get("/event/edit/:id", (req, res) => {
+      res
+      .status(200)
+      .render('event-edit');
+    });
+    
+
+
+
+
+// API: EVENTS =====================
+app.post('/api/events', (req, res) => {
   let event = new Event({
     title: req.body.title,
     details: req.body.description,
-    // start: req.body.start,
-    // end: req.body.end,
-    // _creator: req.user._id
+    start: req.body.start,
+    end: req.body.end,
+    _creator: req.user._id
   });
 
   event.save().then((doc) => {
@@ -55,7 +132,7 @@ app.post('/events', (req, res) => {
   }); 
 });
 
-app.get('/events', (req, res) => {
+app.get('/api/events', (req, res) => {
   Event.find().then((events) => {
     res.send({events});
   }, (err) => {
@@ -63,7 +140,7 @@ app.get('/events', (req, res) => {
   })
 });
 
-app.get('/events/:id', authenticate, (req, res) => {
+app.get('/api/events/:id', authenticate, (req, res) => {
   let id = req.params.id;
 
   if(!ObjectID.isValid(id)) {
@@ -84,7 +161,7 @@ app.get('/events/:id', authenticate, (req, res) => {
   })
 });
 
-app.delete('/events/:id', (req, res) => {
+app.delete('/api/events/:id', (req, res) => {
   let id = req.params.id;
   
     if(!ObjectID.isValid(id)) {
@@ -102,7 +179,7 @@ app.delete('/events/:id', (req, res) => {
     })
 });
 
-app.patch('/events/:id', (req, res) => {
+app.patch('/api/events/:id', (req, res) => {
   var id = req.params.id;
   var body = _.pick(req.body, ['title', 'details', 'start', 'end', 'users']);
 
@@ -121,8 +198,8 @@ app.patch('/events/:id', (req, res) => {
   })
 });
 
-// USERS =====================
-app.post('/users', (req, res) => {
+// API: USERS =====================
+app.post('/api/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   var user = new User(body);
 
@@ -135,11 +212,11 @@ app.post('/users', (req, res) => {
   });
 });
 
-app.get('/users/me', authenticate, (req, res) => {
+app.get('/api/users/me', authenticate, (req, res) => {
   res.send(req.user);
 });
 
-app.post('/users/login', (req, res) => {
+app.post('/api/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   
   User.findByCredentials(body.email, body.password).then((user) => {
@@ -151,7 +228,7 @@ app.post('/users/login', (req, res) => {
   });
 });
 
-app.delete('/users/me/token', authenticate, (req, res) => {
+app.delete('/api/users/me/token', authenticate, (req, res) => {
   req.user.removeToken(req.token).then(() => {
       res.status(200).send();
 
