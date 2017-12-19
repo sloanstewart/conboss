@@ -422,18 +422,18 @@ function displayUsers(data) {
   }
 }
 
-function getAndDisplayUsers() {
-  getUsers(displayUsers);
-}
+// function getAndDisplayUsers() {
+//   getUsers(displayUsers);
+// }
 
-$(function() {
-  getAndDisplayUsers();
-});
+// $(function() {
+//   getAndDisplayUsers();
+// });
 
 
 //ON LOAD
-$(function() {
-  getAndDisplayEvents();
-  getAndDisplayUsers();
-  listeners();
-});
+// $(function() {
+//   getAndDisplayEvents();
+//   getAndDisplayUsers();
+//   listeners();
+// });

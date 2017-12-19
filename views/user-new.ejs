@@ -1,15 +1,15 @@
 <% include head %>
       <h1 class="text-title">Create An Account</h1>     
-      <form class="login" action="" method="POST" enctype="multipart/form-data">
+      <form class="login" action="/users" method="POST">
         <fieldset>
           <legend>Create New Account</legend>
-          <label for="create-username">Username*:</label>
-          <input type="text" name="create-username" id="create-username" placeholder="" value="" title="Choose a username" required>
-          <label for="create-email">Email*:</label>
-          <input type="email" name="create-email" id="create-email" placeholder="" value="" title="Please, provide a valid email address" required>
-          <label for="create-password">Password*:</label>
-          <input type="password" name="create-password" id="create-password" placeholder="" value="" title="Please, provide a password for your account" required>
-          <button name="create-user" id="create-user">Create Account</button>
+          <!-- <label for="username">Username:</label>
+          <input type="text" name="username" id="username" placeholder="" value="" title="Choose a username" required> -->
+          <label for="email">Email*:</label>
+          <input type="email" name="email" id="email" placeholder="" value="" title="Please, provide a valid email address" required>
+          <label for="password">Password*:</label>
+          <input type="password" name="password" id="password" placeholder="" value="" title="Please, provide a password for your account" required>
+          <button type="submit" name="user" id="user">Create Account</button>
         </fieldset>
       </form>
       <p>Already have an account? <a href="/login">Login</a></p>

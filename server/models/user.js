@@ -5,11 +5,11 @@ const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = mongoose.Schema({
-    username: {
-      type: String,
-      required: false,
-      unique: true
-    },
+    // username: {
+    //   type: String,
+    //   required: false,
+    //   // unique: true
+    // },
     email: {
       type: String,
       required: true,
@@ -26,41 +26,41 @@ const UserSchema = mongoose.Schema({
       required: true,
       minlength: 5
     },
-    name: {
-      firstName: {
-        type: String,
-        default: "",
-        trim: true,
-        required: false
-      },
-      lastName: {
-        type: String,
-        default: "",
-        trim: true,
-        required: false
-      }
-    },
-    location: {
-      type: String,
-      default: "",
-      trim: true,
-      required: false
-    },
-    bio: {
-      type: String,
-      default: "",
-      required: false
-    },
-    created: {
-      type: Date,
-      default: Date.now,
-      required: true
-    },
-    role: {
-      type: String,
-      default: "user",
-      required: true
-    },
+    // name: {
+    //   firstName: {
+    //     type: String,
+    //     default: "",
+    //     trim: true,
+    //     required: false
+    //   },
+    //   lastName: {
+    //     type: String,
+    //     default: "",
+    //     trim: true,
+    //     required: false
+    //   }
+    // },
+    // location: {
+    //   type: String,
+    //   default: "",
+    //   trim: true,
+    //   required: false
+    // },
+    // bio: {
+    //   type: String,
+    //   default: "",
+    //   required: false
+    // },
+    // created: {
+    //   type: Date,
+    //   default: Date.now,
+    //   required: true
+    // },
+    // role: {
+    //   type: String,
+    //   default: "user",
+    //   required: true
+    // },
     savedEvents: [],
     tokens: [{
         access: {

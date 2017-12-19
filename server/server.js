@@ -199,7 +199,7 @@ app.patch('/api/events/:id', (req, res) => {
 });
 
 // API: USERS =====================
-app.post('/api/users', (req, res) => {
+app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   var user = new User(body);
 
@@ -212,11 +212,11 @@ app.post('/api/users', (req, res) => {
   });
 });
 
-app.get('/api/users/me', authenticate, (req, res) => {
+app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
 });
 
-app.post('/api/users/login', (req, res) => {
+app.post('/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   
   User.findByCredentials(body.email, body.password).then((user) => {
@@ -228,7 +228,7 @@ app.post('/api/users/login', (req, res) => {
   });
 });
 
-app.delete('/api/users/me/token', authenticate, (req, res) => {
+app.delete('/users/me/token', authenticate, (req, res) => {
   req.user.removeToken(req.token).then(() => {
       res.status(200).send();
 
