@@ -62,54 +62,43 @@ app.get("/dashboard/:id", (req, res) => {
   
   User
   .findById(id)
-  .populate('savedEvents')
-  .exec()
-  // .then( user => {
-    //   // const data = {
-      //   //   _id: user._id,
-      //   //   username: user.username,
-      //   //   email: user.email,
-      //   //   password: user.password,
-      //   //   firstName: user.name.firstName,
-      //   //   lastName: user.name.lastName,
-      //   //   location: user.location,
-      //   //   bio: user.bio,
-      //   //   role: user.role,
-      //   //   created: user.created,
-      //   //   savedEvents: user.savedEvents
-      //   // };
-      //   return user;
-      // })
-      .then( user => {
-        res
-        .status(200)
-        .render('user-dashboard', user);
-      });
-    })
+  .then((user) => {
+    if (!user) {
+      return res.status(404).send();
+    }
+    return user
+  })
+  .then(user => {
+    const data = user;
+    res
+    .status(200)
+    .render('user-dashboard', {user});
+  });
+})
     
-    app.get("/events", (req, res) => {
-      res
-      .status(200)
-      .render('event-all');
-    });
+app.get("/events", (req, res) => {
+  res
+  .status(200)
+  .render('event-all');
+});
 
-    app.get("/event/new", (req, res) => {
-      res
-      .status(200)
-      .render('event-new');
-    });
+app.get("/event/new", (req, res) => {
+  res
+  .status(200)
+  .render('event-new');
+});
 
-    app.get("/event/:id", (req, res) => {
-      res
-      .status(200)
-      .render('event-details');
-    });
+app.get("/event/:id", (req, res) => {
+  res
+  .status(200)
+  .render('event-details');
+});
 
-    app.get("/event/edit/:id", (req, res) => {
-      res
-      .status(200)
-      .render('event-edit');
-    });
+app.get("/event/edit/:id", (req, res) => {
+  res
+  .status(200)
+  .render('event-edit');
+});
     
 
 
@@ -206,7 +195,8 @@ app.post('/users', (req, res) => {
   user.save().then(()=>{
      return user.generateAuthToken();
   }).then((token) => {
-      res.header('x-auth', token).send(user);
+      res.header('x-auth', token)
+      .render(`/dashboard/`);
   }).catch((err)=>{
       res.status(400).send(err);
   });
@@ -221,7 +211,10 @@ app.post('/users/login', (req, res) => {
   
   User.findByCredentials(body.email, body.password).then((user) => {
      return user.generateAuthToken().then((token) => {
-      res.header('x-auth', token).send(user);
+      res.header('x-auth', token)
+      .status(200)
+      .render('user-dashboard', user);
+        // .render(`dashboard`, user);
      });
   }).catch((e) => {
       res.status(400).send();

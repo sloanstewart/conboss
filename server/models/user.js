@@ -74,10 +74,10 @@ const UserSchema = mongoose.Schema({
     }]
   });
   
-  UserSchema.virtual('fullName').get(function() {
-    return `
-    ${this.name.firstName} ${this.name.lastName}`.trim();
-  });
+//   UserSchema.virtual('fullName').get(function() {
+//     return `
+//     ${this.name.firstName} ${this.name.lastName}`.trim();
+//   });
   
   UserSchema.methods.toJSON = function() {
     var user = this;
