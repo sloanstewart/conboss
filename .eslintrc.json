@@ -1,5 +1,5 @@
 {
-    "extends": "airbnb",
+    "extends": "airbnb-standard",
     "rules":{
         "linebreak-style": 0
       }

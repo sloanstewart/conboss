@@ -27,7 +27,6 @@ app.use(morgan('common'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 // handleRequest = (req, res) => {
 
 // }
@@ -58,7 +57,7 @@ app.get('/dashboard/:id', (req, res) => {
     return res.status(404).send();
   }
 
-  User
+  return User
     .findById(id)
     .then((user) => {
       if (!user) {
@@ -66,7 +65,7 @@ app.get('/dashboard/:id', (req, res) => {
       }
       return user;
     })
-    .then(user => {
+    .then((user) => {
       res
         .status(200)
         .render('user-dashboard', { user });
@@ -99,7 +98,6 @@ app.get('/event/edit/:id', (req, res) => {
     .render('event-edit');
 });
 
-
 // API: EVENTS =====================
 app.post('/api/events', (req, res) => {
   const { id } = req.user; // watch for error trying to find _id
@@ -108,7 +106,7 @@ app.post('/api/events', (req, res) => {
     details: req.body.description,
     start: req.body.start,
     end: req.body.end,
-    _creator: id,
+    _creator: id
   });
 
   event.save().then((doc) => {
@@ -133,15 +131,15 @@ app.get('/api/events/:id', authenticate, (req, res) => {
     return res.status(404).send();
   }
 
-  Event.findOne({
-    _id: id,
+  return Event.findOne({
+    _id: id
     // _creator: req.user._id
   }).then((event) => {
     if (!event) {
       return res.status(404).send();
     }
 
-    res.send({ event });
+    return res.send({ event });
   }).catch((err) => {
     res.status(400).send(err);
   });
@@ -153,12 +151,12 @@ app.delete('/api/events/:id', (req, res) => {
     return res.status(404).send('ID invalid');
   }
 
-  Event.findByIdAndRemove(id).then((event) => {
+  return Event.findByIdAndRemove(id).then((event) => {
     if (!event) {
       return res.status(404).send();
     }
 
-    res.send({ event });
+    return res.send({ event });
   }).catch((err) => {
     res.status(400).send(err);
   });
@@ -172,12 +170,12 @@ app.patch('/api/events/:id', (req, res) => {
     return res.status(404).send();
   }
 
-  Event.findByIdAndUpdate(id, { $set: body }, { new: true }).then((event) => {
+  return Event.findByIdAndUpdate(id, { $set: body }, { new: true }).then((event) => {
     if (!event) {
       return res.status(404).send();
     }
 
-    res.send({ event });
+    return res.send({ event });
   }).catch((err) => {
     res.status(400).send(err);
   });
@@ -205,14 +203,13 @@ app.get('/users/me', authenticate, (req, res) => {
 app.post('/users/login', (req, res) => {
   const body = _.pick(req.body, ['email', 'password']);
 
-  User.findByCredentials(body.email, body.password).then((user) => {
-    return user.generateAuthToken().then((token) => {
+  User.findByCredentials(body.email, body.password).then(user => user.generateAuthToken()
+    .then((token) => {
       res.header('x-auth', token)
         .status(200)
         .render('user-dashboard', user);
       // .render(`dashboard`, user);
-    });
-  }).catch((err) => {
+    })).catch((err) => {
     res.status(400).send(err);
   });
 });
