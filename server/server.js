@@ -1,32 +1,27 @@
 /* jshint esversion:6 */
 require('./config/config');
 
-const morgan = require('morgan');
+// const morgan = require('morgan');
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
 
+const { mongoose } = require('./db/mongoose');
 const { Event } = require('./models/event');
 const { User } = require('./models/user');
 const { authenticate } = require('./middleware/authenticate');
+
+mongoose.Promise = global.Promise; // avoids promise deprecation error???
 
 const app = express();
 const port = process.env.PORT;
 
 app.use(express.static('public'));
-
-// ejs templating
 app.set('view engine', 'ejs');
-
-// typical config
-app.use(morgan('common'));
+// app.use(morgan('common'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// handleRequest = (req, res) => {
-
-// }
+// app.use(bodyParser.urlencoded({  extended: true }));
 
 // Front end routes
 app.get('/', (req, res) => {
@@ -45,10 +40,10 @@ app.get('/dashboard/:id', (req, res) => {
   const { id } = req.params;
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send();
+    return res.status(404).send({ message: 'id no good!' });
   }
 
-  return User.findById(id)
+  User.findById(id)
     .then((user) => {
       if (!user) {
         return res.status(404).send();
@@ -182,10 +177,10 @@ app.post('/users', (req, res) => {
   user
     .save()
     .then(() => {
-      user.generateAuthToken();
+      return user.generateAuthToken();
     })
     .then((token) => {
-      res.header('x-auth', token).render('/dashboard/');
+      res.header('x-auth', token).send(user);
     })
     .catch((err) => {
       res.status(400).send(err);
@@ -206,7 +201,6 @@ app.post('/users/login', (req, res) => {
           .header('x-auth', token)
           .status(200)
           .render('user-dashboard', user);
-        // .render(`dashboard`, user);
       })
     )
     .catch((err) => {

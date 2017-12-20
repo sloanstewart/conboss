@@ -92,13 +92,7 @@ UserSchema.methods.generateAuthToken = () => {
   const user = this;
   const access = 'auth';
   const token = jwt
-    .sign(
-      {
-        _id: user._id.toHexString(),
-        access
-      },
-      process.env.JWT_SECRET
-    )
+    .sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET)
     .toString();
 
   user.tokens.push({ access, token });
@@ -146,7 +140,7 @@ UserSchema.statics.findByCredentials = (email, password) => {
         if (res) {
           resolve(user);
         } else {
-          return reject();
+          reject();
         }
       });
     });

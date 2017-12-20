@@ -1,15 +1,13 @@
-var env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'development';
 
-if (env === 'development' || env === 'test' ) {
-    var config = require('./config.json');
-    var envConfig =  config[env];
+if (env === 'development' || env === 'test') {
+  const config = require('./config.json');
+  const envConfig = config[env];
 
-    Object.keys(envConfig).forEach((key) => {
-        process.env[key] = envConfig[key];
-    });
+  Object.keys(envConfig).forEach((key) => {
+    process.env[key] = envConfig[key];
+  });
 }
-
-
 // exports.DATABASE_URL = process.env.DATABASE_URL ||
 //                        global.DATABASE_URL ||
 //                       //  'mongodb://localhost/conboss-dev';
@@ -20,4 +18,3 @@ if (env === 'development' || env === 'test' ) {
 // exports.PORT = process.env.PORT || 8080;
 // exports.JWT_SECRET = process.env.JWT_SECRET;
 // exports.JWT_EXPIRY = process.env.JWT_EXPIRY || '7d';
-
