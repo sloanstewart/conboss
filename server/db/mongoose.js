@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-var promise = mongoose.connect(process.env.MONGODB_URI, {
-    useMongoClient: true
+const promise = mongoose.connect(process.env.MONGODB_URI, {
+  useMongoClient: true
 });
 
-module.exports = {mongoose};
+module.exports = { mongoose };
