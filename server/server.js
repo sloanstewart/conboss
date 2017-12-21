@@ -43,19 +43,14 @@ app.get('/dashboard/:id', (req, res) => {
     return res.status(404).send({ message: 'id no good!' });
   }
 
-  User.findById(id)
+  return User.findById(id)
     .then((user) => {
       if (!user) {
-        return res.status(404).send();
+        return res.status(404).send('user not found');
       }
-      return user;
+      return res.status(200).render('user-dashboard', { user });
     })
-    .then((user) => {
-      res.status(200).render('user-dashboard', { user });
-    })
-    .catch((err) => {
-      res.status(400).send(err);
-    });
+    .catch((err) => res.status(400).send(err));
 });
 
 app.get('/events', (req, res) => {
