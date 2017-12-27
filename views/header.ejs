@@ -7,10 +7,15 @@
 <div class="header-wrapper">
   <a href="/"><span class="text-headline">ConBoss</span></a>
   <nav id="nav-bar">
-    <a class="text-button" href="/login">Login</a>
-    <a class="text-button" id="logout" href="/logout">Logout</a>
-    <a class="text-button" href="/events">Events</a>
-    <!-- <a class="text-button" href="/users">Users</a> -->
-    <a class="text-button" href="/dashboard">Dashboard</a>
+    <% if (typeof user == 'object' && user) { %>
+      <a class="text-button" href="/events">Events</a>
+      <a class="text-button" href="/dashboard">Dashboard</a>
+      <a class="text-button" id="logout" href="/logout">Logout</a>
+      <span class="header-user">
+        <%= typeof user == 'object' && user ? user.email : null  %>
+      </span>
+    <% } else { %>
+      <a class="text-button" href="/login">Login</a>
+    <% } %>
   </nav>
 </div>
