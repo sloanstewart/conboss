@@ -12,7 +12,7 @@
       <a class="text-button" href="/dashboard">Dashboard</a>
       <a class="text-button" id="logout" href="/logout">Logout</a>
       <span class="header-user">
-        <%= typeof user == 'object' && user ? user.email : null  %>
+        <%= user.email %>
       </span>
     <% } else { %>
       <a class="text-button" href="/login">Login</a>

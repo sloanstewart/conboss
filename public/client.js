@@ -1,4 +1,3 @@
-
 // AUTHENTICATION ============================
 
 // $('#login').on('click', function(e) {
@@ -45,47 +44,62 @@
 //   $.ajax(apiCall);
 // });
 
-
-
-
 // E V E N TS ============================
 
 // Get and display all Events
 function getEvents(callback) {
   const apiCall = {
-    method: "GET",
-    url: "/api/events",
-    data: "",
-    dataType: "json",
-    success: callback,
+    method: 'GET',
+    url: '/api/events',
+    data: '',
+    dataType: 'json',
+    success: callback
   };
   $.ajax(apiCall);
 }
 
-// TODO clean this JUNK up! 
+// TODO clean this JUNK up!
 // https://stackoverflow.com/questions/38179077/what-is-the-proper-way-to-loop-through-an-array-in-an-ejs-template-after-an-ajax
 function displayEvents(data) {
   const timeOptions = {};
   for (let index in data.events) {
-    let dateOptions = {month: "short",
-                        day: "2-digit",
-                        year: "numeric",
-                        hour: "numeric",
-                        minute: "numeric"};
-    let start = new Date(data.events[index].start).toLocaleString('en-US',dateOptions);
-    let end = new Date(data.events[index].end).toLocaleString('en-US',dateOptions);
+    let dateOptions = {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    };
+    let start = new Date(data.events[index].start).toLocaleString(
+      'en-US',
+      dateOptions
+    );
+    let end = new Date(data.events[index].end).toLocaleString(
+      'en-US',
+      dateOptions
+    );
     $newItem = $(
       '<div class="list-item card">' +
         '<div class="dialog-content">' +
-          '<span class="text-title">' + data.events[index].title + '</span>' +
-          '<p class="text-subhead">' + start + ' - ' + end + '</p>' +
-          '<p class="">' + data.events[index].details + '</p>' +
-          '</div>' +
-          '<div class="dialog-button-container">' +
-            '<a class="text-button" id="btn-view" data-id="' + data.events[index]._id + '" href="">Details</a>' +
-          '</div>' +
-      '</div>')
-      .appendTo('.event-list');
+        '<span class="text-title">' +
+        data.events[index].title +
+        '</span>' +
+        '<p class="text-subhead">' +
+        start +
+        ' - ' +
+        end +
+        '</p>' +
+        '<p class="">' +
+        data.events[index].details +
+        '</p>' +
+        '</div>' +
+        '<div class="dialog-button-container">' +
+        '<a class="text-button" id="btn-view" data-id="' +
+        data.events[index]._id +
+        '" href="">Details</a>' +
+        '</div>' +
+        '</div>'
+    ).appendTo('.event-list');
   }
 }
 
@@ -95,13 +109,13 @@ function getAndDisplayEvents() {
 
 // Redirect after creating New Event
 function createEventRedirect() {
-  let id = document.URL.substring(document.URL.lastIndexOf('/')+1);
-  window.location.replace("./view/"+id);
+  let id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
+  window.location.replace('./view/' + id);
   return false;
 }
 function editEventRedirect() {
-  let id = document.URL.substring(document.URL.lastIndexOf('/')+1);
-  window.location.replace("./view/"+id);
+  let id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
+  window.location.replace('./view/' + id);
   return false;
 }
 
@@ -109,12 +123,12 @@ function editEventRedirect() {
 function listeners() {
   // remove saved event button
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.id == 'btn-remove') {
+    if (event.target && event.target.id == 'btn-remove') {
       event.preventDefault();
       const eventId = event.target.dataset.id;
       $.ajax({
-        method: "PUT",
-        url: "/api/events/remove/"+ eventId,
+        method: 'PUT',
+        url: '/api/events/remove/' + eventId,
         success: function(res) {
           window.location.reload();
         },
@@ -127,21 +141,21 @@ function listeners() {
 
   // new event button
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.id == 'create-event') {
+    if (event.target && event.target.id == 'create-event') {
       event.preventDefault();
       const formData = {
-        "title": $('#title').val(),
-        "details": $('#details').val(),
-        "start": $('#start').val(),
-        "end": $('#end').val()
+        title: $('#title').val(),
+        details: $('#details').val(),
+        start: $('#start').val(),
+        end: $('#end').val()
       };
       $.ajax({
-        method: "POST",
-        url: "/api/events",
+        method: 'POST',
+        url: '/api/events',
         data: formData,
         success: function() {
           console.log('New event created');
-          window.location.replace("/events");
+          window.location.replace('/events');
         },
         error: function(err) {
           console.error(err);
@@ -150,24 +164,24 @@ function listeners() {
     }
   });
 
-// confirm edit event button
+  // confirm edit event button
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.id == 'confirm-edit-event') {
+    if (event.target && event.target.id == 'confirm-edit-event') {
       event.preventDefault();
       let formData = {
-        "_id": $('#confirm-edit-event').data('id'),
-        "title": $('#title').val(),
-        "start": $('#start').val(),
-        "end": $('#end').val(),
-        "details": $('#details').val()
+        _id: $('#confirm-edit-event').data('id'),
+        title: $('#title').val(),
+        start: $('#start').val(),
+        end: $('#end').val(),
+        details: $('#details').val()
       };
       $.ajax({
-        method: "PUT",
-        url: "/api/events/"+ formData._id,
+        method: 'PUT',
+        url: '/api/events/' + formData._id,
         data: formData,
         success: function() {
           console.log('Event edited');
-          window.location.replace("/events/view/" + formData._id);
+          window.location.replace('/events/view/' + formData._id);
         },
         error: function(err) {
           console.error(err);
@@ -178,81 +192,79 @@ function listeners() {
 
   // view event button
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.id == 'btn-view') {
+    if (event.target && event.target.id == 'btn-view') {
       event.preventDefault();
-      var url = "/events/view/" + event.target.dataset.id;
+      var url = '/events/view/' + event.target.dataset.id;
       console.log(url);
-      window.location=url;
+      window.location = url;
     }
   });
   // save event button
-    document.addEventListener('click', function(event) {
-      if(event.target && event.target.id == 'btn-save') {
-        var id = document.URL.substring(document.URL.lastIndexOf('/')+1);
-        event.preventDefault();
-        $.ajax({
-          method: "PUT",
-          url: "/api/events/save/"+ id,
-          data: id,
-          success: function() {
-            console.log('Event saved to user');
-            window.alert('Saved event' + id);
-            window.location.replace("/events/view/" + id);
-          },
-          error: function(err) {
-            console.error(err);
-          }
-        });
-      }
-    });
-
-  // edit event button
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.id == 'btn-edit') {
-      var id = document.URL.substring(document.URL.lastIndexOf('/')+1);
+    if (event.target && event.target.id == 'btn-save') {
+      var id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
       event.preventDefault();
-      var url = "/events/edit/" + id;
-      console.log(url);
-      window.location=url;
-    }
-  });
-
-  // delete event button
-  document.addEventListener('click', function(event) {
-    if(event.target && event.target.id == 'btn-delete') {
-      event.preventDefault();
-      var id = document.URL.substring(document.URL.lastIndexOf('/')+1);
-      var url = "/api/events/" + id;
-      console.log(url);
       $.ajax({
-        method: "DELETE",
-        url: url,
-        success: 
-        function() {
-          window.alert('event deleted')
-          window.location.replace("../")
+        method: 'PUT',
+        url: '/api/events/save/' + id,
+        data: id,
+        success: function() {
+          console.log('Event saved to user');
+          window.alert('Saved event' + id);
+          window.location.replace('/events/view/' + id);
+        },
+        error: function(err) {
+          console.error(err);
         }
       });
     }
   });
 
+  // edit event button
+  document.addEventListener('click', function(event) {
+    if (event.target && event.target.id == 'btn-edit') {
+      var id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
+      event.preventDefault();
+      var url = '/events/edit/' + id;
+      console.log(url);
+      window.location = url;
+    }
+  });
+
+  // delete event button
+  document.addEventListener('click', function(event) {
+    if (event.target && event.target.id == 'btn-delete') {
+      event.preventDefault();
+      var id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
+      var url = '/api/events/' + id;
+      console.log(url);
+      $.ajax({
+        method: 'DELETE',
+        url: url,
+        success: function() {
+          window.alert('event deleted');
+          window.location.replace('../');
+        }
+      });
+    }
+  });
 
   // USER new button
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.id == 'create-user') {
+    if (event.target && event.target.id == 'create-user') {
       event.preventDefault();
       const formData = {
-        "username": $('#create-username').val(),
-        "email": $('#create-email').val(),
-        "password": $('#create-password').val()
+        username: $('#create-username').val(),
+        email: $('#create-email').val(),
+        password: $('#create-password').val()
       };
       $.ajax({
-        method: "POST",
-        url: "/api/user",
+        method: 'POST',
+        url: '/api/user',
         data: formData,
         success: function() {
           console.log('New user created');
-          window.location.replace("/users");
+          window.location.replace('/users');
         },
         error: function(err) {
           console.error(err);
@@ -262,60 +274,59 @@ function listeners() {
   });
 
   // USER confirm edit button
-    document.addEventListener('click', function(event) {
-      if(event.target && event.target.id == 'confirm-edit-user') {
-        event.preventDefault();
-        let formData = {
-          _id: $('#confirm-edit-user').data('id'),
-          username: $('#username').val(),
-          email: $('#email').val(),
-          password: $('#password').val(),
-          name: {
-            firstName: $('#firstName').val(),
-            lastName: $('#lastName').val()
-          },
-          location: $('#location').val(),
-          bio: $('#bio').val()
-        };
-        $.ajax({
-          method: "PUT",
-          url: "/api/user/"+ formData._id,
-          data: formData,
-          success: function() {
-            console.log('User edited');
-            window.location.replace("/dashboard");
-          },
-          error: function(err) {
-            console.error(err);
-          }
-        });
-      }
-    });
+  document.addEventListener('click', function(event) {
+    if (event.target && event.target.id == 'confirm-edit-user') {
+      event.preventDefault();
+      let formData = {
+        _id: $('#confirm-edit-user').data('id'),
+        username: $('#username').val(),
+        email: $('#email').val(),
+        password: $('#password').val(),
+        name: {
+          firstName: $('#firstName').val(),
+          lastName: $('#lastName').val()
+        },
+        location: $('#location').val(),
+        bio: $('#bio').val()
+      };
+      $.ajax({
+        method: 'PUT',
+        url: '/api/user/' + formData._id,
+        data: formData,
+        success: function() {
+          console.log('User edited');
+          window.location.replace('/dashboard');
+        },
+        error: function(err) {
+          console.error(err);
+        }
+      });
+    }
+  });
 
   // edit user button
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.id == 'btn-edit-user') {
+    if (event.target && event.target.id == 'btn-edit-user') {
       event.preventDefault();
-      const url = "../edit/" + event.target.dataset.id;
+      const url = '../edit/' + event.target.dataset.id;
       console.log(url);
-      window.location=url;
+      window.location = url;
     }
   });
 
   // delete event button
   document.addEventListener('click', function(event) {
-    if(event.target && event.target.id == 'delete-user') {
+    if (event.target && event.target.id == 'delete-user') {
       event.preventDefault();
-      const url = "/api/user/" + event.target.dataset.id;
+      const url = '/api/user/' + event.target.dataset.id;
       console.log(url);
       $.ajax({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-        success: window.location=('/users')
+        success: (window.location = '/users')
       });
     }
   });
-
 } // <-- end of button listeners
 
 // U S E R S ====================
@@ -370,10 +381,10 @@ function listeners() {
 function getUsers(callback) {
   // setTimeout(function() {callback(MOCK_USERS)}, 100);
   const apiCall = {
-    method: "GET",
-    url: "/api/users",
-    data: "",
-    dataType: "json",
+    method: 'GET',
+    url: '/api/users',
+    data: '',
+    dataType: 'json',
     success: callback
   };
   $.ajax(apiCall);
@@ -385,14 +396,27 @@ function displayUsers(data) {
     let user = data.users[index];
     $('.user-list').append(
       '<div class="list-item">' +
-        '<h2 class="item-title">' + user.username + '</h2>' +
-        '<p><span class="item-time">' + user.name.firstName + ' ' + user.name.lastName + ' | <a href=mailto:"' + user.email + '">' + user.email + '</a></span></p>' +
-        '<p class="item-details">' + user.bio + '</p>' +
-        '<p>' +
-
-          '<button id="btn-edit-user" class="btn-yellow" data-id="' + user._id + '">Edit</button>' +
+        '<h2 class="item-title">' +
+        user.username +
+        '</h2>' +
+        '<p><span class="item-time">' +
+        user.name.firstName +
+        ' ' +
+        user.name.lastName +
+        ' | <a href=mailto:"' +
+        user.email +
+        '">' +
+        user.email +
+        '</a></span></p>' +
+        '<p class="item-details">' +
+        user.bio +
         '</p>' +
-      '</div>'
+        '<p>' +
+        '<button id="btn-edit-user" class="btn-yellow" data-id="' +
+        user._id +
+        '">Edit</button>' +
+        '</p>' +
+        '</div>'
     );
   }
 }
@@ -404,7 +428,6 @@ function displayUsers(data) {
 // $(function() {
 //   getAndDisplayUsers();
 // });
-
 
 //ON LOAD
 // $(function() {

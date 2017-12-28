@@ -21,7 +21,7 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 // app.use(morgan('common'));
 app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({  extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Front end routes
 app.get('/', (req, res) => {
@@ -188,14 +188,13 @@ app.get('/users/me', authenticate, (req, res) => {
 
 app.post('/users/login', (req, res) => {
   const body = _.pick(req.body, ['email', 'password']);
-
   User.findByCredentials(body.email, body.password)
     .then((user) =>
       user.generateAuthToken().then((token) => {
         res
           .header('x-auth', token)
           .status(200)
-          .render('user-dashboard', user);
+          .render('user-dashboard', { user });
       })
     )
     .catch((err) => {
