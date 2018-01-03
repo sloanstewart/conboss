@@ -14,6 +14,7 @@
             user.savedEvents.forEach((event) => { %>
                   <div class="card">
                     <h3><%- event.title %></h3>
+                    <span><%- event.start %> - <%- event.end %></span>
                     <p><%- event.details %></p>
                   </div>
               <% })
