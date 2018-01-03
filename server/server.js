@@ -40,7 +40,7 @@ app.get('/dashboard/:id', (req, res) => {
   const { id } = req.params;
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send({ message: 'id no good!' });
+    return res.status(404).render('user-dashboard');
   }
 
   return User.findById(id)
@@ -202,10 +202,10 @@ app.post('/users/login', (req, res) => {
     });
 });
 
-app.delete('/users/me/token', authenticate, (req, res) => {
+app.delete('/logout', authenticate, (req, res) => {
   req.user.removeToken(req.token).then(
     () => {
-      res.status(200).send();
+      res.status(200).render('/login');
     },
     () => {
       res.status(400);

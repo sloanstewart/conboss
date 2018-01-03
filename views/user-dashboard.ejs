@@ -1,10 +1,27 @@
 <% include head %>
         <section id="title">
-          <h1 class="text-title">Schedule</h1>
+          <h1 class="text-title">
+            <%- 
+              typeof user == 'object' && user
+              ? `${user.email}'s Dashboard`
+              : 'Invalid User'
+            %>
+          </h1>
         </section>
         <section class="saved-event-list">
           <!-- TODO this should really be a list, not 'cards' -->
-          event list will be here
+          <% if (typeof user.savedEvents == 'object' && user.savedEvents) {
+            user.savedEvents.forEach((event) => { %>
+                  <div class="card">
+                    <h3><%- event.title %></h3>
+                    <p><%- event.details %></p>
+                  </div>
+              <% })
+            } else { %>
+              <div class="card">
+                <p>No events found</p>
+              </div>
+            <% } %>
           <!-- TODO loop through events with EJS -->
         </section>
         <script src="/js/user-dashboard.js"></script>

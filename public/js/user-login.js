@@ -6,7 +6,10 @@ const handleLogin = (e) => {
     type: "POST",
     url: "/users/login",
     dataType: "json", 
-    error: function (err) {
+    success(user) {
+      document.history.pushState({ user }, "Dashboard", `/dashboard/${user.id}`);
+    },
+    error(err) {
         console.log(err);
     },
     data: {
