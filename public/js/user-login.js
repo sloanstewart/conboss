@@ -6,11 +6,11 @@ const handleLogin = (e) => {
     type: "POST",
     url: "/users/login",
     dataType: "json", 
-    success(user) {
-      document.history.pushState({ user }, "Dashboard", `/dashboard/${user.id}`);
-    },
+    // success(user) {
+    //   window.redirect({ user }, "Dashboard", `user/dashboard/${user.id}`);
+    // },
     error(err) {
-        console.log(err);
+        return err;
     },
     data: {
      email,

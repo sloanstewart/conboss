@@ -9,13 +9,11 @@
   <nav id="nav-bar">
     <% if (typeof user == 'object' && user) { %>
       <a class="text-button" href="/events">Events</a>
-      <a class="text-button" href="/dashboard">Dashboard</a>
-      <a class="text-button" id="logout" href="/logout">Logout</a>
-      <span class="header-user">
-        <%= user.email %>
-      </span>
+      <a class="text-button" href="/users/dashboard">Dashboard</a>
+      <a class="text-button" id="logout" href="/users/logout">Logout</a>
+      <a class="" href="users/me"><%= user.email %></a>
     <% } else { %>
-      <a class="text-button" href="/login">Login</a>
+      <a class="text-button" href="/users/login">Login</a>
     <% } %>
   </nav>
 </div>
