@@ -21,8 +21,8 @@ router.post('/users/login', (req, res) => {
         res
           .header('x-auth', token)
           .status(200)
-          .send(user);
-          // .redirect(`/user/dashboard/${user.id}`)
+          // .send(user);
+          .redirect(`/users/dashboard/${user.id}`)
       })
     )
     .catch((err) => {
