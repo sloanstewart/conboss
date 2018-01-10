@@ -6,7 +6,7 @@ const { ObjectID } = require('mongodb');
 const _ = require('lodash');
 
 router.get('/users/signup', (req, res) => {
-  res.status(200).render('user-new');
+  res.status(200).render('user-signup');
 });
 
 router.get('/users/login', (req, res) => {
@@ -41,7 +41,7 @@ router.get('users/logout', authenticate, (req, res) => {
   );
 });
 
-router.get('/users/dashboard/:id', (req, res) => {
+router.get('/users/dashboard/:id', authenticate, (req, res) => {
   const { id } = req.params;
 
   if (!ObjectID.isValid(id)) {
@@ -58,6 +58,7 @@ router.get('/users/dashboard/:id', (req, res) => {
     .catch((err) => res.status(400).send(err));
 });
 
+// Create new user
 router.post('/users', (req, res) => {
   const body = _.pick(req.body, ['email', 'password']);
   const user = new User(body);
@@ -68,13 +69,15 @@ router.post('/users', (req, res) => {
       user.generateAuthToken();
     })
     .then((token) => {
-      res.header('x-auth', token).send(user);
+      res.header('x-auth', token).render('user-dashboard', { user });
     })
     .catch((err) => {
       res.status(400).send(err.message);
     });
 });
 
+
+// See my user info
 router.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
 });
